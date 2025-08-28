@@ -1,6 +1,7 @@
 import React from 'react';
 import ThemeSelector from '../../lib/ThemeSelector.jsx';
 import { Link } from 'react-router';
+import f1 from '../../assets/img/f1.jpg';
 
 const HomePage = () => {
   return (
@@ -71,7 +72,18 @@ const HomePage = () => {
 
       {/* Hero section */}
       <div className="p-6">
-        
+        <div className='relative  overflow-hidden'>
+          <img src={f1} alt="farmer" className='w-full h-auto object-cover opacity-75 ' />
+
+          
+          <div className='absolute inset-0 flex flex-col justify-center items-center p-6 md:p-12 bg-black/30'>
+          <div className='flex gap-3'> 
+            <button className='btn btn-primary'>hello</button>
+           <button className='btn btn-primary'>hello</button>
+          </div>
+          </div>
+
+        </div>
       </div>
 
     </div>
