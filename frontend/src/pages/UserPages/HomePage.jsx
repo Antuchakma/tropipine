@@ -8,7 +8,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-base-100 dark:bg-gray-900 text-base-content dark:text-white">
       
       {/* Navbar */}
-      <nav className="bg-base-200 dark:bg-gray-800 p-2 sm:p-2 md:p-4 lg:p-4 xl:p-6">
+      <nav className="bg-base-200 dark:bg-gray-800 p-2 sm:p-2 md:p-4 lg:p-4 xl:p-6 z-50 relative">
         <div className="flex justify-between items-center">
           
           {/* Logo */}
@@ -72,17 +72,16 @@ const HomePage = () => {
 
       {/* Hero section */}
       <div className="p-6">
-        <div className='relative  overflow-hidden'>
-          <img src={f1} alt="farmer" className='w-full h-auto object-cover opacity-75 ' />
+        <div className="relative overflow-hidden">
+          <img src={f1} alt="farmer" className="w-full h-auto object-cover opacity-75" />
 
-          
-          <div className='absolute inset-0 flex flex-col justify-center items-center p-6 md:p-12 bg-black/30'>
-          <div className='flex gap-3'> 
-            <button className='btn btn-primary'>hello</button>
-           <button className='btn btn-primary'>hello</button>
+          {/* Overlay on image */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center p-6 md:p-12 bg-black/30 z-10">
+            <div className="flex gap-3"> 
+              <button className="btn">hello</button>
+              <button className="btn">hello</button>
+            </div>
           </div>
-          </div>
-
         </div>
       </div>
 
