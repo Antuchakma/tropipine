@@ -16,7 +16,7 @@ const Footer = () => {
 
         {/* Links */}
         <div>
-          <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+          <h3 className="text-lg font-semibold ">Quick Links</h3>
           <ul className="mt-3 space-y-2">
             <li><a href="/" className="hover:text-primary">Home</a></li>
             <li><a href="/about" className="hover:text-primary">About</a></li>
@@ -27,7 +27,7 @@ const Footer = () => {
 
         {/* Social */}
         <div>
-          <h3 className="text-lg font-semibold text-white">Follow Us</h3>
+          <h3 className="text-lg font-semibold ">Follow Us</h3>
           <div className="flex gap-4 mt-3">
             <a href="#" className="hover:text-primary"><Facebook /></a>
             <a href="#" className="hover:text-primary"><Twitter /></a>

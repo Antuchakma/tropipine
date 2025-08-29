@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-;
 import { Link } from "react-router"; // use react-router-dom instead of react-router
 import f1 from "../../assets/img/f1.jpg";
 import Navbar from "../../lib/Navbar.jsx";
@@ -42,13 +41,13 @@ const HomePage = () => {
     <div className="min-h-screen bg-base-100 dark:bg-gray-900 text-base-content dark:text-white">
       
      <Navbar/>
-
+    
       {/* Hero section */}
       <div className="-py-6">
         <div className="relative overflow-hidden">
           <img src={f1} alt="farmer" className="w-full h-auto object-cover opacity-75" />
 
-          {/* Overlay on image */}
+          
           <div className="absolute inset-0 flex flex-col justify-center items-center p-6 md:p-12 bg-black/30 z-10">
             <h1 className="font-extrabold text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
               TropiPine
@@ -65,7 +64,7 @@ const HomePage = () => {
 
         {/* Section Title */}
         <div className="text-center my-10">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-wide">FEATURED</h2>
+          <h2 className="text-3xl md:text-4xl sm:text-2xl font-extrabold tracking-wide">FEATURED</h2>
           <div className="flex items-center justify-center mt-3">
             <div className="w-16 h-[2px] bg-gray-300"></div>
             <div className="mx-3 w-10 h-10 rounded-full bg-white shadow flex items-center justify-center">
