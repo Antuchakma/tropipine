@@ -21,12 +21,12 @@ const Navbar = () => {
           <Link to="/shop" className="hover:text-primary transition-colors">Shop</Link>
           <Link to="/cart" className="hover:text-primary transition-colors">Cart</Link>
           <Link to="/user" className="hover:text-primary transition-colors">User</Link>
-          <ThemeSelector />
+          
         </div>
 
         {/* Mobile Burger Menu */}
         <div className="md:hidden flex items-center">
-          <ThemeSelector />
+        
           <div className="dropdown dropdown-end ml-2">
             <label tabIndex={0} className="btn btn-square btn-ghost">
               <svg
