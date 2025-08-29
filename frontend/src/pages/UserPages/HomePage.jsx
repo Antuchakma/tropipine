@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import ThemeSelector from "../../lib/ThemeSelector.jsx";
+;
 import { Link } from "react-router"; // use react-router-dom instead of react-router
 import f1 from "../../assets/img/f1.jpg";
+import Navbar from "../../lib/Navbar.jsx";
+import Footer from "../../lib/Footer.jsx";
 
 const HomePage = () => {
   // Temporary products (later fetched from DB)
@@ -39,59 +41,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-base-100 dark:bg-gray-900 text-base-content dark:text-white">
       
-      {/* Navbar */}
-      <nav className="bg-base-200 dark:bg-gray-800 p-2 sm:p-2 md:p-4 lg:p-4 xl:p-6 z-50 relative">
-        <div className="flex justify-between items-center">
-          
-          {/* Logo */}
-          <div className="flex-1">
-            <Link to="/" className="text-xl font-bold hover:text-primary transition-colors">
-              TropiPine
-            </Link>
-          </div>
-
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-            <Link to="/about" className="hover:text-primary transition-colors">About</Link>
-            <Link to="/gallery" className="hover:text-primary transition-colors">Gallery</Link>
-            <Link to="/shop" className="hover:text-primary transition-colors">Shop</Link>
-            <Link to="/cart" className="hover:text-primary transition-colors">Cart</Link>
-            <Link to="/user" className="hover:text-primary transition-colors">User</Link>
-            <ThemeSelector />
-          </div>
-
-          {/* Mobile Burger Menu */}
-          <div className="md:hidden flex items-center">
-            <ThemeSelector />
-            <div className="dropdown dropdown-end ml-2">
-              <label tabIndex={0} className="btn btn-square btn-ghost">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </label>
-              <ul
-                tabIndex={0}
-                className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 dark:bg-gray-800 rounded-box w-52"
-              >
-                <li><Link to="/" className="hover:text-primary">Home</Link></li>
-                <li><Link to="/about" className="hover:text-primary">About</Link></li>
-                <li><Link to="/gallery" className="hover:text-primary">Gallery</Link></li>
-                <li><Link to="/shop" className="hover:text-primary">Shop</Link></li>
-                <li><Link to="/cart" className="hover:text-primary">Cart</Link></li>
-                <li><Link to="/user" className="hover:text-primary">User</Link></li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-      </nav>
+     <Navbar/>
 
       {/* Hero section */}
       <div className="p-6">
@@ -115,7 +65,7 @@ const HomePage = () => {
 
         {/* Section Title */}
         <div className="text-center my-10">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-wide">OUR FRUITS</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-wide">FEATURED</h2>
           <div className="flex items-center justify-center mt-3">
             <div className="w-16 h-[2px] bg-gray-300"></div>
             <div className="mx-3 w-10 h-10 rounded-full bg-white shadow flex items-center justify-center">
@@ -158,6 +108,7 @@ const HomePage = () => {
         </div>
 
       </div>
+        <Footer/>
     </div>
   );
 };
