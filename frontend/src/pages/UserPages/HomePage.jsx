@@ -44,7 +44,7 @@ const HomePage = () => {
      <Navbar/>
 
       {/* Hero section */}
-      <div className="p-6">
+      <div className="-py-6">
         <div className="relative overflow-hidden">
           <img src={f1} alt="farmer" className="w-full h-auto object-cover opacity-75" />
 
@@ -54,7 +54,7 @@ const HomePage = () => {
               TropiPine
             </h1>
             <p className="mt-4 py-4 text-white font-bold text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl">
-              Fresh from the farm, sweet from the heart 🌱🍍
+              Fresh from the farm, sweet from the heart 
             </p>
             <div className="flex gap-3">
               <button className="btn">Contact Us</button>

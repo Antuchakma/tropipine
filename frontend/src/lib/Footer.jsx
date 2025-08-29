@@ -2,14 +2,15 @@ import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-10 mt-10">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer >
+      <div className="py-14 max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
         
         {/* Brand Section */}
         <div>
-          <h2 className="text-2xl font-bold text-white">TropiPine 🍍</h2>
+          <h2 className="text-2xl font-bold ">TropiPine 🍍</h2>
           <p className="mt-3 text-sm">
-            Fresh from the farm, sweet from the heart 🌱
+            Fresh from the farm, sweet from the heart .
+            we ensure the highest quality in fruits
           </p>
         </div>
 
@@ -37,7 +38,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="text-center text-sm text-gray-500 mt-10 border-t border-gray-700 pt-4">
+      <div className="text-center text-sm text-gray-500 mt-10 border-t border-gray-700 py-4 ">
         © {new Date().getFullYear()} TropiPine. All rights reserved.
       </div>
     </footer>
