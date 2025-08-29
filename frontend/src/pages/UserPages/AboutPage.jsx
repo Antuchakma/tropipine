@@ -61,7 +61,7 @@ const AboutPage = () => {
             {/* Timeline Item */}
             <div className="mb-12 flex justify-between items-center w-full">
               <div className="order-1 w-5/12"></div>
-              <div className="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full">
+              <div className="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-10 h-10 rounded-full">
                 <span className="mx-auto text-white font-semibold">2025</span>
               </div>
               <div className="order-1 bg-white dark:bg-gray-800 rounded-lg shadow-xl w-5/12 px-6 py-4 text-left">
@@ -76,7 +76,7 @@ const AboutPage = () => {
             {/* Timeline Item */}
             <div className="mb-12 flex justify-between items-center w-full flex-row-reverse">
               <div className="order-1 w-5/12"></div>
-              <div className="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full">
+              <div className="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-10 h-10 rounded-full">
                 <span className="mx-auto text-white font-semibold">2026</span>
               </div>
               <div className="order-1 bg-white dark:bg-gray-800 rounded-lg shadow-xl w-5/12 px-6 py-4 text-left">
@@ -91,7 +91,7 @@ const AboutPage = () => {
             {/* Timeline Item */}
             <div className="flex justify-between items-center w-full">
               <div className="order-1 w-5/12"></div>
-              <div className="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full">
+              <div className="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-10 h-10 rounded-full">
                 <span className="mx-auto text-white font-semibold">2027+</span>
               </div>
               <div className="order-1 bg-white dark:bg-gray-800 rounded-lg shadow-xl w-5/12 px-6 py-4 text-left">

@@ -3,6 +3,7 @@ import Navbar from "../../lib/Navbar.jsx";
 import Footer from "../../lib/Footer.jsx";
 import heroImage from "../../assets/img/f1.jpg"; // replace with your actual image
 
+
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-base-100 dark:bg-gray-900 text-base-content dark:text-white flex flex-col">
