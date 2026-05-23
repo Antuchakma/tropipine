@@ -1,0 +1,23 @@
+                                      Table "public.User"
+       Column       |              Type              | Collation | Nullable |      Default      
+--------------------+--------------------------------+-----------+----------+-------------------
+ id                 | text                           |           | not null | 
+ name               | text                           |           | not null | 
+ email              | text                           |           | not null | 
+ password           | text                           |           | not null | 
+ phone              | text                           |           |          | 
+ role               | text                           |           | not null | 'USER'::text
+ isActive           | boolean                        |           | not null | true
+ passwordResetToken | text                           |           |          | 
+ passwordResetExp   | timestamp(3) without time zone |           |          | 
+ createdAt          | timestamp(3) without time zone |           | not null | CURRENT_TIMESTAMP
+ updatedAt          | timestamp(3) without time zone |           | not null | 
+Indexes:
+    "User_pkey" PRIMARY KEY, btree (id)
+    "User_email_key" UNIQUE, btree (email)
+Referenced by:
+    TABLE ""Address"" CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE CASCADE
+    TABLE ""Order"" CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE CASCADE
+    TABLE ""Review"" CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE CASCADE
+    TABLE ""Wishlist"" CONSTRAINT "Wishlist_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE CASCADE
+
