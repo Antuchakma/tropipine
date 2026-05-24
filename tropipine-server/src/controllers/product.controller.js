@@ -6,43 +6,24 @@ async function listProducts(req, res) {
   const page = parseInt(req.query.page || '1', 10);
   const limit = parseInt(req.query.limit || '12', 10);
   const skip = (page - 1) * limit;
+  const featured = req.query.featured === 'true';
+  
   try {
+    const where = featured ? { isFeatured: true } : {};
+    
     const [items, total] = await Promise.all([
       prisma.product.findMany({ 
         skip, 
         take: limit,
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          description: true,
-          basePrice: true,
-          finalPrice: true,
-          stockQty: true,
-          origin: true,
-          isFeatured: true,
-          isExclusive: true,
-          exclusiveLabel: true,
-          isBestSeller: true,
-          images: {
-            select: {
-              id: true,
-              url: true,
-              isPrimary: true,
-            }
-          },
-          category: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
-            }
-          },
+        where,
+        include: {
+          images: true,
+          category: true,
         }
       }),
-      prisma.product.count(),
+      prisma.product.count({ where }),
     ]);
-    res.json({ data: items, total, page, limit });
+    res.json({ items, total, page, limit });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error', error: err.message });

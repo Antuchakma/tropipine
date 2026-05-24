@@ -51,12 +51,12 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
-        <p className="text-gray-600 mb-8">Add some delicious fruits to your cart!</p>
+      <div className="min-h-screen bg-[#F6F1E8] flex flex-col items-center justify-center px-6">
+        <h1 className="text-4xl font-black mb-4 text-[#1E1E1E]">Your Cart is Empty</h1>
+        <p className="text-[#6A625B] mb-8 text-lg">Add some delicious fruits to your cart!</p>
         <Link
           to="/shop"
-          className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700"
+          className="bg-[#8B5E3C] text-white px-8 py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold transition"
         >
           Continue Shopping
         </Link>
@@ -65,31 +65,31 @@ export default function Cart() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+    <div className="min-h-screen bg-[#F6F1E8] py-12">
+      <div className="max-w-7xl mx-auto px-6">
+        <h1 className="text-4xl font-black mb-10 text-[#1E1E1E]">Shopping Cart</h1>
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm overflow-hidden">
               {cart.map((item) => (
                 <div
                   key={item.productId}
-                  className="p-4 border-b flex items-center gap-4 hover:bg-gray-50 transition"
+                  className="p-6 border-b border-[#E7DBCF] flex items-center gap-4 hover:bg-[#F6F1E8]/50 transition"
                 >
                   <img
                     src={item.image || 'https://via.placeholder.com/100'}
                     alt={item.name}
-                    className="w-20 h-20 object-cover rounded"
+                    className="w-24 h-24 object-cover rounded-2xl"
                   />
                   <div className="flex-1">
-                    <h3 className="font-semibold">{item.name}</h3>
-                    <p className="text-green-600 font-bold">৳{item.price}</p>
+                    <h3 className="font-semibold text-[#1E1E1E]">{item.name}</h3>
+                    <p className="text-[#8B5E3C] font-bold">৳{item.price}</p>
                   </div>
 
                   {/* Quantity Controls */}
-                  <div className="flex items-center gap-2 bg-gray-100 rounded">
+                  <div className="flex items-center gap-2 bg-[#F6F1E8] rounded-2xl">
                     <button
                       onClick={() =>
                         dispatch(
@@ -99,11 +99,11 @@ export default function Cart() {
                           })
                         )
                       }
-                      className="px-3 py-2 hover:bg-gray-200"
+                      className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
                     >
                       <FaMinus size={14} />
                     </button>
-                    <span className="px-4">{item.quantity}</span>
+                    <span className="px-4 font-medium text-[#5A5149]">{item.quantity}</span>
                     <button
                       onClick={() =>
                         dispatch(
@@ -113,21 +113,21 @@ export default function Cart() {
                           })
                         )
                       }
-                      className="px-3 py-2 hover:bg-gray-200"
+                      className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
                     >
                       <FaPlus size={14} />
                     </button>
                   </div>
 
                   {/* Subtotal */}
-                  <div className="w-24 text-right">
-                    <p className="font-bold">৳{(item.price * item.quantity).toFixed(2)}</p>
+                  <div className="w-28 text-right">
+                    <p className="font-bold text-[#1E1E1E]">৳{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
 
                   {/* Remove */}
                   <button
                     onClick={() => dispatch(removeFromCart(item.productId))}
-                    className="text-red-500 hover:text-red-700 p-2"
+                    className="text-[#8B5E3C] hover:bg-[#F6F1E8] p-3 rounded-full transition"
                   >
                     <FaTrash />
                   </button>
@@ -137,47 +137,47 @@ export default function Cart() {
           </div>
 
           {/* Order Summary */}
-          <div className="bg-white rounded-lg shadow p-6 h-fit">
-            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+          <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
+            <h2 className="text-2xl font-black mb-6 text-[#1E1E1E]">Order Summary</h2>
 
             {/* Coupon */}
             <div className="mb-6">
-              <label className="block text-sm font-semibold mb-2">Promo Code</label>
+              <label className="block text-sm font-medium text-[#5A5149] mb-2">Promo Code</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   placeholder="Enter code"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="flex-1 px-3 py-2 border rounded"
+                  className="flex-1 px-4 py-2 border border-[#E7DBCF] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
                 />
                 <button
                   onClick={handleApplyCoupon}
                   disabled={loading}
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400"
+                  className="px-4 py-2 bg-[#8B5E3C] text-white rounded-2xl hover:bg-[#7a4e2f] disabled:opacity-50 transition font-medium"
                 >
                   Apply
                 </button>
               </div>
               {couponCode && (
-                <p className="text-green-600 text-sm mt-2">✓ {couponCode} applied</p>
+                <p className="text-[#8B5E3C] text-sm mt-2 font-medium">✓ {couponCode} applied</p>
               )}
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+              {error && <p className="text-[#8B5E3C] text-sm mt-2">{error}</p>}
             </div>
 
             {/* Totals */}
-            <div className="space-y-2 border-t pt-4 mb-6">
-              <div className="flex justify-between">
+            <div className="space-y-3 border-t border-[#E7DBCF] pt-4 mb-6">
+              <div className="flex justify-between text-[#5A5149]">
                 <span>Subtotal:</span>
                 <span>৳{subtotal.toFixed(2)}</span>
               </div>
               {discount > 0 && (
-                <div className="flex justify-between text-green-600">
+                <div className="flex justify-between text-[#8B5E3C] font-medium">
                   <span>Discount ({couponDiscount}%):</span>
                   <span>-৳{discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-lg font-bold border-t pt-2">
+              <div className="flex justify-between text-lg font-black border-t border-[#E7DBCF] pt-3 text-[#1E1E1E]">
                 <span>Total:</span>
                 <span>৳{total.toFixed(2)}</span>
               </div>
@@ -186,13 +186,13 @@ export default function Cart() {
             {/* Buttons */}
             <button
               onClick={() => navigate('/checkout')}
-              className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-semibold mb-2"
+              className="w-full bg-[#8B5E3C] text-white py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold mb-3 transition"
             >
               Proceed to Checkout
             </button>
             <Link
               to="/shop"
-              className="block w-full text-center bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300"
+              className="block w-full text-center bg-[#F6F1E8] border border-[#E7DBCF] text-[#8B5E3C] py-3 rounded-2xl hover:bg-[#E7DBCF] font-semibold transition"
             >
               Continue Shopping
             </Link>

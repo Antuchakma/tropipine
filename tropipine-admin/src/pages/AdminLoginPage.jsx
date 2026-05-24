@@ -22,6 +22,15 @@ export default function AdminLoginPage() {
       const response = await api.post('/auth/login', { email, password });
       const { user, token } = response.data.data;
       
+      // Check if user is admin (SUPER_ADMIN or ADMIN role)
+      if (user.role !== 'SUPER_ADMIN' && user.role !== 'ADMIN') {
+        setError('Only admin users can access this dashboard');
+        return;
+      }
+      
+      // Save token to localStorage for API interceptor
+      localStorage.setItem('adminToken', token);
+      
       dispatch(setUser(user));
       dispatch(setToken(token));
       

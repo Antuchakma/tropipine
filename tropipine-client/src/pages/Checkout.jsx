@@ -93,12 +93,12 @@ export default function Checkout() {
 
   if (cart.length === 0 && !orderCreated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#F6F1E8] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
+          <h1 className="text-4xl font-black mb-4 text-[#1E1E1E]">Your cart is empty</h1>
           <button
             onClick={() => navigate('/shop')}
-            className="bg-green-600 text-white px-8 py-3 rounded-lg"
+            className="bg-[#8B5E3C] text-white px-8 py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold transition"
           >
             Continue Shopping
           </button>
@@ -108,29 +108,29 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+    <div className="min-h-screen bg-[#F6F1E8] py-12">
+      <div className="max-w-7xl mx-auto px-6">
+        <h1 className="text-4xl font-black mb-10 text-[#1E1E1E]">Checkout</h1>
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="md:col-span-2">
             {/* Step 1: Address */}
             {step === 1 && (
-              <div className="bg-white rounded-lg shadow p-6 space-y-4">
-                <h2 className="text-xl font-bold mb-4">Delivery Address</h2>
+              <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 space-y-5">
+                <h2 className="text-2xl font-black mb-6 text-[#1E1E1E]">Delivery Address</h2>
 
                 {error && (
-                  <div className="bg-red-50 text-red-700 p-3 rounded">{error}</div>
+                  <div className="bg-[#F6F1E8] border border-[#E7DBCF] text-[#8B5E3C] p-4 rounded-2xl text-sm">{error}</div>
                 )}
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Full Address</label>
+                  <label className="block text-sm font-medium text-[#5A5149] mb-2">Full Address</label>
                   <textarea
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg"
+                    className="w-full px-4 py-3 border border-[#E7DBCF] rounded-2xl bg-[#F6F1E8]/40 focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
                     rows="3"
                     placeholder="Enter your full address"
                   />
@@ -138,65 +138,66 @@ export default function Checkout() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold mb-2">City</label>
+                    <label className="block text-sm font-medium text-[#5A5149] mb-2">City</label>
                     <input
                       type="text"
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border rounded-lg"
+                      className="w-full px-4 py-3 border border-[#E7DBCF] rounded-2xl bg-[#F6F1E8]/40 focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
                       placeholder="Dhaka"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Postal Code</label>
+                    <label className="block text-sm font-medium text-[#5A5149] mb-2">Postal Code</label>
                     <input
                       type="text"
                       name="postalCode"
                       value={formData.postalCode}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border rounded-lg"
+                      className="w-full px-4 py-3 border border-[#E7DBCF] rounded-2xl bg-[#F6F1E8]/40 focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
                       placeholder="1000"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Phone</label>
+                  <label className="block text-sm font-medium text-[#5A5149] mb-2">Phone</label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg"
+                    className="w-full px-4 py-3 border border-[#E7DBCF] rounded-2xl bg-[#F6F1E8]/40 focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
                     placeholder="+880 1234-567890"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Special Notes</label>
+                  <label className="block text-sm font-medium text-[#5A5149] mb-2">Special Notes</label>
                   <textarea
                     name="specialNote"
                     value={formData.specialNote}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-lg"
+                    className="w-full px-4 py-3 border border-[#E7DBCF] rounded-2xl bg-[#F6F1E8]/40 focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
                     rows="2"
                     placeholder="Any special instructions?"
                   />
                 </div>
 
-                <h2 className="text-lg font-bold mt-8 mb-4">Payment Method</h2>
-                <div className="space-y-2">
+                <h2 className="text-lg font-bold mt-8 mb-4 text-[#1E1E1E]">Payment Method</h2>
+                <div className="space-y-3 bg-[#F6F1E8] border border-[#E7DBCF] rounded-2xl p-4">
                   {['bkash', 'nagad', 'rocket'].map((method) => (
-                    <label key={method} className="flex items-center gap-2 cursor-pointer">
+                    <label key={method} className="flex items-center gap-3 cursor-pointer">
                       <input
                         type="radio"
                         name="paymentMethod"
                         value={method}
                         checked={formData.paymentMethod === method}
                         onChange={handleChange}
+                        className="w-4 h-4 accent-[#8B5E3C]"
                       />
-                      <span className="text-sm font-semibold uppercase">{method}</span>
+                      <span className="text-sm font-medium text-[#5A5149] uppercase">{method}</span>
                     </label>
                   ))}
                 </div>
@@ -204,7 +205,7 @@ export default function Checkout() {
                 <button
                   onClick={handleCreateOrder}
                   disabled={loading}
-                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 font-semibold mt-6"
+                  className="w-full bg-[#8B5E3C] text-white py-4 rounded-2xl hover:bg-[#7a4e2f] disabled:opacity-50 font-semibold mt-8 transition"
                 >
                   {loading ? 'Creating Order...' : 'Continue to Payment'}
                 </button>
@@ -213,16 +214,16 @@ export default function Checkout() {
 
             {/* Step 2: Review */}
             {step === 2 && orderCreated && (
-              <div className="bg-white rounded-lg shadow p-6 space-y-4">
-                <h2 className="text-xl font-bold">Order Summary</h2>
-                <p className="text-green-600 font-semibold">
+              <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 space-y-4">
+                <h2 className="text-2xl font-black text-[#1E1E1E]">Order Summary</h2>
+                <p className="text-[#8B5E3C] font-bold text-lg">
                   ✓ Order #{orderCreated.id} created successfully!
                 </p>
 
                 <button
                   onClick={handleSubmitPayment}
                   disabled={loading}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 font-semibold"
+                  className="w-full bg-[#8B5E3C] text-white py-4 rounded-2xl hover:bg-[#7a4e2f] disabled:opacity-50 font-semibold mt-6 transition"
                 >
                   {loading ? 'Processing...' : 'Complete Payment'}
                 </button>
@@ -231,33 +232,33 @@ export default function Checkout() {
           </div>
 
           {/* Order Summary Sidebar */}
-          <div className="bg-white rounded-lg shadow p-6 h-fit">
-            <h2 className="text-lg font-bold mb-4">Order Total</h2>
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between">
+          <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
+            <h2 className="text-2xl font-black mb-6 text-[#1E1E1E]">Order Total</h2>
+            <div className="space-y-3 mb-6">
+              <div className="flex justify-between text-[#5A5149]">
                 <span>Subtotal:</span>
                 <span>৳{subtotal.toFixed(2)}</span>
               </div>
               {discount > 0 && (
-                <div className="flex justify-between text-green-600">
+                <div className="flex justify-between text-[#8B5E3C] font-medium">
                   <span>Discount:</span>
                   <span>-৳{discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between">
+              <div className="flex justify-between text-[#5A5149]">
                 <span>Delivery:</span>
                 <span>৳{deliveryCharge}</span>
               </div>
-              <div className="flex justify-between text-lg font-bold border-t pt-2">
+              <div className="flex justify-between text-lg font-black border-t border-[#E7DBCF] pt-3 text-[#1E1E1E]">
                 <span>Total:</span>
                 <span>৳{total.toFixed(2)}</span>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded text-sm space-y-1">
-              <p className="font-semibold">Order Items ({cart.length})</p>
+            <div className="bg-[#F6F1E8] border border-[#E7DBCF] p-5 rounded-2xl text-sm space-y-2">
+              <p className="font-bold text-[#1E1E1E]">Order Items ({cart.length})</p>
               {cart.map((item) => (
-                <p key={item.productId} className="text-gray-600">
+                <p key={item.productId} className="text-[#6A625B]">
                   {item.name} x {item.quantity}
                 </p>
               ))}

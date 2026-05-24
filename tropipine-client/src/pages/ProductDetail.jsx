@@ -69,38 +69,38 @@ export default function ProductDetail() {
     : 0
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 bg-white p-8 rounded-lg shadow">
+    <div className="min-h-screen bg-[#F6F1E8] py-12">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-12 bg-white border border-[#E7DBCF] p-10 rounded-3xl shadow-sm">
           {/* Image */}
           <div>
             <img
               src={product.image || 'https://via.placeholder.com/500'}
               alt={product.name}
-              className="w-full rounded-lg"
+              className="w-full rounded-3xl"
             />
           </div>
 
           {/* Details */}
           <div>
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <p className="text-gray-600 mb-4">{product.description}</p>
+            <h1 className="text-4xl font-black mb-3 text-[#1E1E1E]">{product.name}</h1>
+            <p className="text-[#6A625B] mb-5 text-lg leading-relaxed">{product.description}</p>
 
             {product.origin && (
-              <p className="text-sm text-gray-500 mb-4">📍 Origin: {product.origin}</p>
+              <p className="text-sm text-[#8B5E3C] mb-6 font-medium">📍 Origin: {product.origin}</p>
             )}
 
             {/* Pricing */}
-            <div className="mb-6 pb-6 border-b">
+            <div className="mb-8 pb-8 border-b border-[#E7DBCF]">
               {discount > 0 && (
-                <span className="text-gray-500 line-through">৳{product.basePrice}</span>
+                <span className="text-[#6A625B] line-through block mb-2">৳{product.basePrice}</span>
               )}
               <div className="flex items-center gap-4">
-                <span className="text-4xl font-bold text-green-600">
+                <span className="text-5xl font-black text-[#8B5E3C]">
                   ৳{product.finalPrice || product.price}
                 </span>
                 {discount > 0 && (
-                  <span className="bg-red-500 text-white px-3 py-1 rounded">
+                  <span className="bg-[#8B5E3C] text-white px-4 py-2 rounded-full text-sm font-bold">
                     -{discount}%
                   </span>
                 )}
@@ -111,28 +111,28 @@ export default function ProductDetail() {
             <div className="mb-6">
               <p
                 className={`text-sm font-semibold ${
-                  product.stockQty > 0 ? 'text-green-600' : 'text-red-600'
+                  product.stockQty > 0 ? 'text-[#8B5E3C]' : 'text-[#6A625B]'
                 }`}
               >
-                {product.stockQty > 0 ? `In Stock (${product.stockQty})` : 'Out of Stock'}
+                {product.stockQty > 0 ? `✓ In Stock (${product.stockQty})` : 'Out of Stock'}
               </p>
             </div>
 
             {/* Quantity */}
-            <div className="mb-6 flex items-center gap-4">
-              <label className="font-semibold">Quantity:</label>
-              <div className="flex items-center gap-2 border rounded">
+            <div className="mb-8 flex items-center gap-4">
+              <label className="font-medium text-[#5A5149]">Quantity:</label>
+              <div className="flex items-center gap-2 border border-[#E7DBCF] rounded-2xl bg-[#F6F1E8]">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3 py-2"
+                  className="px-4 py-2 text-[#8B5E3C] hover:bg-[#E7DBCF] rounded-l-2xl transition"
                 >
-                  -
+                  −
                 </button>
-                <span className="px-4">{quantity}</span>
+                <span className="px-6 font-medium text-[#1E1E1E]">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
                   disabled={quantity >= product.stockQty}
-                  className="px-3 py-2 disabled:text-gray-400"
+                  className="px-4 py-2 text-[#8B5E3C] hover:bg-[#E7DBCF] rounded-r-2xl transition disabled:opacity-50"
                 >
                   +
                 </button>
@@ -140,17 +140,21 @@ export default function ProductDetail() {
             </div>
 
             {/* Actions */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <button
                 onClick={handleAddToCart}
                 disabled={product.stockQty === 0}
-                className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 font-semibold"
+                className="w-full bg-[#8B5E3C] text-white py-4 rounded-2xl hover:bg-[#7a4e2f] disabled:opacity-50 font-semibold transition"
               >
                 Add to Cart
               </button>
               <button
                 onClick={handleWishlist}
-                className="w-full flex items-center justify-center gap-2 border border-red-500 text-red-500 py-3 rounded-lg hover:bg-red-50"
+                className={`w-full flex items-center justify-center gap-2 border-2 py-4 rounded-2xl font-semibold transition ${
+                  isInWishlist 
+                    ? 'bg-[#8B5E3C] text-white border-[#8B5E3C]'
+                    : 'border-[#E7DBCF] text-[#8B5E3C] bg-white hover:border-[#8B5E3C]'
+                }`}
               >
                 {isInWishlist ? <FaHeart /> : <FaRegHeart />}
                 {isInWishlist ? 'In Wishlist' : 'Add to Wishlist'}

@@ -42,37 +42,37 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-[#F6F1E8] py-12">
+      <div className="max-w-4xl mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Sidebar */}
-          <div className="bg-white rounded-lg shadow p-6 h-fit">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+          <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
+            <div className="text-center mb-8">
+              <div className="w-20 h-20 bg-[#8B5E3C] text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
-              <h2 className="text-lg font-bold">{user.name}</h2>
-              <p className="text-gray-600 text-sm">{user.email}</p>
-              {user.phone && <p className="text-gray-600 text-sm">{user.phone}</p>}
+              <h2 className="text-xl font-black text-[#1E1E1E]">{user.name}</h2>
+              <p className="text-[#6A625B] text-sm mt-1">{user.email}</p>
+              {user.phone && <p className="text-[#6A625B] text-sm">{user.phone}</p>}
             </div>
 
-            <nav className="space-y-2 border-t pt-4">
+            <nav className="space-y-2 border-t border-[#E7DBCF] pt-6">
               <button
                 onClick={() => setActiveTab('orders')}
-                className={`w-full text-left px-4 py-2 rounded ${
+                className={`w-full text-left px-4 py-3 rounded-2xl transition font-medium ${
                   activeTab === 'orders'
-                    ? 'bg-green-100 text-green-700 font-semibold'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-[#8B5E3C] text-white'
+                    : 'text-[#5A5149] hover:bg-[#F6F1E8]'
                 }`}
               >
                 My Orders
               </button>
               <button
                 onClick={() => setActiveTab('account')}
-                className={`w-full text-left px-4 py-2 rounded ${
+                className={`w-full text-left px-4 py-3 rounded-2xl transition font-medium ${
                   activeTab === 'account'
-                    ? 'bg-green-100 text-green-700 font-semibold'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-[#8B5E3C] text-white'
+                    : 'text-[#5A5149] hover:bg-[#F6F1E8]'
                 }`}
               >
                 Account Settings
@@ -81,7 +81,7 @@ export default function Profile() {
 
             <button
               onClick={handleLogout}
-              className="w-full mt-6 bg-red-500 text-white py-2 rounded hover:bg-red-600 font-semibold"
+              className="w-full mt-8 bg-[#8B5E3C] text-white py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold transition"
             >
               Logout
             </button>
@@ -92,44 +92,44 @@ export default function Profile() {
             {/* Orders Tab */}
             {activeTab === 'orders' && (
               <div>
-                <h1 className="text-3xl font-bold mb-6">My Orders</h1>
+                <h1 className="text-4xl font-black mb-8 text-[#1E1E1E]">My Orders</h1>
 
                 {loading ? (
                   <div className="text-center py-12">Loading...</div>
                 ) : orders.length > 0 ? (
                   <div className="space-y-4">
                     {orders.map((order) => (
-                      <div key={order.id} className="bg-white rounded-lg shadow p-6">
+                      <div key={order.id} className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-6 hover:shadow-md transition">
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <p className="text-sm text-gray-500">Order #{order.id}</p>
-                            <p className="font-semibold text-lg">
+                            <p className="text-sm text-[#8B5E3C] font-medium">Order #{order.id}</p>
+                            <p className="font-black text-2xl text-[#1E1E1E]">
                               ৳{order.totalAmount?.toFixed(2)}
                             </p>
                           </div>
                           <span
-                            className={`px-3 py-1 rounded text-sm font-semibold ${
+                            className={`px-4 py-2 rounded-full text-sm font-bold transition ${
                               order.status === 'CONFIRMED'
-                                ? 'bg-green-100 text-green-700'
+                                ? 'bg-[#8B5E3C] text-white'
                                 : order.status === 'PENDING'
-                                ? 'bg-yellow-100 text-yellow-700'
-                                : 'bg-blue-100 text-blue-700'
+                                ? 'bg-[#F6F1E8] text-[#8B5E3C] border border-[#E7DBCF]'
+                                : 'bg-[#F6F1E8] text-[#8B5E3C] border border-[#E7DBCF]'
                             }`}
                           >
                             {order.status}
                           </span>
                         </div>
 
-                        <p className="text-sm text-gray-600 mb-2">
+                        <p className="text-sm text-[#6A625B] mb-2">
                           📍 {order.address}, {order.city}
                         </p>
-                        <p className="text-sm text-gray-600 mb-3">
+                        <p className="text-sm text-[#6A625B] mb-4">
                           {new Date(order.createdAt).toLocaleDateString()}
                         </p>
 
                         <button
                           onClick={() => navigate(`/orders/${order.id}`)}
-                          className="text-green-600 hover:text-green-700 font-semibold text-sm"
+                          className="text-[#8B5E3C] hover:text-[#7a4e2f] font-bold text-sm"
                         >
                           View Details →
                         </button>
@@ -137,8 +137,8 @@ export default function Profile() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 bg-white rounded-lg">
-                    <p className="text-gray-600">No orders yet</p>
+                  <div className="text-center py-12 bg-white border border-[#E7DBCF] rounded-3xl">
+                    <p className="text-[#6A625B]">No orders yet</p>
                   </div>
                 )}
               </div>
@@ -147,7 +147,7 @@ export default function Profile() {
             {/* Account Settings Tab */}
             {activeTab === 'account' && (
               <div>
-                <h1 className="text-3xl font-bold mb-6">Account Settings</h1>
+                <h1 className="text-4xl font-black mb-8 text-[#1E1E1E]">Account Settings</h1>
 
                 <div className="bg-white rounded-lg shadow p-6 space-y-4">
                   <div>

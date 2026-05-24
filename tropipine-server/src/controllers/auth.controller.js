@@ -60,7 +60,7 @@ async function login(req, res) {
     });
 
     const { password: _p, ...safe } = user;
-    res.json({ user: safe });
+    res.json({ data: { user: safe, token } });
   } catch (err) {
     console.error('[LOGIN] Error:', err.message);
     console.error('[LOGIN] Stack:', err.stack);
