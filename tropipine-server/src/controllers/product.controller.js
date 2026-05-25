@@ -224,6 +224,14 @@ async function deleteProduct(req, res) {
     const existing = await prisma.product.findUnique({ where: { id }, include: { images: true } });
     if (!existing) return res.status(404).json({ message: 'Product not found' });
 
+    // Check if product is referenced in any orders
+    const orderItemCount = await prisma.orderItem.count({ where: { productId: id } });
+    if (orderItemCount > 0) {
+      return res.status(409).json({ 
+        message: 'Cannot delete product that has been ordered. This product is referenced in active orders.' 
+      });
+    }
+
     // Delete images from Cloudinary
     for (const img of existing.images) {
       if (img.publicId) await destroyImage(img.publicId).catch(() => {});

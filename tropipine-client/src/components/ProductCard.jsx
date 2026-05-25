@@ -49,10 +49,10 @@ export default function ProductCard({ product }) {
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className="group bg-white rounded-3xl overflow-hidden border border-edge shadow-card hover:shadow-card-hover transition-shadow duration-300 flex flex-col"
+      className="group bg-white rounded-3xl overflow-hidden border border-edge shadow-card hover:shadow-card-hover transition-shadow duration-300 flex flex-col h-full"
     >
       {/* IMAGE */}
-      <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-surface h-56">
+      <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-surface h-56 flex-shrink-0">
         <img
           src={primaryImage || 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&q=80'}
           alt={product.name}
@@ -99,7 +99,7 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* CONTENT */}
-      <div className="p-5 flex flex-col flex-1">
+      <div className="p-5 flex flex-col flex-1 h-full">
         {/* Category */}
         {product.category && (
           <span className="text-[11px] uppercase tracking-wider text-brand-500 font-semibold mb-2">
@@ -109,19 +109,19 @@ export default function ProductCard({ product }) {
 
         {/* Title */}
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-display text-base font-bold text-ink leading-snug mb-1 line-clamp-2 hover:text-brand-600 transition-colors">
+          <h3 className="font-display text-base font-bold text-ink leading-tight mb-1 line-clamp-2 h-10 hover:text-brand-600 transition-colors">
             {product.name}
           </h3>
         </Link>
 
         {/* Origin */}
         {product.origin && (
-          <p className="text-xs text-ink-faint mb-3">📍 {product.origin}</p>
+          <p className="text-xs text-ink-faint mb-2 h-5">📍 {product.origin}</p>
         )}
 
         {/* Rating */}
         {product.avgRating > 0 && (
-          <div className="flex items-center gap-1.5 mb-3">
+          <div className="flex items-center gap-1.5 mb-2 h-5">
             <div className="flex">
               {[1,2,3,4,5].map((i) => (
                 <FaStar key={i} size={11} className={i <= Math.round(product.avgRating) ? 'text-[#F59E0B]' : 'text-edge'} />
@@ -147,7 +147,7 @@ export default function ProductCard({ product }) {
 
           {/* Stock pill */}
           {isLowStock && (
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-orange-50 text-orange-600 border border-orange-200">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-orange-50 text-orange-600 border border-orange-200 whitespace-nowrap">
               Only {product.stockQty} left
             </span>
           )}
@@ -157,7 +157,7 @@ export default function ProductCard({ product }) {
         <button
           onClick={handleAddToCart}
           disabled={isOutOfStock}
-          className={`w-full py-3 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
+          className={`w-full py-3 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 flex-shrink-0 ${
             isOutOfStock
               ? 'bg-surface text-ink-faint cursor-not-allowed border border-edge'
               : 'gradient-brand text-white shadow-brand hover:shadow-lg hover:opacity-90'
