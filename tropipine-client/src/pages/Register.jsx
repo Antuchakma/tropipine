@@ -43,10 +43,12 @@ export default function Register() {
         password: formData.password,
       })
 
+      const { user, token } = response.data.data
+
       dispatch(
         loginSuccess({
-          user: response.data.user,
-          token: response.data.token,
+          user,
+          token,
         })
       )
       navigate('/profile')
@@ -62,7 +64,7 @@ export default function Register() {
     <div className="min-h-screen bg-[#F6F1E8] flex items-center justify-center py-12 px-6">
       <div className="w-full max-w-md">
         <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-10">
-          <h1 className="text-3xl font-black text-center mb-2">🍍 Join TropiPine</h1>
+          <h1 className="text-3xl font-black text-center mb-2">Join TropiPine</h1>
           <p className="text-center text-[#6A625B] text-sm mb-8">Create your account to start shopping</p>
 
           {error && (

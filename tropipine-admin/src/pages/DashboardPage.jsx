@@ -61,7 +61,6 @@ export default function DashboardPage() {
                       ৳{stats.todayRevenue?.toLocaleString() || 0}
                     </p>
                   </div>
-                  <div className="text-4xl">💰</div>
                 </div>
               </div>
 
@@ -74,7 +73,6 @@ export default function DashboardPage() {
                       {stats.totalOrders || 0}
                     </p>
                   </div>
-                  <div className="text-4xl">📦</div>
                 </div>
               </div>
 
@@ -87,7 +85,6 @@ export default function DashboardPage() {
                       {stats.pendingPayments || 0}
                     </p>
                   </div>
-                  <div className="text-4xl">⏳</div>
                 </div>
               </div>
 
@@ -100,7 +97,6 @@ export default function DashboardPage() {
                       {stats.lowStockProducts || 0}
                     </p>
                   </div>
-                  <div className="text-4xl">⚠️</div>
                 </div>
               </div>
             </div>

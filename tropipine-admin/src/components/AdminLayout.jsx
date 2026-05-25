@@ -17,7 +17,7 @@ export default function AdminLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-white p-6">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold">🍍 TropiPine</h1>
+          <h1 className="text-2xl font-bold">TropiPine</h1>
           <p className="text-sm text-gray-400">Admin Dashboard</p>
         </div>
 
@@ -26,43 +26,43 @@ export default function AdminLayout({ children }) {
             to="/dashboard"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            📊 Dashboard
+            Dashboard
           </Link>
           <Link
             to="/products"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            🛍️ Products
+            Products
           </Link>
           <Link
             to="/orders"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            📦 Orders
+            Orders
           </Link>
           <Link
             to="/payments"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            💳 Payments
+            Payments
           </Link>
           <Link
             to="/coupons"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            🎟️ Coupons
+            Coupons
           </Link>
           <Link
             to="/gallery"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            🖼️ Gallery
+            Gallery
           </Link>
           <Link
             to="/settings"
             className="block px-4 py-2 rounded hover:bg-gray-800 transition"
           >
-            ⚙️ Settings
+            Settings
           </Link>
         </nav>
 

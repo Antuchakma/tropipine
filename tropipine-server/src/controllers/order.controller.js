@@ -9,20 +9,36 @@ async function createOrder(req, res) {
     if (!Array.isArray(items) || items.length === 0) return res.status(400).json({ message: 'Cart is empty' });
 
     // Fetch products and calculate subtotal
-    const productIds = items.map((i) => parseInt(i.productId, 10));
+    const productIds = items
+      .map((i) => {
+        const id = typeof i.productId === 'string' ? parseInt(i.productId, 10) : i.productId;
+        return isNaN(id) ? null : id;
+      })
+      .filter((id) => id !== null);
+
+    if (productIds.length === 0) {
+      return res.status(400).json({ message: 'Invalid product IDs in cart' });
+    }
+
     const products = await prisma.product.findMany({ where: { id: { in: productIds } } });
     const productMap = new Map(products.map((p) => [p.id, p]));
 
     let subtotal = 0;
     const orderItemsData = [];
     for (const it of items) {
-      const pid = parseInt(it.productId, 10);
+      const pid = typeof it.productId === 'string' ? parseInt(it.productId, 10) : it.productId;
+      if (isNaN(pid)) continue; // Skip invalid product IDs
+      
       const qty = parseInt(it.quantity, 10) || 1;
       const prod = productMap.get(pid);
       if (!prod) return res.status(400).json({ message: `Product ${pid} not found` });
       const line = prod.price * qty;
       subtotal += line;
       orderItemsData.push({ productId: pid, productName: prod.name, unitPrice: prod.price, quantity: qty, subtotal: line });
+    }
+
+    if (orderItemsData.length === 0) {
+      return res.status(400).json({ message: 'No valid items in cart' });
     }
 
     let couponId = null;

@@ -52,11 +52,7 @@ export default function Checkout() {
           quantity: item.quantity,
         })),
         couponCode,
-        address: formData.address,
-        city: formData.city,
-        postalCode: formData.postalCode,
-        phone: formData.phone,
-        specialNote: formData.specialNote,
+        deliveryCharge,
         paymentMethod: formData.paymentMethod,
       })
 

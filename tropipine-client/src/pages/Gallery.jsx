@@ -142,12 +142,12 @@ export default function Gallery() {
               desc: 'Directly sourced from trusted farms',
             },
             {
-              icon: '🌾',
+              icon: '',
               title: 'Quality Control',
               desc: 'Strict inspection for every batch',
             },
             {
-              icon: '📦',
+              icon: '',
               title: 'Safe Packaging',
               desc: 'Eco-friendly and freshness-safe packaging',
             },

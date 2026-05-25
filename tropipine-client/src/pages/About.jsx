@@ -93,12 +93,12 @@ export default function About() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: '✨', title: 'Quality First', desc: 'Carefully selected fresh fruits' },
-              { icon: '🚚', title: 'Fast Delivery', desc: 'Quick and reliable shipping' },
-              { icon: '👨‍🌾', title: 'Farm Direct', desc: 'Sourced directly from farmers' },
-              { icon: '💰', title: 'Fair Pricing', desc: 'No unnecessary markups' },
-              { icon: '🔒', title: 'Secure Payment', desc: 'Safe checkout system' },
-              { icon: '📞', title: 'Support', desc: 'Simple and responsive help' },
+              { icon: '', title: 'Quality First', desc: 'Carefully selected fresh fruits' },
+              { icon: '', title: 'Fast Delivery', desc: 'Quick and reliable shipping' },
+              { icon: '', title: 'Farm Direct', desc: 'Sourced directly from farmers' },
+              { icon: '', title: 'Fair Pricing', desc: 'No unnecessary markups' },
+              { icon: '', title: 'Secure Payment', desc: 'Safe checkout system' },
+              { icon: '', title: 'Support', desc: 'Simple and responsive help' },
             ].map((item, idx) => (
               <div
                 key={idx}

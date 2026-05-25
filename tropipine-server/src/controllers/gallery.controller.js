@@ -14,20 +14,22 @@ async function getGalleryImages(req, res) {
 
 async function createGalleryImage(req, res) {
   try {
-    const { caption, category } = req.body;
-    let url = req.body.url;
-    let publicId = req.body.publicId || `gallery_${Date.now()}`;
+    const { caption, category } = req.body || {};
+    
+    let url = null;
+    let publicId = null;
 
     // Handle file upload if provided
     if (req.file) {
-      // If a file is uploaded, create a data URL or save it
-      // For now, we'll use a placeholder URL pattern
       url = `/uploads/gallery/${req.file.filename}`;
       publicId = req.file.filename;
+    } else if (req.body?.url) {
+      url = req.body.url;
+      publicId = req.body.publicId || `gallery_${Date.now()}`;
     }
 
     if (!url) {
-      return res.status(400).json({ message: 'URL or file is required' });
+      return res.status(400).json({ message: 'File or URL is required' });
     }
 
     const image = await prisma.galleryImage.create({

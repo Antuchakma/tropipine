@@ -24,10 +24,12 @@ export default function Login() {
         password,
       })
 
+      const { user, token } = response.data.data
+
       dispatch(
         loginSuccess({
-          user: response.data.user,
-          token: response.data.token,
+          user,
+          token,
         })
       )
 
@@ -53,7 +55,7 @@ export default function Login() {
 
           {/* TITLE */}
           <h1 className="text-3xl font-black text-center mb-2">
-            Welcome Back 🍍
+            Welcome Back
           </h1>
 
           <p className="text-center text-[#6A625B] text-sm mb-8">
