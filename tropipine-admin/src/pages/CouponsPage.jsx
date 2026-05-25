@@ -1,47 +1,35 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { FaEdit, FaTrash, FaPlus, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow } from '../utils/ui';
+
+const emptyForm = {
+  code: '', type: 'PERCENTAGE', value: '',
+  minOrderAmount: '', maxDiscount: '', usageLimit: '', perUserLimit: 1,
+};
 
 export default function CouponsPage() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({
-    code: '',
-    type: 'PERCENTAGE',
-    value: '',
-    minOrderAmount: '',
-    maxDiscount: '',
-    usageLimit: '',
-    perUserLimit: 1,
-  });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [formData, setFormData] = useState(emptyForm);
+  const [toast, setToast] = useState(null);
 
-  useEffect(() => {
-    fetchCoupons();
-  }, []);
-
-  const fetchCoupons = async () => {
-    try {
-      const response = await api.get('/coupons');
-      setCoupons(response.data.data || []);
-    } catch (error) {
-      console.error('Error fetching coupons:', error);
-      setError('Failed to fetch coupons');
-    } finally {
-      setLoading(false);
-    }
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+  useEffect(() => { fetchCoupons(); }, []);
+
+  const fetchCoupons = async () => {
+    setLoading(true);
+    try {
+      const r = await api.get('/coupons');
+      setCoupons(r.data.data || []);
+    } catch { showToast('Failed to load coupons', 'error'); }
+    finally { setLoading(false); }
   };
 
   const handleSubmit = async (e) => {
@@ -49,232 +37,173 @@ export default function CouponsPage() {
     try {
       if (editingId) {
         await api.patch(`/coupons/${editingId}`, formData);
-        setSuccess('Coupon updated successfully!');
+        showToast('Coupon updated!');
       } else {
         await api.post('/coupons', formData);
-        setSuccess('Coupon created successfully!');
+        showToast('Coupon created!');
       }
       setShowForm(false);
       setEditingId(null);
-      setFormData({
-        code: '',
-        type: 'PERCENTAGE',
-        value: '',
-        minOrderAmount: '',
-        maxDiscount: '',
-        usageLimit: '',
-        perUserLimit: 1,
-      });
       fetchCoupons();
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error saving coupon');
-    }
+    } catch (err) { showToast(err.response?.data?.message || 'Error', 'error'); }
   };
 
-  const handleEdit = (coupon) => {
-    setFormData(coupon);
+  const handleToggle = async (id, current) => {
+    try {
+      await api.patch(`/coupons/${id}/toggle`);
+      showToast(`Coupon ${current ? 'disabled' : 'enabled'}`);
+      fetchCoupons();
+    } catch { showToast('Toggle failed', 'error'); }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this coupon?')) return;
+    try {
+      await api.delete(`/coupons/${id}`);
+      showToast('Coupon deleted');
+      fetchCoupons();
+    } catch { showToast('Failed to delete', 'error'); }
+  };
+
+  const openEdit = (coupon) => {
+    setFormData({ ...emptyForm, ...coupon });
     setEditingId(coupon.id);
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure?')) {
-      try {
-        await api.delete(`/coupons/${id}`);
-        setSuccess('Coupon deleted successfully!');
-        fetchCoupons();
-      } catch (error) {
-        setError('Failed to delete coupon');
-      }
-    }
-  };
-
-  const handleToggle = async (id, currentStatus) => {
-    try {
-      await api.patch(`/coupons/${id}/toggle`);
-      setSuccess(`Coupon ${currentStatus ? 'disabled' : 'enabled'}!`);
-      fetchCoupons();
-    } catch (error) {
-      setError('Failed to toggle coupon');
-    }
-  };
-
   return (
     <AdminLayout>
-      <div>
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800">Coupon Management</h2>
-          <button
-            onClick={() => {
-              setShowForm(!showForm);
-              setEditingId(null);
-              setFormData({
-                code: '',
-                type: 'PERCENTAGE',
-                value: '',
-                minOrderAmount: '',
-                maxDiscount: '',
-                usageLimit: '',
-                perUserLimit: 1,
-              });
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
-          >
-            <FaPlus /> Add Coupon
+      <div className="max-w-[1100px] space-y-6">
+
+        {toast && (
+          <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
+            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            {toast.msg}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Coupons</h2>
+            <p className="text-sm text-ink-muted mt-0.5">{coupons.length} coupons total</p>
+          </div>
+          <button onClick={() => { setFormData(emptyForm); setEditingId(null); setShowForm(true); }} className={btn.primary} style={brandGrad}>
+            + New Coupon
           </button>
         </div>
 
-        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
-        {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">{success}</div>}
-
-        {/* Form */}
         {showForm && (
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">{editingId ? 'Edit Coupon' : 'Add New Coupon'}</h3>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="code"
-                placeholder="Coupon Code (e.g., SUMMER20)"
-                value={formData.code}
-                onChange={handleInputChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2 uppercase"
-              />
-              <select
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2"
-              >
-                <option value="PERCENTAGE">Percentage</option>
-                <option value="FIXED">Fixed Amount</option>
-              </select>
-              <input
-                type="number"
-                name="value"
-                placeholder={formData.type === 'PERCENTAGE' ? 'Discount % (e.g., 20)' : 'Discount Amount (e.g., 100)'}
-                value={formData.value}
-                onChange={handleInputChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <input
-                type="number"
-                name="minOrderAmount"
-                placeholder="Minimum Order Amount"
-                value={formData.minOrderAmount}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <input
-                type="number"
-                name="maxDiscount"
-                placeholder="Max Discount (for percentage)"
-                value={formData.maxDiscount}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <input
-                type="number"
-                name="usageLimit"
-                placeholder="Total Usage Limit"
-                value={formData.usageLimit}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <input
-                type="number"
-                name="perUserLimit"
-                placeholder="Per User Limit"
-                value={formData.perUserLimit}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <div className="md:col-span-2 flex gap-4">
-                <button
-                  type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
+          <div className={`${card} p-7`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>
+                {editingId ? 'Edit Coupon' : 'New Coupon'}
+              </h3>
+              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted flex items-center justify-center text-lg">✕</button>
+            </div>
+            <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Coupon Code *</label>
+                <input
+                  type="text"
+                  name="code"
+                  placeholder="SUMMER20"
+                  value={formData.code}
+                  onChange={(e) => setFormData((p) => ({ ...p, code: e.target.value.toUpperCase() }))}
+                  required
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm font-mono uppercase focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Discount Type</label>
+                <select
+                  name="type"
+                  value={formData.type}
+                  onChange={(e) => setFormData((p) => ({ ...p, type: e.target.value }))}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
                 >
-                  {editingId ? 'Update' : 'Create'} Coupon
+                  <option value="PERCENTAGE">Percentage (%)</option>
+                  <option value="FIXED">Fixed Amount (৳)</option>
+                </select>
+              </div>
+              {[
+                { name: 'value', label: formData.type === 'PERCENTAGE' ? 'Discount % *' : 'Discount Amount ৳ *', placeholder: formData.type === 'PERCENTAGE' ? '20' : '100', required: true },
+                { name: 'minOrderAmount', label: 'Min Order Amount', placeholder: '500' },
+                { name: 'maxDiscount', label: 'Max Discount Cap (৳)', placeholder: 'No cap' },
+                { name: 'usageLimit', label: 'Total Usage Limit', placeholder: 'Unlimited' },
+                { name: 'perUserLimit', label: 'Per-User Limit', placeholder: '1' },
+              ].map(({ name, label, placeholder, required }) => (
+                <div key={name}>
+                  <label className="block text-xs font-semibold text-ink-muted mb-1.5">{label}</label>
+                  <input
+                    type="number"
+                    name={name}
+                    placeholder={placeholder}
+                    value={formData[name]}
+                    onChange={(e) => setFormData((p) => ({ ...p, [name]: e.target.value }))}
+                    required={required}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition"
+                  />
+                </div>
+              ))}
+              <div className="sm:col-span-2 flex gap-3 pt-2">
+                <button type="submit" className={btn.primary} style={brandGrad}>
+                  {editingId ? 'Save Changes' : 'Create Coupon'}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg transition"
-                >
-                  Cancel
-                </button>
+                <button type="button" onClick={() => setShowForm(false)} className={btn.secondary}>Cancel</button>
               </div>
             </form>
           </div>
         )}
 
-        {/* Coupons Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead className="bg-gray-100 border-b">
+            <thead style={{ background: '#FAFAF8' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Code</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Type</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Value</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Usage</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Status</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Actions</th>
+                {['Code', 'Type', 'Discount', 'Min Order', 'Used / Limit', 'Status', ''].map((h) => (
+                  <th key={h} className={tableHead}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-                    Loading...
-                  </td>
-                </tr>
-              ) : coupons.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-                    No coupons found
-                  </td>
-                </tr>
-              ) : (
-                coupons.map((coupon) => (
-                  <tr key={coupon.id} className="border-b hover:bg-gray-50">
-                    <td className="px-6 py-4 font-bold text-gray-800">{coupon.code}</td>
-                    <td className="px-6 py-4 text-gray-600">{coupon.type}</td>
-                    <td className="px-6 py-4 text-gray-600">
-                      {coupon.type === 'PERCENTAGE' ? `${coupon.value}%` : `৳${coupon.value}`}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">{coupon.usedCount} / {coupon.usageLimit || '∞'}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded text-sm ${
-                        coupon.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {coupon.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 flex gap-2">
-                      <button
-                        onClick={() => handleToggle(coupon.id, coupon.isActive)}
-                        className={`${coupon.isActive ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-500 hover:bg-green-600'} text-white px-3 py-1 rounded transition`}
-                      >
-                        {coupon.isActive ? <FaToggleOn /> : <FaToggleOff />}
-                      </button>
-                      <button
-                        onClick={() => handleEdit(coupon)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(coupon.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
-                      >
-                        <FaTrash />
-                      </button>
-                    </td>
+                [...Array(4)].map((_, i) => (
+                  <tr key={i} className="border-b border-edge">
+                    {[...Array(7)].map((_, j) => (
+                      <td key={j} className="px-5 py-4"><div className="h-4 bg-edge rounded animate-pulse" /></td>
+                    ))}
                   </tr>
                 ))
-              )}
+              ) : coupons.length === 0 ? (
+                <tr><td colSpan="7" className="px-5 py-16 text-center text-sm text-ink-muted">No coupons yet</td></tr>
+              ) : coupons.map((c) => (
+                <tr key={c.id} className={tableRow}>
+                  <td className={`${tableCell} font-mono font-bold text-ink`}>{c.code}</td>
+                  <td className={`${tableCell} text-ink-muted`}>{c.type}</td>
+                  <td className={`${tableCell} font-semibold`}>{c.type === 'PERCENTAGE' ? `${c.value}%` : `৳${c.value}`}</td>
+                  <td className={tableCell}>{c.minOrderAmount > 0 ? `৳${c.minOrderAmount}` : '—'}</td>
+                  <td className={tableCell}>
+                    <span className="font-semibold text-ink">{c.usedCount}</span>
+                    <span className="text-ink-muted"> / {c.usageLimit || '∞'}</span>
+                  </td>
+                  <td className={tableCell}>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${c.isActive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-surface text-ink-faint border-edge'}`}>
+                      {c.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td className={tableCell}>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleToggle(c.id, c.isActive)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium border border-edge bg-white text-ink-muted hover:text-ink hover:border-gray-300 transition-colors"
+                      >
+                        {c.isActive ? 'Disable' : 'Enable'}
+                      </button>
+                      <button onClick={() => openEdit(c)} className={btn.ghost}>Edit</button>
+                      <button onClick={() => handleDelete(c.id)} className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors">Del</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

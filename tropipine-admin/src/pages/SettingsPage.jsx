@@ -1,233 +1,183 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { FaSave, FaPlus, FaTrash } from 'react-icons/fa';
+import { btn, brandGrad, card } from '../utils/ui';
 
 export default function SettingsPage() {
-  const [mfsSettings, setMfsSettings] = useState({
-    bkash_number: '',
-    nagad_number: '',
-    rocket_number: '',
-  });
-  const [deliveryZones, setDeliveryZones] = useState([]);
-  const [showDeliveryForm, setShowDeliveryForm] = useState(false);
-  const [newZone, setNewZone] = useState({
-    name: '',
-    charge: '',
-    estimatedDays: '',
-  });
+  const [mfs, setMfs] = useState({ bkash_number: '', nagad_number: '', rocket_number: '' });
+  const [zones, setZones] = useState([]);
+  const [showZoneForm, setShowZoneForm] = useState(false);
+  const [newZone, setNewZone] = useState({ name: '', charge: '', estimatedDays: '' });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
+  };
 
   useEffect(() => {
-    fetchSettings();
+    Promise.all([
+      api.get('/payments/config').catch(() => ({ data: { data: {} } })),
+      api.get('/delivery').catch(() => ({ data: { data: [] } })),
+    ]).then(([m, d]) => {
+      setMfs(m.data.data || {});
+      setZones(d.data.data || []);
+    }).finally(() => setLoading(false));
   }, []);
-
-  const fetchSettings = async () => {
-    try {
-      const [mfsRes, deliveryRes] = await Promise.all([
-        api.get('/payments/config').catch(() => ({ data: { data: {} } })),
-        api.get('/delivery').catch(() => ({ data: { data: [] } })),
-      ]);
-
-      setMfsSettings(mfsRes.data.data || {});
-      setDeliveryZones(deliveryRes.data.data || []);
-    } catch (error) {
-      console.error('Error fetching settings:', error);
-      setError('Failed to fetch settings');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleMfsChange = (e) => {
-    const { name, value } = e.target;
-    setMfsSettings((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const handleSaveMfs = async () => {
     try {
-      await api.patch('/payments/config', mfsSettings);
-      setSuccess('MFS settings saved successfully!');
-    } catch (error) {
-      setError('Failed to save MFS settings');
-    }
+      await api.patch('/payments/config', mfs);
+      showToast('MFS numbers saved!');
+    } catch { showToast('Failed to save', 'error'); }
   };
 
-  const handleAddDeliveryZone = async (e) => {
+  const handleAddZone = async (e) => {
     e.preventDefault();
     if (!newZone.name || !newZone.charge || !newZone.estimatedDays) {
-      setError('Please fill all fields');
-      return;
+      showToast('Fill all zone fields', 'error'); return;
     }
-
     try {
       await api.post('/delivery', newZone);
-      setSuccess('Delivery zone added!');
+      showToast('Delivery zone added!');
       setNewZone({ name: '', charge: '', estimatedDays: '' });
-      setShowDeliveryForm(false);
-      fetchSettings();
-    } catch (error) {
-      setError('Failed to add delivery zone');
-    }
+      setShowZoneForm(false);
+      const r = await api.get('/delivery');
+      setZones(r.data.data || []);
+    } catch { showToast('Failed to add zone', 'error'); }
   };
 
-  const handleDeleteDeliveryZone = async (id) => {
-    if (window.confirm('Are you sure?')) {
-      try {
-        await api.delete(`/delivery/${id}`);
-        setSuccess('Delivery zone deleted!');
-        fetchSettings();
-      } catch (error) {
-        setError('Failed to delete delivery zone');
-      }
-    }
+  const handleDeleteZone = async (id) => {
+    if (!window.confirm('Delete this zone?')) return;
+    try {
+      await api.delete(`/delivery/${id}`);
+      showToast('Zone deleted');
+      setZones((z) => z.filter((z) => z.id !== id));
+    } catch { showToast('Failed', 'error'); }
   };
+
+  const mfsFields = [
+    { key: 'bkash_number', label: 'bKash Merchant Number', placeholder: '01XXXXXXXXX', color: '#E2136E' },
+    { key: 'nagad_number', label: 'Nagad Merchant Number', placeholder: '01XXXXXXXXX', color: '#F7A21B' },
+    { key: 'rocket_number', label: 'Rocket Merchant Number', placeholder: '01XXXXXXXXX', color: '#8332A4' },
+  ];
 
   return (
     <AdminLayout>
-      <div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">Settings</h2>
+      <div className="max-w-[900px] space-y-8">
 
-        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
-        {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">{success}</div>}
+        {toast && (
+          <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
+            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            {toast.msg}
+          </div>
+        )}
+
+        <div>
+          <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Settings</h2>
+          <p className="text-sm text-ink-muted mt-0.5">Configure payments, delivery zones, and site options</p>
+        </div>
 
         {loading ? (
-          <div className="text-center py-8">Loading...</div>
+          <div className="text-center py-16 text-ink-muted">Loading settings…</div>
         ) : (
           <>
-            {/* MFS Settings */}
-            <div className="bg-white rounded-lg shadow p-8 mb-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">Mobile Financial Service (MFS) Configuration</h3>
-              <p className="text-gray-600 text-sm mb-6">Enter the merchant numbers where customers will send payment</p>
-
+            {/* MFS */}
+            <div className={`${card} p-7`}>
+              <h3 className="font-bold text-ink text-lg mb-1" style={{ fontFamily: 'var(--font-display)' }}>Mobile Financial Services</h3>
+              <p className="text-sm text-ink-muted mb-6">Customers will send payments to these numbers</p>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-gray-700 font-bold mb-2">bKash Number</label>
-                  <input
-                    type="text"
-                    name="bkash_number"
-                    value={mfsSettings.bkash_number || ''}
-                    onChange={handleMfsChange}
-                    placeholder="e.g., 01XXXXXXXXX"
-                    className="w-full border border-gray-300 rounded px-3 py-2"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-700 font-bold mb-2">Nagad Number</label>
-                  <input
-                    type="text"
-                    name="nagad_number"
-                    value={mfsSettings.nagad_number || ''}
-                    onChange={handleMfsChange}
-                    placeholder="e.g., 01XXXXXXXXX"
-                    className="w-full border border-gray-300 rounded px-3 py-2"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-700 font-bold mb-2">Rocket Number</label>
-                  <input
-                    type="text"
-                    name="rocket_number"
-                    value={mfsSettings.rocket_number || ''}
-                    onChange={handleMfsChange}
-                    placeholder="e.g., 01XXXXXXXXX"
-                    className="w-full border border-gray-300 rounded px-3 py-2"
-                  />
-                </div>
-
-                <button
-                  onClick={handleSaveMfs}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition"
-                >
-                  <FaSave /> Save MFS Settings
+                {mfsFields.map(({ key, label, placeholder, color }) => (
+                  <div key={key} className="flex items-center gap-4">
+                    <div className="w-3 h-3 rounded-full shrink-0" style={{ background: color }} />
+                    <div className="flex-1">
+                      <label className="block text-xs font-semibold text-ink-muted mb-1.5">{label}</label>
+                      <input
+                        type="text"
+                        value={mfs[key] || ''}
+                        onChange={(e) => setMfs((p) => ({ ...p, [key]: e.target.value }))}
+                        placeholder={placeholder}
+                        className="w-full px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition"
+                      />
+                    </div>
+                  </div>
+                ))}
+                <button onClick={handleSaveMfs} className={btn.primary} style={brandGrad}>
+                  Save MFS Numbers
                 </button>
               </div>
             </div>
 
             {/* Delivery Zones */}
-            <div className="bg-white rounded-lg shadow p-8 mb-8">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">Delivery Zones</h3>
-                <button
-                  onClick={() => setShowDeliveryForm(!showDeliveryForm)}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
-                >
-                  <FaPlus /> Add Zone
+            <div className={`${card} p-7`}>
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h3 className="font-bold text-ink text-lg" style={{ fontFamily: 'var(--font-display)' }}>Delivery Zones</h3>
+                  <p className="text-sm text-ink-muted mt-0.5">Configure delivery areas and charges</p>
+                </div>
+                <button onClick={() => setShowZoneForm(!showZoneForm)} className={btn.primary} style={brandGrad}>
+                  + Add Zone
                 </button>
               </div>
 
-              {/* Add Zone Form */}
-              {showDeliveryForm && (
-                <form onSubmit={handleAddDeliveryZone} className="bg-gray-50 p-6 rounded-lg mb-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <input
-                      type="text"
-                      placeholder="Zone Name (e.g., Inside Dhaka)"
-                      value={newZone.name}
-                      onChange={(e) => setNewZone((prev) => ({ ...prev, name: e.target.value }))}
-                      className="border border-gray-300 rounded px-3 py-2"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Delivery Charge (৳)"
-                      value={newZone.charge}
-                      onChange={(e) => setNewZone((prev) => ({ ...prev, charge: e.target.value }))}
-                      className="border border-gray-300 rounded px-3 py-2"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Estimated Days (e.g., 1-2 days)"
-                      value={newZone.estimatedDays}
-                      onChange={(e) => setNewZone((prev) => ({ ...prev, estimatedDays: e.target.value }))}
-                      className="border border-gray-300 rounded px-3 py-2"
-                    />
+              {showZoneForm && (
+                <form onSubmit={handleAddZone} className="bg-surface rounded-2xl p-5 mb-5 border border-edge">
+                  <p className="text-sm font-semibold text-ink mb-4">New Delivery Zone</p>
+                  <div className="grid sm:grid-cols-3 gap-3 mb-4">
+                    <div>
+                      <label className="block text-xs text-ink-muted mb-1.5">Zone Name</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Inside Dhaka"
+                        value={newZone.name}
+                        onChange={(e) => setNewZone((p) => ({ ...p, name: e.target.value }))}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-ink-muted mb-1.5">Charge (৳)</label>
+                      <input
+                        type="number"
+                        placeholder="80"
+                        value={newZone.charge}
+                        onChange={(e) => setNewZone((p) => ({ ...p, charge: e.target.value }))}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-ink-muted mb-1.5">Estimated Days</label>
+                      <input
+                        type="text"
+                        placeholder="1-2 days"
+                        value={newZone.estimatedDays}
+                        onChange={(e) => setNewZone((p) => ({ ...p, estimatedDays: e.target.value }))}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
+                      />
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <button
-                      type="submit"
-                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition"
-                    >
-                      Add Zone
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowDeliveryForm(false)}
-                      className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded transition"
-                    >
-                      Cancel
-                    </button>
+                  <div className="flex gap-3">
+                    <button type="submit" className={btn.primary} style={brandGrad}>Add Zone</button>
+                    <button type="button" onClick={() => setShowZoneForm(false)} className={btn.secondary}>Cancel</button>
                   </div>
                 </form>
               )}
 
-              {/* Zones List */}
-              {deliveryZones.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No delivery zones configured</p>
+              {zones.length === 0 ? (
+                <div className="text-center py-10 text-sm text-ink-muted">No delivery zones configured yet.</div>
               ) : (
-                <div className="space-y-4">
-                  {deliveryZones.map((zone) => (
-                    <div
-                      key={zone.id}
-                      className="border border-gray-200 rounded-lg p-4 flex justify-between items-center"
-                    >
+                <div className="space-y-3">
+                  {zones.map((z) => (
+                    <div key={z.id} className="flex items-center justify-between px-5 py-4 rounded-2xl bg-surface border border-edge">
                       <div>
-                        <p className="font-bold text-gray-800">{zone.name}</p>
-                        <p className="text-sm text-gray-600">
-                          Charge: ৳{zone.charge} • Estimated: {zone.estimatedDays}
-                        </p>
+                        <p className="font-semibold text-ink text-sm">{z.name}</p>
+                        <p className="text-xs text-ink-muted mt-0.5">৳{z.charge} · {z.estimatedDays}</p>
                       </div>
                       <button
-                        onClick={() => handleDeleteDeliveryZone(zone.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded transition"
+                        onClick={() => handleDeleteZone(z.id)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors"
                       >
-                        <FaTrash />
+                        Delete
                       </button>
                     </div>
                   ))}
@@ -235,18 +185,20 @@ export default function SettingsPage() {
               )}
             </div>
 
-            {/* Site Info */}
-            <div className="bg-white rounded-lg shadow p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6">Site Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                  <p className="text-gray-600 text-sm mb-2">Admin Email</p>
-                  <p className="font-bold text-lg">admin@tropipine.com</p>
-                </div>
-                <div className="bg-green-50 p-6 rounded-lg border border-green-200">
-                  <p className="text-gray-600 text-sm mb-2">Version</p>
-                  <p className="font-bold text-lg">1.0.0</p>
-                </div>
+            {/* Info */}
+            <div className={`${card} p-7`}>
+              <h3 className="font-bold text-ink text-lg mb-5" style={{ fontFamily: 'var(--font-display)' }}>Site Info</h3>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {[
+                  { label: 'Admin Email', val: 'admin@tropipine.com' },
+                  { label: 'App Version', val: '1.0.0' },
+                  { label: 'Environment', val: 'Production' },
+                ].map(({ label, val }) => (
+                  <div key={label} className="bg-surface rounded-xl p-4 border border-edge">
+                    <p className="text-xs text-ink-muted mb-1">{label}</p>
+                    <p className="text-sm font-semibold text-ink">{val}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </>

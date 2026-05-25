@@ -1,65 +1,126 @@
-import { FaFacebook, FaTwitter, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
+import { FaFacebook, FaTwitter, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800 text-white mt-16">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          {/* Brand */}
+    <footer className="bg-[#100C08] text-white mt-24">
+      {/* Top strip */}
+      <div className="border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-8 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
-            <h3 className="text-2xl font-bold mb-4">🍍 TropiPine</h3>
-            <p className="text-gray-300">Fresh tropical fruits delivered to your door.</p>
-            <div className="flex gap-4 mt-4">
-              <a href="#" className="hover:text-green-400"><FaFacebook size={20} /></a>
-              <a href="#" className="hover:text-green-400"><FaTwitter size={20} /></a>
-              <a href="#" className="hover:text-green-400"><FaInstagram size={20} /></a>
-            </div>
+            <h3 className="font-display text-2xl font-bold mb-2">Stay fresh with TropiPine</h3>
+            <p className="text-white/50 text-sm">Seasonal deals and harvest updates, straight to your inbox.</p>
           </div>
+          <form className="flex w-full max-w-sm gap-2" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              placeholder="you@email.com"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/15 text-sm placeholder-white/40 focus:outline-none focus:border-brand-400 transition"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2.5 rounded-xl gradient-brand text-white text-sm font-semibold shadow-brand hover:opacity-90 transition flex items-center gap-1.5"
+            >
+              Subscribe <FaArrowRight size={11} />
+            </button>
+          </form>
+        </div>
+      </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li><a href="/" className="hover:text-green-400">Home</a></li>
-              <li><a href="/shop" className="hover:text-green-400">Shop</a></li>
-              <li><a href="/gallery" className="hover:text-green-400">Gallery</a></li>
-              <li><a href="/about" className="hover:text-green-400">About Us</a></li>
-            </ul>
+      {/* Main grid */}
+      <div className="max-w-7xl mx-auto px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        {/* Brand */}
+        <div>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center text-lg shadow-brand">🍍</div>
+            <span className="font-display text-lg font-bold">TropiPine</span>
           </div>
-
-          {/* Support */}
-          <div>
-            <h4 className="font-semibold mb-4">Support</h4>
-            <ul className="space-y-2 text-gray-300">
-              <li><a href="#" className="hover:text-green-400">FAQ</a></li>
-              <li><a href="#" className="hover:text-green-400">Shipping Info</a></li>
-              <li><a href="#" className="hover:text-green-400">Returns</a></li>
-              <li><a href="#" className="hover:text-green-400">Contact</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold mb-4">Contact Us</h4>
-            <div className="space-y-2 text-gray-300">
-              <div className="flex items-center gap-2">
-                <FaPhone />
-                <span>+880 1234-567890</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaEnvelope />
-                <span>info@tropipine.com</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <FaMapMarkerAlt className="mt-1" />
-                <span>Dhaka, Bangladesh</span>
-              </div>
-            </div>
+          <p className="text-white/50 text-sm leading-relaxed mb-6">
+            Premium tropical fruits delivered farm-fresh to your door. Handpicked. Always fresh.
+          </p>
+          <div className="flex gap-3">
+            {[
+              { icon: <FaFacebook size={15} />, href: '#' },
+              { icon: <FaTwitter size={15} />, href: '#' },
+              { icon: <FaInstagram size={15} />, href: '#' },
+            ].map((s, i) => (
+              <a
+                key={i}
+                href={s.href}
+                className="w-9 h-9 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:border-brand-400 hover:bg-brand-500/20 transition-all duration-200"
+              >
+                {s.icon}
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 TropiPine. All rights reserved.</p>
+        {/* Quick Links */}
+        <div>
+          <h4 className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Explore</h4>
+          <ul className="space-y-3">
+            {[
+              { name: 'Home', to: '/' },
+              { name: 'Shop All Fruits', to: '/shop' },
+              { name: 'Gallery', to: '/gallery' },
+              { name: 'About Us', to: '/about' },
+            ].map((l) => (
+              <li key={l.name}>
+                <Link to={l.to} className="text-sm text-white/55 hover:text-white transition-colors duration-200">
+                  {l.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Account */}
+        <div>
+          <h4 className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Account</h4>
+          <ul className="space-y-3">
+            {[
+              { name: 'My Profile', to: '/profile' },
+              { name: 'My Orders', to: '/orders' },
+              { name: 'Wishlist', to: '/wishlist' },
+              { name: 'Cart', to: '/cart' },
+            ].map((l) => (
+              <li key={l.name}>
+                <Link to={l.to} className="text-sm text-white/55 hover:text-white transition-colors duration-200">
+                  {l.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div>
+          <h4 className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Contact</h4>
+          <ul className="space-y-4">
+            <li className="flex items-start gap-3 text-sm text-white/55">
+              <FaPhone className="mt-0.5 shrink-0 text-brand-400" size={13} />
+              <span>+880 1234-567890</span>
+            </li>
+            <li className="flex items-start gap-3 text-sm text-white/55">
+              <FaEnvelope className="mt-0.5 shrink-0 text-brand-400" size={13} />
+              <span>info@tropipine.com</span>
+            </li>
+            <li className="flex items-start gap-3 text-sm text-white/55">
+              <FaMapMarkerAlt className="mt-0.5 shrink-0 text-brand-400" size={13} />
+              <span>Dhaka, Bangladesh</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/35">
+          <span>© {new Date().getFullYear()} TropiPine. All rights reserved.</span>
+          <div className="flex gap-5">
+            <a href="#" className="hover:text-white/70 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white/70 transition-colors">Terms of Service</a>
+          </div>
         </div>
       </div>
     </footer>

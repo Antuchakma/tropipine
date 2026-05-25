@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../store/slices/authSlice'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -9,17 +9,32 @@ import {
   FaUser,
   FaBars,
   FaTimes,
+  FaChevronDown,
 } from 'react-icons/fa'
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const { user } = useSelector((state) => state.auth)
-  const cart = useSelector((state) => state.cart.items)
-  const wishlist = useSelector((state) => state.wishlist.items)
+  const { user } = useSelector((s) => s.auth)
+  const cart = useSelector((s) => s.cart.items)
+  const wishlist = useSelector((s) => s.wishlist.items)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    setMobileOpen(false)
+    setUserMenuOpen(false)
+  }, [location.pathname])
 
   const handleLogout = () => {
     dispatch(logout())
@@ -33,66 +48,68 @@ export default function Navbar() {
     { name: 'About', path: '/about' },
   ]
 
+  const isActive = (path) =>
+    path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)
+
   return (
-    <header className="sticky top-0 z-50 bg-[#F6F1E8]/95 backdrop-blur-md border-b border-[#E7DBCF]">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="h-20 flex items-center justify-between">
-          {/* ================= LOGO ================= */}
-          <Link
-            to="/"
-            className="flex items-center gap-3"
-          >
-            <span className="text-2xl">🍍</span>
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/95 backdrop-blur-lg shadow-[0_1px_24px_rgba(24,16,10,0.08)]'
+          : 'bg-white border-b border-edge'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="h-[68px] flex items-center justify-between gap-6">
 
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-[#1E1E1E]">
+          {/* LOGO */}
+          <Link to="/" className="flex items-center gap-3 shrink-0">
+            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center text-white text-lg font-bold shadow-brand">
+              🍍
+            </div>
+            <div className="leading-none">
+              <span className="block text-[17px] font-bold font-display text-ink tracking-tight">
                 TropiPine
-              </h1>
-
-              <p className="text-[11px] uppercase tracking-[0.18em] text-[#8B5E3C]">
+              </span>
+              <span className="block text-[10px] uppercase tracking-[0.15em] text-brand-500 font-medium mt-0.5">
                 Tropical Fruits
-              </p>
+              </span>
             </div>
           </Link>
 
-          {/* ================= NAV LINKS ================= */}
-          <nav className="hidden md:flex items-center gap-8">
+          {/* NAV LINKS – desktop */}
+          <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className="
-                  text-[#5A5149]
-                  hover:text-[#1E1E1E]
-                  transition-colors duration-300
-                  text-sm
-                  font-medium
-                "
+                className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  isActive(link.path)
+                    ? 'text-brand-600 bg-brand-50'
+                    : 'text-ink-muted hover:text-ink hover:bg-surface'
+                }`}
               >
                 {link.name}
+                {isActive(link.path) && (
+                  <motion.span
+                    layoutId="nav-dot"
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-500"
+                  />
+                )}
               </Link>
             ))}
           </nav>
 
-          {/* ================= RIGHT SIDE ================= */}
-          <div className="hidden md:flex items-center gap-5">
+          {/* RIGHT – desktop */}
+          <div className="hidden md:flex items-center gap-3">
             {/* Wishlist */}
             <Link
               to="/wishlist"
-              className="relative text-[#5A5149] hover:text-[#8B5E3C] transition-colors duration-300"
+              className="relative w-9 h-9 rounded-xl flex items-center justify-center text-ink-muted hover:text-brand-600 hover:bg-brand-50 transition-all duration-200"
             >
-              <FaHeart size={18} />
-
+              <FaHeart size={16} />
               {wishlist.length > 0 && (
-                <span
-                  className="
-                    absolute -top-2 -right-2
-                    w-4 h-4 rounded-full
-                    bg-[#8B5E3C]
-                    text-white text-[9px]
-                    flex items-center justify-center
-                  "
-                >
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-brand-500 text-white text-[9px] flex items-center justify-center font-bold shadow-brand">
                   {wishlist.length}
                 </span>
               )}
@@ -101,200 +118,137 @@ export default function Navbar() {
             {/* Cart */}
             <Link
               to="/cart"
-              className="relative text-[#5A5149] hover:text-[#8B5E3C] transition-colors duration-300"
+              className="relative w-9 h-9 rounded-xl flex items-center justify-center text-ink-muted hover:text-brand-600 hover:bg-brand-50 transition-all duration-200"
             >
-              <FaShoppingCart size={18} />
-
+              <FaShoppingCart size={16} />
               {cart.length > 0 && (
-                <span
-                  className="
-                    absolute -top-2 -right-2
-                    w-4 h-4 rounded-full
-                    bg-[#8B5E3C]
-                    text-white text-[9px]
-                    flex items-center justify-center
-                  "
-                >
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-brand-500 text-white text-[9px] flex items-center justify-center font-bold shadow-brand">
                   {cart.length}
                 </span>
               )}
             </Link>
 
-            {/* AUTH */}
+            {/* Auth */}
             {user ? (
-              <div className="flex items-center gap-4 ml-2">
-                <Link
-                  to="/profile"
-                  className="flex items-center gap-2 text-[#5A5149] hover:text-[#1E1E1E] transition-colors duration-300"
-                >
-                  <FaUser size={16} />
-
-                  <span className="text-sm font-medium">
-                    {user.name}
-                  </span>
-                </Link>
-
+              <div className="relative">
                 <button
-                  onClick={handleLogout}
-                  className="
-                    text-sm
-                    font-medium
-                    text-[#8B5E3C]
-                    hover:text-black
-                    transition-colors duration-300
-                  "
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium text-ink-muted hover:text-ink hover:bg-surface transition-all duration-200"
                 >
-                  Logout
+                  <div className="w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center">
+                    <FaUser size={11} className="text-brand-600" />
+                  </div>
+                  <span className="max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
+                  <FaChevronDown size={10} className={`transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-card-hover border border-edge py-1.5 overflow-hidden"
+                    >
+                      <Link to="/profile" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-muted hover:text-ink hover:bg-surface transition-colors">
+                        <FaUser size={12} /> My Profile
+                      </Link>
+                      <Link to="/orders" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-muted hover:text-ink hover:bg-surface transition-colors">
+                        📦 My Orders
+                      </Link>
+                      <Link to="/wishlist" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-muted hover:text-ink hover:bg-surface transition-colors">
+                        <FaHeart size={12} /> Wishlist
+                      </Link>
+                      <div className="mx-3 my-1 border-t border-edge" />
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        🚪 Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
-              <div className="flex items-center gap-3 ml-2">
+              <div className="flex items-center gap-2.5 ml-1">
                 <Link
                   to="/login"
-                  className="
-                    text-sm
-                    font-medium
-                    text-[#5A5149]
-                    hover:text-black
-                    transition-colors duration-300
-                  "
+                  className="px-4 py-2 text-sm font-medium text-ink-muted hover:text-ink transition-colors"
                 >
-                  Login
+                  Sign in
                 </Link>
-
                 <Link
                   to="/register"
-                  className="
-                    bg-[#1F1F1F]
-                    hover:bg-black
-                    text-white
-                    px-5 py-2.5
-                    rounded-xl
-                    text-sm
-                    font-medium
-                    transition-all duration-300
-                  "
+                  className="px-4 py-2 text-sm font-semibold text-white gradient-brand rounded-xl shadow-brand hover:shadow-lg hover:opacity-90 transition-all duration-200"
                 >
-                  Register
+                  Get Started
                 </Link>
               </div>
             )}
           </div>
 
-          {/* ================= MOBILE BUTTON ================= */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-[#1E1E1E]"
-          >
-            {mobileOpen ? (
-              <FaTimes size={22} />
-            ) : (
-              <FaBars size={22} />
-            )}
-          </button>
-        </div>
-
-        {/* ================= MOBILE MENU ================= */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.2 }}
-              className="md:hidden pb-6"
+          {/* Mobile trigger */}
+          <div className="md:hidden flex items-center gap-3">
+            <Link to="/cart" className="relative text-ink-muted">
+              <FaShoppingCart size={18} />
+              {cart.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-brand-500 text-white text-[9px] flex items-center justify-center font-bold">
+                  {cart.length}
+                </span>
+              )}
+            </Link>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="w-9 h-9 flex items-center justify-center text-ink"
             >
-              <div className="border-t border-[#E7DBCF] pt-5 space-y-4">
-                {/* NAV LINKS */}
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    onClick={() => setMobileOpen(false)}
-                    className="
-                      block
-                      text-[#5A5149]
-                      hover:text-black
-                      transition-colors duration-300
-                      font-medium
-                    "
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+              {mobileOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            </button>
+          </div>
+        </div>
+      </div>
 
-                {/* ICON LINKS */}
-                <div className="flex gap-6 pt-2">
-                  <Link
-                    to="/wishlist"
-                    className="flex items-center gap-2 text-[#5A5149]"
-                  >
-                    <FaHeart />
-                    Wishlist
-                  </Link>
-
-                  <Link
-                    to="/cart"
-                    className="flex items-center gap-2 text-[#5A5149]"
-                  >
-                    <FaShoppingCart />
-                    Cart
-                  </Link>
-                </div>
-
-                {/* AUTH */}
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-edge overflow-hidden bg-white"
+          >
+            <div className="max-w-7xl mx-auto px-5 py-5 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`block px-4 py-3 rounded-xl font-medium text-sm transition-all ${
+                    isActive(link.path)
+                      ? 'text-brand-600 bg-brand-50'
+                      : 'text-ink-muted hover:text-ink hover:bg-surface'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+              <div className="pt-3 border-t border-edge mt-2">
                 {user ? (
-                  <div className="pt-3 space-y-4">
-                    <Link
-                      to="/profile"
-                      className="flex items-center gap-2 text-[#5A5149]"
-                    >
-                      <FaUser />
-                      {user.name}
-                    </Link>
-
-                    <button
-                      onClick={handleLogout}
-                      className="text-[#8B5E3C] font-medium"
-                    >
-                      Logout
-                    </button>
+                  <div className="space-y-1">
+                    <Link to="/profile" className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface">👤 {user.name}</Link>
+                    <Link to="/wishlist" className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface">❤️ Wishlist ({wishlist.length})</Link>
+                    <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50">🚪 Sign Out</button>
                   </div>
                 ) : (
-                  <div className="flex gap-3 pt-3">
-                    <Link
-                      to="/login"
-                      className="
-                        flex-1
-                        text-center
-                        border border-[#D6C6B8]
-                        py-3 rounded-xl
-                        font-medium
-                      "
-                    >
-                      Login
-                    </Link>
-
-                    <Link
-                      to="/register"
-                      className="
-                        flex-1
-                        text-center
-                        bg-[#1F1F1F]
-                        text-white
-                        py-3 rounded-xl
-                        font-medium
-                      "
-                    >
-                      Register
-                    </Link>
+                  <div className="flex gap-3 pt-1">
+                    <Link to="/login" className="flex-1 text-center py-3 rounded-xl border border-edge text-sm font-medium text-ink-muted hover:bg-surface">Sign in</Link>
+                    <Link to="/register" className="flex-1 text-center py-3 rounded-xl text-sm font-semibold text-white gradient-brand shadow-brand">Get Started</Link>
                   </div>
                 )}
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }

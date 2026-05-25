@@ -14,90 +14,81 @@ const port = process.env.PORT || 5000;
 
 app.use(helmet());
 app.use(
-	cors({
-		origin: process.env.CLIENT_URL || true,
-		credentials: true,
-	})
+  cors({
+    origin: [
+      process.env.CLIENT_URL || 'http://localhost:5173',
+      process.env.ADMIN_URL || 'http://localhost:5174',
+    ],
+    credentials: true,
+  })
 );
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(
-	rateLimit({
-		windowMs: 15 * 60 * 1000,
-		max: 100,
-	})
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
+    standardHeaders: true,
+    legacyHeaders: false,
+  })
 );
 
-// Connect to DB
 connect();
 
 // Routes
-const authRoutes = require('./routes/auth.routes');
-app.use('/api/v1/auth', authRoutes);
-
-const productRoutes = require('./routes/product.routes');
-app.use('/api/v1/products', productRoutes);
-
-const orderRoutes = require('./routes/order.routes');
-app.use('/api/v1/orders', orderRoutes);
-
-const paymentRoutes = require('./routes/payment.routes');
-app.use('/api/v1/payments', paymentRoutes);
-
-const couponRoutes = require('./routes/coupon.routes');
-app.use('/api/v1/coupons', couponRoutes);
-
-const adminRoutes = require('./routes/admin.routes');
-app.use('/api/v1/admin', adminRoutes);
-
-const galleryRoutes = require('./routes/gallery.routes');
-app.use('/api/v1/gallery', galleryRoutes);
-
-const analyticsRoutes = require('./routes/analytics.routes');
-app.use('/api/v1/analytics', analyticsRoutes);
-
-const deliveryRoutes = require('./routes/delivery.routes');
-app.use('/api/v1/delivery', deliveryRoutes);
+app.use('/api/v1/auth', require('./routes/auth.routes'));
+app.use('/api/v1/products', require('./routes/product.routes'));
+app.use('/api/v1/categories', require('./routes/category.routes'));
+app.use('/api/v1/orders', require('./routes/order.routes'));
+app.use('/api/v1/payments', require('./routes/payment.routes'));
+app.use('/api/v1/coupons', require('./routes/coupon.routes'));
+app.use('/api/v1/reviews', require('./routes/review.routes'));
+app.use('/api/v1/wishlist', require('./routes/wishlist.routes'));
+app.use('/api/v1/addresses', require('./routes/address.routes'));
+app.use('/api/v1/gallery', require('./routes/gallery.routes'));
+app.use('/api/v1/analytics', require('./routes/analytics.routes'));
+app.use('/api/v1/delivery', require('./routes/delivery.routes'));
+app.use('/api/v1/admin', require('./routes/admin.routes'));
 
 app.get('/health', async (_req, res) => {
-	try {
-		await prisma.$queryRaw`SELECT 1`;
-		res.json({ status: 'ok' });
-	} catch {
-		res.status(503).json({ status: 'degraded' });
-	}
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ status: 'ok' });
+  } catch {
+    res.status(503).json({ status: 'degraded' });
+  }
 });
 
 app.get('/', (_req, res) => {
-	res.json({ message: 'TropiPine server is running' });
+  res.json({ message: 'TropiPine API is running', version: '1.0.0' });
 });
 
 app.use((_req, res) => {
-	res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ message: 'Route not found' });
+});
+
+// Global error handler
+app.use((err, _req, res, _next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: 'Internal server error' });
 });
 
 const server = app.listen(port, () => {
-	console.log(`Server running on port ${port}`);
+  console.log(`TropiPine server running on port ${port}`);
 });
 
 async function shutdown(signal) {
-	console.log(`${signal} received, shutting down`);
-	server.close(async () => {
-		await prisma.$disconnect();
-		process.exit(0);
-	});
+  console.log(`${signal} received, shutting down`);
+  server.close(async () => {
+    await prisma.$disconnect();
+    process.exit(0);
+  });
 }
 
-process.on('SIGINT', () => {
-	shutdown('SIGINT');
-});
-
-process.on('SIGTERM', () => {
-	shutdown('SIGTERM');
-});
-
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('unhandledRejection', (error) => {
-	console.error('Unhandled rejection:', error);
+  console.error('Unhandled rejection:', error);
 });

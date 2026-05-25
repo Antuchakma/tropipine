@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { prisma } = require('../config/db');
 require('dotenv/config');
 
@@ -10,27 +11,32 @@ function signToken(user) {
   return jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES });
 }
 
+function setCookie(res, token) {
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+}
+
 async function register(req, res) {
   try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) return res.status(400).json({ message: 'Missing fields' });
+    const { name, email, password, phone } = req.body;
+    if (!name || !email || !password) return res.status(400).json({ message: 'Missing required fields' });
+    if (password.length < 6) return res.status(400).json({ message: 'Password must be at least 6 characters' });
 
     const exists = await prisma.user.findUnique({ where: { email } });
     if (exists) return res.status(409).json({ message: 'Email already in use' });
 
-    const hashed = await bcrypt.hash(password, 10);
-    const user = await prisma.user.create({ data: { name, email, password: hashed } });
+    const hashed = await bcrypt.hash(password, 12);
+    const user = await prisma.user.create({ data: { name, email, password: hashed, phone: phone || null } });
 
     const token = signToken(user);
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setCookie(res, token);
 
     const { password: _p, ...safe } = user;
-    res.status(201).json({ user: safe });
+    res.status(201).json({ user: safe, token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -42,28 +48,20 @@ async function login(req, res) {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Missing fields' });
 
-    console.log('[LOGIN] Attempting login for email:', email);
     const user = await prisma.user.findUnique({ where: { email } });
-    console.log('[LOGIN] User found:', !!user);
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+    if (!user.isActive) return res.status(403).json({ message: 'Account is deactivated' });
 
     const ok = await bcrypt.compare(password, user.password);
-    console.log('[LOGIN] Password match:', ok);
     if (!ok) return res.status(401).json({ message: 'Invalid credentials' });
 
     const token = signToken(user);
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setCookie(res, token);
 
     const { password: _p, ...safe } = user;
     res.json({ data: { user: safe, token } });
   } catch (err) {
     console.error('[LOGIN] Error:', err.message);
-    console.error('[LOGIN] Stack:', err.stack);
     res.status(500).json({ message: 'Server error' });
   }
 }
@@ -76,7 +74,7 @@ async function logout(req, res) {
 async function me(req, res) {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!user) return res.status(404).json({ message: 'Not found' });
+    if (!user) return res.status(404).json({ message: 'User not found' });
     const { password: _p, ...safe } = user;
     res.json({ user: safe });
   } catch (err) {
@@ -85,4 +83,102 @@ async function me(req, res) {
   }
 }
 
-module.exports = { register, login, logout, me };
+async function updateProfile(req, res) {
+  try {
+    const { name, phone } = req.body;
+    const data = {};
+    if (name) data.name = name;
+    if (phone !== undefined) data.phone = phone;
+
+    const user = await prisma.user.update({
+      where: { id: req.user.id },
+      data,
+    });
+    const { password: _p, ...safe } = user;
+    res.json({ user: safe });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function changePassword(req, res) {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) return res.status(400).json({ message: 'Missing fields' });
+    if (newPassword.length < 6) return res.status(400).json({ message: 'New password must be at least 6 characters' });
+
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const ok = await bcrypt.compare(currentPassword, user.password);
+    if (!ok) return res.status(401).json({ message: 'Current password is incorrect' });
+
+    const hashed = await bcrypt.hash(newPassword, 12);
+    await prisma.user.update({ where: { id: req.user.id }, data: { password: hashed } });
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    // Always return success to prevent email enumeration
+    if (!user) return res.json({ message: 'If this email exists, a reset link has been sent' });
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const exp = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { passwordResetToken: token, passwordResetExp: exp },
+    });
+
+    // In production, send email here via nodemailer
+    // For dev: return token in response
+    const isDev = process.env.NODE_ENV !== 'production';
+    res.json({
+      message: 'If this email exists, a reset link has been sent',
+      ...(isDev && { resetToken: token }),
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function resetPassword(req, res) {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    if (!password) return res.status(400).json({ message: 'Password is required' });
+    if (password.length < 6) return res.status(400).json({ message: 'Password must be at least 6 characters' });
+
+    const user = await prisma.user.findFirst({
+      where: {
+        passwordResetToken: token,
+        passwordResetExp: { gt: new Date() },
+      },
+    });
+
+    if (!user) return res.status(400).json({ message: 'Invalid or expired reset token' });
+
+    const hashed = await bcrypt.hash(password, 12);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashed, passwordResetToken: null, passwordResetExp: null },
+    });
+
+    res.json({ message: 'Password reset successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = { register, login, logout, me, updateProfile, changePassword, forgotPassword, resetPassword };
