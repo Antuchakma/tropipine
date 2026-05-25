@@ -80,4 +80,63 @@ async function myOrders(req, res) {
   }
 }
 
-module.exports = { createOrder, myOrders };
+async function getAllOrders(req, res) {
+  try {
+    const { status, paymentStatus, page = 1, limit = 20 } = req.query;
+    const where = {};
+    if (status) where.status = status;
+    if (paymentStatus) where.paymentStatus = paymentStatus;
+
+    const orders = await prisma.order.findMany({
+      where,
+      include: { user: true, items: true, payment: true },
+      skip: (parseInt(page) - 1) * parseInt(limit),
+      take: parseInt(limit),
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const total = await prisma.order.count({ where });
+
+    res.json({ data: orders, total, page: parseInt(page), limit: parseInt(limit) });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function getOrderById(req, res) {
+  try {
+    const { id } = req.params;
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: { user: true, items: true, payment: true },
+    });
+
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    res.json({ data: order });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function updateOrderStatus(req, res) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status) return res.status(400).json({ message: 'Status is required' });
+
+    const order = await prisma.order.update({
+      where: { id },
+      data: { status },
+    });
+
+    res.json({ data: order });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = { createOrder, myOrders, getAllOrders, getOrderById, updateOrderStatus };

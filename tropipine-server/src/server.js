@@ -55,6 +55,12 @@ app.use('/api/v1/admin', adminRoutes);
 const galleryRoutes = require('./routes/gallery.routes');
 app.use('/api/v1/gallery', galleryRoutes);
 
+const analyticsRoutes = require('./routes/analytics.routes');
+app.use('/api/v1/analytics', analyticsRoutes);
+
+const deliveryRoutes = require('./routes/delivery.routes');
+app.use('/api/v1/delivery', deliveryRoutes);
+
 app.get('/health', async (_req, res) => {
 	try {
 		await prisma.$queryRaw`SELECT 1`;
