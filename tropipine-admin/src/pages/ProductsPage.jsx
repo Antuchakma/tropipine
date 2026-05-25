@@ -1,50 +1,57 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow } from '../utils/ui';
+
+const emptyForm = {
+  name: '', description: '', categoryId: '', basePrice: '',
+  unit: 'kg', stockQty: '', isFeatured: false, isBestSeller: false,
+  isExclusive: false, exclusiveLabel: '',
+};
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    categoryId: '',
-    basePrice: '',
-    unit: 'kg',
-    stockQty: '',
-    isFeatured: false,
-    isBestSeller: false,
-    isExclusive: false,
-    exclusiveLabel: '',
-  });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [formData, setFormData] = useState(emptyForm);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg, type = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
+  };
 
   useEffect(() => {
     fetchProducts();
+    api.get('/categories').then((r) => setCategories(r.data.data || [])).catch(() => {});
   }, []);
 
   const fetchProducts = async () => {
+    setLoading(true);
     try {
-      const response = await api.get('/products?limit=100');
-      setProducts(response.data.items || []);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      setError('Failed to fetch products');
-    } finally {
-      setLoading(false);
-    }
+      const r = await api.get('/products?limit=100');
+      setProducts(r.data.items || []);
+    } catch { showToast('Failed to fetch products', 'error'); }
+    finally { setLoading(false); }
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+    setFormData((p) => ({ ...p, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const openAdd = () => {
+    setFormData(emptyForm);
+    setEditingId(null);
+    setShowForm(true);
+  };
+
+  const openEdit = (product) => {
+    setFormData({ ...emptyForm, ...product });
+    setEditingId(product.id);
+    setShowForm(true);
   };
 
   const handleSubmit = async (e) => {
@@ -52,181 +59,152 @@ export default function ProductsPage() {
     try {
       if (editingId) {
         await api.patch(`/products/${editingId}`, formData);
-        setSuccess('Product updated successfully!');
+        showToast('Product updated!');
       } else {
         await api.post('/products', formData);
-        setSuccess('Product created successfully!');
+        showToast('Product created!');
       }
       setShowForm(false);
-      setEditingId(null);
-      setFormData({
-        name: '',
-        description: '',
-        categoryId: '',
-        basePrice: '',
-        unit: 'kg',
-        stockQty: '',
-        isFeatured: false,
-        isBestSeller: false,
-        isExclusive: false,
-        exclusiveLabel: '',
-      });
       fetchProducts();
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error saving product');
-    }
-  };
-
-  const handleEdit = (product) => {
-    setFormData(product);
-    setEditingId(product.id);
-    setShowForm(true);
+    } catch (err) { showToast(err.response?.data?.message || 'Error saving product', 'error'); }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure?')) {
-      try {
-        await api.delete(`/products/${id}`);
-        setSuccess('Product deleted successfully!');
-        fetchProducts();
-      } catch (error) {
-        setError('Failed to delete product');
-      }
-    }
+    if (!window.confirm('Delete this product?')) return;
+    try {
+      await api.delete(`/products/${id}`);
+      showToast('Product deleted');
+      fetchProducts();
+    } catch { showToast('Failed to delete', 'error'); }
   };
 
   return (
     <AdminLayout>
-      <div>
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800">Product Management</h2>
-          <button
-            onClick={() => {
-              setShowForm(!showForm);
-              setEditingId(null);
-              setFormData({
-                name: '',
-                description: '',
-                categoryId: '',
-                basePrice: '',
-                unit: 'kg',
-                stockQty: '',
-                isFeatured: false,
-                isBestSeller: false,
-                isExclusive: false,
-                exclusiveLabel: '',
-              });
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
-          >
-            <FaPlus /> Add Product
+      <div className="max-w-[1300px] space-y-6">
+
+        {toast && (
+          <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
+            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            {toast.msg}
+          </div>
+        )}
+
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Products</h2>
+            <p className="text-sm text-ink-muted mt-0.5">{products.length} products in catalogue</p>
+          </div>
+          <button onClick={openAdd} className={btn.primary} style={brandGrad}>
+            + Add Product
           </button>
         </div>
 
-        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
-        {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">{success}</div>}
-
-        {/* Form */}
+        {/* Form Panel */}
         {showForm && (
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">{editingId ? 'Edit Product' : 'Add New Product'}</h3>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Product Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <input
-                type="number"
-                name="basePrice"
-                placeholder="Base Price"
-                value={formData.basePrice}
-                onChange={handleInputChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <textarea
-                name="description"
-                placeholder="Description"
-                value={formData.description}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2 md:col-span-2"
-              ></textarea>
-              <input
-                type="number"
-                name="stockQty"
-                placeholder="Stock Quantity"
-                value={formData.stockQty}
-                onChange={handleInputChange}
-                required
-                className="border border-gray-300 rounded px-3 py-2"
-              />
-              <select
-                name="unit"
-                value={formData.unit}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded px-3 py-2"
-              >
-                <option value="kg">kg</option>
-                <option value="piece">piece</option>
-                <option value="dozen">dozen</option>
-              </select>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="isFeatured"
-                  checked={formData.isFeatured}
+          <div className={`${card} p-7`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>
+                {editingId ? 'Edit Product' : 'New Product'}
+              </h3>
+              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted hover:text-ink flex items-center justify-center text-lg">✕</button>
+            </div>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { name: 'name', label: 'Product Name *', placeholder: 'e.g. Haribhanga Mango', required: true },
+                { name: 'basePrice', label: 'Base Price (৳) *', placeholder: '0.00', type: 'number', required: true },
+                { name: 'stockQty', label: 'Stock Quantity *', placeholder: '0', type: 'number', required: true },
+              ].map(({ name, label, placeholder, type = 'text', required }) => (
+                <div key={name}>
+                  <label className="block text-xs font-semibold text-ink-muted mb-1.5">{label}</label>
+                  <input
+                    type={type}
+                    name={name}
+                    placeholder={placeholder}
+                    value={formData[name]}
+                    onChange={handleInputChange}
+                    required={required}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 transition"
+                  />
+                </div>
+              ))}
+
+              <div>
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Category</label>
+                <select
+                  name="categoryId"
+                  value={formData.categoryId}
                   onChange={handleInputChange}
-                  className="w-4 h-4"
-                />
-                <span>Featured</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="isBestSeller"
-                  checked={formData.isBestSeller}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
+                >
+                  <option value="">No category</option>
+                  {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Unit</label>
+                <select
+                  name="unit"
+                  value={formData.unit}
                   onChange={handleInputChange}
-                  className="w-4 h-4"
-                />
-                <span>Best Seller</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="isExclusive"
-                  checked={formData.isExclusive}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
+                >
+                  <option value="kg">kg</option>
+                  <option value="piece">piece</option>
+                  <option value="dozen">dozen</option>
+                </select>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Description</label>
+                <textarea
+                  name="description"
+                  placeholder="Product description…"
+                  value={formData.description}
                   onChange={handleInputChange}
-                  className="w-4 h-4"
+                  rows={3}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 resize-none transition"
                 />
-                <span>Exclusive</span>
-              </label>
+              </div>
+
+              <div className="sm:col-span-2 flex flex-wrap gap-6">
+                {[
+                  { name: 'isFeatured', label: 'Featured' },
+                  { name: 'isBestSeller', label: 'Best Seller' },
+                  { name: 'isExclusive', label: 'Exclusive' },
+                ].map(({ name, label }) => (
+                  <label key={name} className="flex items-center gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name={name}
+                      checked={formData[name]}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 rounded accent-brand-500"
+                    />
+                    <span className="text-sm font-medium text-ink">{label}</span>
+                  </label>
+                ))}
+              </div>
+
               {formData.isExclusive && (
-                <input
-                  type="text"
-                  name="exclusiveLabel"
-                  placeholder="Exclusive Label (e.g., Haribhanga)"
-                  value={formData.exclusiveLabel}
-                  onChange={handleInputChange}
-                  className="border border-gray-300 rounded px-3 py-2"
-                />
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-ink-muted mb-1.5">Exclusive Label</label>
+                  <input
+                    type="text"
+                    name="exclusiveLabel"
+                    placeholder="e.g. Haribhanga, Gopalbhog"
+                    value={formData.exclusiveLabel}
+                    onChange={handleInputChange}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
+                  />
+                </div>
               )}
-              <div className="md:col-span-2 flex gap-4">
-                <button
-                  type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
-                >
-                  {editingId ? 'Update' : 'Create'} Product
+
+              <div className="sm:col-span-2 flex gap-3 pt-2">
+                <button type="submit" className={btn.primary} style={brandGrad}>
+                  {editingId ? 'Save Changes' : 'Create Product'}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg transition"
-                >
+                <button type="button" onClick={() => setShowForm(false)} className={btn.secondary}>
                   Cancel
                 </button>
               </div>
@@ -234,59 +212,57 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {/* Products Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        {/* Table */}
+        <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead className="bg-gray-100 border-b">
+            <thead style={{ background: '#FAFAF8' }}>
               <tr>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Name</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Price</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Stock</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Flags</th>
-                <th className="px-6 py-3 text-left text-gray-700 font-bold">Actions</th>
+                {['Product', 'Category', 'Price', 'Stock', 'Flags', ''].map((h) => (
+                  <th key={h} className={tableHead}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                    Loading...
-                  </td>
-                </tr>
-              ) : products.length === 0 ? (
-                <tr>
-                  <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                    No products found
-                  </td>
-                </tr>
-              ) : (
-                products.map((product) => (
-                  <tr key={product.id} className="border-b hover:bg-gray-50">
-                    <td className="px-6 py-4 font-medium text-gray-800">{product.name}</td>
-                    <td className="px-6 py-4 text-gray-600">৳{product.basePrice}</td>
-                    <td className="px-6 py-4 text-gray-600">{product.stockQty}</td>
-                    <td className="px-6 py-4 text-sm">
-                      {product.isFeatured && <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded mr-1">Featured</span>}
-                      {product.isBestSeller && <span className="bg-green-100 text-green-800 px-2 py-1 rounded mr-1">Best Seller</span>}
-                      {product.isExclusive && <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">Exclusive</span>}
-                    </td>
-                    <td className="px-6 py-4 flex gap-2">
-                      <button
-                        onClick={() => handleEdit(product)}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded transition"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(product.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
-                      >
-                        <FaTrash />
-                      </button>
-                    </td>
+                [...Array(5)].map((_, i) => (
+                  <tr key={i} className="border-b border-edge">
+                    {[...Array(6)].map((_, j) => (
+                      <td key={j} className="px-5 py-4"><div className="h-4 bg-edge rounded animate-pulse" /></td>
+                    ))}
                   </tr>
                 ))
-              )}
+              ) : products.length === 0 ? (
+                <tr><td colSpan="6" className="px-5 py-16 text-center text-sm text-ink-muted">No products yet</td></tr>
+              ) : products.map((p) => (
+                <tr key={p.id} className={tableRow}>
+                  <td className={`${tableCell} font-semibold text-ink max-w-[200px] truncate`}>{p.name}</td>
+                  <td className={`${tableCell} text-ink-muted`}>{p.category?.name || '—'}</td>
+                  <td className={tableCell}>
+                    <span className="font-semibold text-ink">৳{p.finalPrice || p.basePrice}</span>
+                    {p.discountPercent > 0 && (
+                      <span className="ml-2 text-xs text-ink-faint line-through">৳{p.basePrice}</span>
+                    )}
+                  </td>
+                  <td className={tableCell}>
+                    <span className={`font-semibold ${p.stockQty <= 0 ? 'text-red-500' : p.stockQty <= p.lowStockThreshold ? 'text-orange-500' : 'text-ink'}`}>
+                      {p.stockQty} {p.unit}
+                    </span>
+                  </td>
+                  <td className={tableCell}>
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.isFeatured && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600 border border-indigo-200">Featured</span>}
+                      {p.isBestSeller && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Best Seller</span>}
+                      {p.isExclusive && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">✦ Exclusive</span>}
+                    </div>
+                  </td>
+                  <td className={`${tableCell} text-right`}>
+                    <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => openEdit(p)} className={btn.ghost}>Edit</button>
+                      <button onClick={() => handleDelete(p.id)} className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

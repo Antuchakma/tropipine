@@ -1,261 +1,172 @@
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../store/slices/cartSlice'
-import {
-  addToWishlist,
-  removeFromWishlist,
-} from '../store/slices/wishlistSlice'
-
-import {
-  FaHeart,
-  FaRegHeart,
-  FaShoppingCart,
-  FaStar,
-} from 'react-icons/fa'
+import { addToWishlist, removeFromWishlist } from '../store/slices/wishlistSlice'
+import { motion } from 'framer-motion'
+import { FaHeart, FaRegHeart, FaShoppingCart, FaStar } from 'react-icons/fa'
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch()
+  const wishlist = useSelector((s) => s.wishlist.items)
+  const isInWishlist = wishlist.some((i) => i.productId === product.id)
 
-  const wishlist = useSelector((state) => state.wishlist.items)
-
-  const isInWishlist = wishlist.some(
-    (item) => item.productId === product.id
-  )
+  const primaryImage = product.images?.find((i) => i.isPrimary)?.url
+    || product.images?.[0]?.url
+    || product.image
 
   const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        productId: product.id,
-        name: product.name,
-        price: product.finalPrice || product.price,
-        quantity: 1,
-        image: product.image,
-      })
-    )
+    dispatch(addToCart({
+      productId: product.id,
+      name: product.name,
+      price: product.finalPrice || product.basePrice,
+      quantity: product.minOrderQty || 1,
+      unit: product.unit || 'kg',
+      image: primaryImage,
+    }))
   }
 
   const handleWishlist = () => {
     if (isInWishlist) {
       dispatch(removeFromWishlist(product.id))
     } else {
-      dispatch(
-        addToWishlist({
-          productId: product.id,
-          name: product.name,
-          price: product.finalPrice || product.price,
-          image: product.image,
-        })
-      )
+      dispatch(addToWishlist({
+        productId: product.id,
+        name: product.name,
+        price: product.finalPrice || product.basePrice,
+        image: primaryImage,
+      }))
     }
   }
 
-  const discount =
-    product.basePrice && product.finalPrice
-      ? Math.round(
-          ((product.basePrice - product.finalPrice) /
-            product.basePrice) *
-            100
-        )
-      : 0
+  const discount = product.basePrice && product.finalPrice && product.finalPrice < product.basePrice
+    ? Math.round(((product.basePrice - product.finalPrice) / product.basePrice) * 100)
+    : 0
+
+  const isOutOfStock = product.stockQty === 0
+  const isLowStock = !isOutOfStock && product.stockQty > 0 && product.stockQty <= (product.lowStockThreshold || 5)
 
   return (
-    <div
-      className="
-        group
-        bg-white
-        border border-[#E7DBCF]
-        rounded-[28px]
-        overflow-hidden
-        transition-all duration-300
-        hover:-translate-y-1
-        hover:shadow-[0_18px_40px_rgba(0,0,0,0.08)]
-      "
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="group bg-white rounded-3xl overflow-hidden border border-edge shadow-card hover:shadow-card-hover transition-shadow duration-300 flex flex-col"
     >
-      {/* ================= IMAGE ================= */}
-      <Link to={`/product/${product.id}`}>
-        <div className="relative overflow-hidden bg-[#F6F1E8] h-64">
-          <img
-            src={
-              product.image ||
-              'https://via.placeholder.com/400x300?text=No+Image'
-            }
-            alt={product.name}
-            className="
-              w-full h-full object-cover
-              transition duration-500
-              group-hover:scale-105
-            "
-          />
+      {/* IMAGE */}
+      <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-surface h-56">
+        <img
+          src={primaryImage || 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&q=80'}
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
 
-          {/* FEATURED */}
-          {product.isFeatured && (
-            <div
-              className="
-                absolute top-4 left-4
-                bg-white/90 backdrop-blur-md
-                border border-[#E7DBCF]
-                text-[#8B5E3C]
-                px-3 py-1
-                rounded-full
-                text-[11px]
-                font-semibold
-                tracking-wide
-              "
-            >
-              Featured
-            </div>
-          )}
+        {/* Wishlist btn */}
+        <button
+          onClick={(e) => { e.preventDefault(); handleWishlist() }}
+          className={`absolute top-3 right-3 w-9 h-9 rounded-2xl flex items-center justify-center backdrop-blur-sm border transition-all duration-200 z-10 ${
+            isInWishlist
+              ? 'bg-brand-500 border-brand-500 text-white'
+              : 'bg-white/80 border-white/60 text-ink-muted hover:text-brand-500 hover:border-brand-300'
+          }`}
+        >
+          {isInWishlist ? <FaHeart size={13} /> : <FaRegHeart size={13} />}
+        </button>
 
-          {/* DISCOUNT */}
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
           {discount > 0 && (
-            <div
-              className="
-                absolute top-4 right-4
-                bg-[#1F1F1F]
-                text-white
-                px-3 py-1
-                rounded-full
-                text-[11px]
-                font-semibold
-              "
-            >
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold gradient-brand text-white shadow-brand">
               -{discount}%
-            </div>
+            </span>
           )}
-
-          {/* LOW STOCK */}
-          {product.stockQty && product.stockQty < 20 && (
-            <div
-              className="
-                absolute bottom-4 left-4
-                bg-[#F6F1E8]/90
-                backdrop-blur-md
-                border border-[#E7DBCF]
-                text-[#8B5E3C]
-                px-3 py-1
-                rounded-full
-                text-[11px]
-                font-medium
-              "
-            >
-              Low Stock
-            </div>
+          {product.isExclusive && (
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#D4A017] text-white">
+              ✦ Exclusive
+            </span>
+          )}
+          {product.isBestSeller && !product.isExclusive && (
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-sm text-ink border border-edge">
+              Best Seller
+            </span>
           )}
         </div>
+
+        {/* Out of stock overlay */}
+        {isOutOfStock && (
+          <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center">
+            <span className="px-3 py-1.5 rounded-full bg-ink text-white text-xs font-semibold">Out of Stock</span>
+          </div>
+        )}
       </Link>
 
-      {/* ================= CONTENT ================= */}
-      <div className="p-6">
-        {/* TITLE */}
+      {/* CONTENT */}
+      <div className="p-5 flex flex-col flex-1">
+        {/* Category */}
+        {product.category && (
+          <span className="text-[11px] uppercase tracking-wider text-brand-500 font-semibold mb-2">
+            {product.category.name}
+          </span>
+        )}
+
+        {/* Title */}
         <Link to={`/product/${product.id}`}>
-          <h3
-            className="
-              text-lg font-semibold
-              text-[#1E1E1E]
-              leading-snug
-              mb-2
-              line-clamp-2
-              hover:text-[#8B5E3C]
-              transition-colors duration-300
-            "
-          >
+          <h3 className="font-display text-base font-bold text-ink leading-snug mb-1 line-clamp-2 hover:text-brand-600 transition-colors">
             {product.name}
           </h3>
         </Link>
 
-        {/* DESCRIPTION */}
-        <p
-          className="
-            text-sm text-[#6A625B]
-            leading-relaxed
-            line-clamp-2
-            mb-5
-          "
-        >
-          {product.description}
-        </p>
+        {/* Origin */}
+        {product.origin && (
+          <p className="text-xs text-ink-faint mb-3">📍 {product.origin}</p>
+        )}
 
-        {/* PRICE + WISHLIST */}
-        <div className="flex items-start justify-between mb-5">
-          <div>
-            {discount > 0 && (
-              <p className="text-sm text-[#9B928A] line-through">
-                ৳{product.basePrice}
-              </p>
-            )}
-
-            <h2 className="text-2xl font-bold text-[#1E1E1E]">
-              ৳{product.finalPrice || product.price}
-            </h2>
-          </div>
-
-          <button
-            onClick={handleWishlist}
-            className="
-              w-11 h-11
-              rounded-2xl
-              border border-[#E7DBCF]
-              bg-[#F6F1E8]
-              flex items-center justify-center
-              transition-all duration-300
-              hover:border-[#8B5E3C]
-              hover:text-[#8B5E3C]
-            "
-          >
-            {isInWishlist ? (
-              <FaHeart className="text-[#8B5E3C]" />
-            ) : (
-              <FaRegHeart className="text-[#5A5149]" />
-            )}
-          </button>
-        </div>
-
-        {/* RATING */}
-        {product.rating && (
-          <div className="flex items-center gap-1 mb-5">
-            {[...Array(5)].map((_, i) => (
-              <FaStar
-                key={i}
-                size={12}
-                className={
-                  i < product.rating
-                    ? 'text-[#D4A373]'
-                    : 'text-[#DDD6CF]'
-                }
-              />
-            ))}
-
-            <span className="text-xs text-[#8A817A] ml-1">
-              ({product.reviews})
-            </span>
+        {/* Rating */}
+        {product.avgRating > 0 && (
+          <div className="flex items-center gap-1.5 mb-3">
+            <div className="flex">
+              {[1,2,3,4,5].map((i) => (
+                <FaStar key={i} size={11} className={i <= Math.round(product.avgRating) ? 'text-[#F59E0B]' : 'text-edge'} />
+              ))}
+            </div>
+            <span className="text-[11px] text-ink-faint">({product.avgRating})</span>
           </div>
         )}
 
-        {/* BUTTON */}
+        <div className="flex-1" />
+
+        {/* Price row */}
+        <div className="flex items-end justify-between mb-4">
+          <div>
+            {discount > 0 && (
+              <p className="text-xs text-ink-faint line-through leading-none mb-1">৳{product.basePrice}/{product.unit}</p>
+            )}
+            <p className="text-xl font-display font-bold text-ink leading-none">
+              ৳{product.finalPrice || product.basePrice}
+              <span className="text-xs font-normal text-ink-muted ml-1">/{product.unit || 'kg'}</span>
+            </p>
+          </div>
+
+          {/* Stock pill */}
+          {isLowStock && (
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-orange-50 text-orange-600 border border-orange-200">
+              Only {product.stockQty} left
+            </span>
+          )}
+        </div>
+
+        {/* Add to Cart */}
         <button
           onClick={handleAddToCart}
-          disabled={product.stockQty === 0}
-          className="
-            w-full
-            bg-[#1F1F1F]
-            hover:bg-black
-            text-white
-            py-3.5
-            rounded-2xl
-            font-medium
-            transition-all duration-300
-            flex items-center justify-center gap-2
-            disabled:bg-[#B8B0A8]
-            disabled:cursor-not-allowed
-          "
+          disabled={isOutOfStock}
+          className={`w-full py-3 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
+            isOutOfStock
+              ? 'bg-surface text-ink-faint cursor-not-allowed border border-edge'
+              : 'gradient-brand text-white shadow-brand hover:shadow-lg hover:opacity-90'
+          }`}
         >
-          <FaShoppingCart size={15} />
-
-          {product.stockQty === 0
-            ? 'Out of Stock'
-            : 'Add to Cart'}
+          <FaShoppingCart size={13} />
+          {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
         </button>
       </div>
-    </div>
+    </motion.div>
   )
 }
