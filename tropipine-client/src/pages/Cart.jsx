@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { motion } from 'framer-motion'
 import { removeFromCart, updateQuantity, setCoupon, clearCart } from '../store/slices/cartSlice'
 import api from '../services/api'
 import { FaTrash, FaMinus, FaPlus } from 'react-icons/fa'
@@ -51,93 +52,129 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F6F1E8] flex flex-col items-center justify-center px-6">
-        <h1 className="text-4xl font-black mb-4 text-[#1E1E1E]">Your Cart is Empty</h1>
-        <p className="text-[#6A625B] mb-8 text-lg">Add some delicious fruits to your cart!</p>
-        <Link
-          to="/shop"
-          className="bg-[#8B5E3C] text-white px-8 py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold transition"
+      <div className="min-h-screen bg-surface">
+        <section
+          className="relative text-white overflow-hidden"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
-          Continue Shopping
-        </Link>
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-screen">
+            <div className="max-w-2xl space-y-8 text-center">
+              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+                <h1 className="font-display text-4xl font-black text-white mb-4">Your Cart is Empty</h1>
+                <p className="text-white/80 mb-8 text-lg">Add some delicious fruits to your cart!</p>
+                <Link
+                  to="/shop"
+                  className="inline-block bg-brand-600 text-white px-8 py-4 rounded-2xl hover:bg-brand-700 font-semibold transition"
+                >
+                  Continue Shopping
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+        </section>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#F6F1E8] py-12">
-      <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-4xl font-black mb-10 text-[#1E1E1E]">Shopping Cart</h1>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Cart Items */}
-          <div className="md:col-span-2">
-            <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm overflow-hidden">
-              {cart.map((item) => (
-                <div
-                  key={item.productId}
-                  className="p-6 border-b border-[#E7DBCF] flex items-center gap-4 hover:bg-[#F6F1E8]/50 transition"
-                >
-                  <img
-                    src={item.image || 'https://via.placeholder.com/100'}
-                    alt={item.name}
-                    className="w-24 h-24 object-cover rounded-2xl"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-[#1E1E1E]">{item.name}</h3>
-                    <p className="text-[#8B5E3C] font-bold">৳{item.price}</p>
-                  </div>
-
-                  {/* Quantity Controls */}
-                  <div className="flex items-center gap-2 bg-[#F6F1E8] rounded-2xl">
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({
-                            productId: item.productId,
-                            quantity: Math.max(1, item.quantity - 1),
-                          })
-                        )
-                      }
-                      className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
-                    >
-                      <FaMinus size={14} />
-                    </button>
-                    <span className="px-4 font-medium text-[#5A5149]">{item.quantity}</span>
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({
-                            productId: item.productId,
-                            quantity: item.quantity + 1,
-                          })
-                        )
-                      }
-                      className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
-                    >
-                      <FaPlus size={14} />
-                    </button>
-                  </div>
-
-                  {/* Subtotal */}
-                  <div className="w-28 text-right">
-                    <p className="font-bold text-[#1E1E1E]">৳{(item.price * item.quantity).toFixed(2)}</p>
-                  </div>
-
-                  {/* Remove */}
-                  <button
-                    onClick={() => dispatch(removeFromCart(item.productId))}
-                    className="text-[#8B5E3C] hover:bg-[#F6F1E8] p-3 rounded-full transition"
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
-              ))}
-            </div>
+    <div className="min-h-screen bg-surface">
+      <section
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-20 flex items-center justify-center">
+          <div className="max-w-2xl space-y-4 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Shopping</p>
+              <h1 className="font-display text-4xl font-black text-white">Shopping Cart</h1>
+            </motion.div>
           </div>
+        </div>
+      </section>
 
-          {/* Order Summary */}
-          <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
+      <div className="bg-surface py-12">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="md:col-span-2">
+              <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm overflow-hidden">
+                {cart.map((item) => (
+                  <div
+                    key={item.productId}
+                    className="p-6 border-b border-[#E7DBCF] flex items-center gap-4 hover:bg-[#F6F1E8]/50 transition"
+                  >
+                    <img
+                      src={item.image || 'https://via.placeholder.com/100'}
+                      alt={item.name}
+                      className="w-24 h-24 object-cover rounded-2xl"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-[#1E1E1E]">{item.name}</h3>
+                      <p className="text-[#8B5E3C] font-bold">৳{item.price}</p>
+                    </div>
+
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-2 bg-[#F6F1E8] rounded-2xl">
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            updateQuantity({
+                              productId: item.productId,
+                              quantity: Math.max(1, item.quantity - 1),
+                            })
+                          )
+                        }
+                        className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
+                      >
+                        <FaMinus size={14} />
+                      </button>
+                      <span className="px-4 font-medium text-[#5A5149]">{item.quantity}</span>
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            updateQuantity({
+                              productId: item.productId,
+                              quantity: item.quantity + 1,
+                            })
+                          )
+                        }
+                        className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
+                      >
+                        <FaPlus size={14} />
+                      </button>
+                    </div>
+
+                    {/* Subtotal */}
+                    <div className="w-28 text-right">
+                      <p className="font-bold text-[#1E1E1E]">৳{(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+
+                    {/* Remove */}
+                    <button
+                      onClick={() => dispatch(removeFromCart(item.productId))}
+                      className="text-[#8B5E3C] hover:bg-[#F6F1E8] p-3 rounded-full transition"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Order Summary */}
+            <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
             <h2 className="text-2xl font-black mb-6 text-[#1E1E1E]">Order Summary</h2>
 
             {/* Coupon */}
@@ -199,6 +236,8 @@ export default function Cart() {
           </div>
         </div>
       </div>
+      </div>
     </div>
   )
 }
+

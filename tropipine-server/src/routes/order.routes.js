@@ -10,8 +10,12 @@ const {
   getAllOrders,
   getOrderById,
   updateOrderStatus,
+  trackOrder,
+  getRecentPendingCount,
 } = require('../controllers/order.controller');
 
+router.get('/track', trackOrder);
+router.get('/notifications', authenticate, requireAdmin, getRecentPendingCount);
 router.post('/', authenticate, createOrder);
 router.get('/my-orders', authenticate, myOrders);
 router.get('/my-orders/:id', authenticate, getMyOrderById);

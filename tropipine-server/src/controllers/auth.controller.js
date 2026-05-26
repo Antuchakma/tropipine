@@ -43,6 +43,50 @@ async function register(req, res) {
   }
 }
 
+async function googleAuth(req, res) {
+  try {
+    const { credential } = req.body;
+    if (!credential) return res.status(400).json({ message: 'Google credential is required' });
+
+    const googleRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
+    if (!googleRes.ok) return res.status(401).json({ message: 'Invalid Google token' });
+
+    const payload = await googleRes.json();
+    const email = payload.email;
+    const googleId = payload.sub;
+    const name = payload.name || email.split('@')[0];
+
+    if (!email) return res.status(400).json({ message: 'Google account has no email' });
+
+    let user = await prisma.user.findFirst({
+      where: { OR: [{ googleId }, { email }] },
+    });
+
+    if (user) {
+      if (!user.googleId) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { googleId },
+        });
+      }
+    } else {
+      user = await prisma.user.create({
+        data: { name, email, googleId, password: null, role: 'USER' },
+      });
+    }
+
+    if (!user.isActive) return res.status(403).json({ message: 'Account is deactivated' });
+
+    const token = signToken(user);
+    setCookie(res, token);
+    const { password: _p, ...safe } = user;
+    res.json({ data: { user: safe, token } });
+  } catch (err) {
+    console.error('[GOOGLE AUTH]', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
 async function login(req, res) {
   try {
     const { email, password } = req.body;
@@ -51,6 +95,9 @@ async function login(req, res) {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
     if (!user.isActive) return res.status(403).json({ message: 'Account is deactivated' });
+    if (!user.password) {
+      return res.status(400).json({ message: 'This account uses Google sign-in. Please continue with Google.' });
+    }
 
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return res.status(401).json({ message: 'Invalid credentials' });
@@ -181,4 +228,14 @@ async function resetPassword(req, res) {
   }
 }
 
-module.exports = { register, login, logout, me, updateProfile, changePassword, forgotPassword, resetPassword };
+module.exports = {
+  register,
+  login,
+  logout,
+  me,
+  updateProfile,
+  changePassword,
+  forgotPassword,
+  resetPassword,
+  googleAuth,
+};

@@ -51,6 +51,7 @@ app.use('/api/v1/gallery', require('./routes/gallery.routes'));
 app.use('/api/v1/analytics', require('./routes/analytics.routes'));
 app.use('/api/v1/delivery', require('./routes/delivery.routes'));
 app.use('/api/v1/admin', require('./routes/admin.routes'));
+app.use('/api/v1/contact', require('./routes/contact.routes'));
 
 app.get('/health', async (_req, res) => {
   try {

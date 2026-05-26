@@ -36,6 +36,8 @@ export default function Shop() {
   const [sortBy, setSortBy] = useState('')
   const [activeFilter, setActiveFilter] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [fruitTypes, setFruitTypes] = useState([])
+  const [selectedFruitType, setSelectedFruitType] = useState('')
 
   // Debounce search
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function Shop() {
 
   useEffect(() => {
     api.get('/categories').then((r) => setCategories(r.data.data || [])).catch(() => {})
+    api.get('/products/fruit-types').then((r) => setFruitTypes(r.data.data || [])).catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -59,29 +62,41 @@ export default function Shop() {
     if (sortBy) params.set('sortBy', sortBy)
     if (activeFilter) params.set(activeFilter, 'true')
     if (selectedCategory) params.set('category', selectedCategory)
+    if (selectedFruitType) params.set('fruitType', selectedFruitType)
 
     api.get(`/products?${params}`)
       .then((r) => { setProducts(r.data.items || []); setTotal(r.data.total || 0) })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [page, debouncedSearch, sortBy, activeFilter, selectedCategory])
+  }, [page, debouncedSearch, sortBy, activeFilter, selectedCategory, selectedFruitType])
 
   const totalPages = Math.ceil(total / LIMIT)
 
   return (
     <div className="min-h-screen bg-surface">
-      {/* Page Header */}
-      <div className="bg-white border-b border-edge">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12">
-          <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
-            <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-3">Our Collection</p>
-            <h1 className="font-display text-4xl sm:text-5xl font-black text-ink mb-3">Fresh Tropical Fruits</h1>
-            <p className="text-ink-muted">
-              {total > 0 ? `${total} products available` : 'Browse our curated selection of premium fruits'}
-            </p>
-          </motion.div>
+      {/* Hero Section */}
+      <section
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1488567046910-6a266dd8d07a?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-[400px]">
+          <div className="max-w-2xl space-y-4 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Our Collection</p>
+              <h1 className="font-display text-4xl sm:text-5xl font-black text-white mb-3">Fresh Tropical Fruits</h1>
+              <p className="text-white/80">
+                {total > 0 ? `${total} premium fruits available` : 'Browse our curated selection of premium fruits'}
+              </p>
+            </motion.div>
+          </div>
         </div>
-      </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10">
 
@@ -128,6 +143,23 @@ export default function Shop() {
               {f.label}
             </button>
           ))}
+          {fruitTypes.map((item) => {
+            const typeValue = typeof item === 'string' ? item : item.type;
+            const count = typeof item === 'string' ? null : item.count;
+            return (
+              <button
+                key={typeValue}
+                onClick={() => { setSelectedFruitType(selectedFruitType === typeValue ? '' : typeValue); setPage(1) }}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+                  selectedFruitType === typeValue
+                    ? 'bg-ink text-white border-transparent'
+                    : 'bg-white text-ink-muted border-edge hover:border-brand-300 hover:text-ink'
+                }`}
+              >
+                {typeValue}{count ? ` (${count})` : ''}
+              </button>
+            );
+          })}
           {categories.slice(0, 5).map((cat) => (
             <button
               key={cat.id}
@@ -188,7 +220,7 @@ export default function Shop() {
               <h3 className="font-display text-xl font-bold text-ink mb-2">No products found</h3>
               <p className="text-ink-muted text-sm mb-6">Try clearing your filters or searching for something else.</p>
               <button
-                onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSortBy('') }}
+                onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSelectedFruitType(''); setSortBy('') }}
                 className="px-6 py-3 rounded-2xl gradient-brand text-white text-sm font-semibold shadow-brand hover:opacity-90 transition"
               >
                 Clear All Filters

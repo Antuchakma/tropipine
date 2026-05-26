@@ -5,7 +5,18 @@ async function createOrder(req, res) {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: 'Authentication required' });
 
-    const { items, addressId, deliveryCharge = 0, couponCode, paymentMethod, specialNote } = req.body;
+    const {
+      items,
+      addressId,
+      deliveryCharge = 0,
+      couponCode,
+      paymentMethod,
+      specialNote,
+      address,
+      city,
+      postalCode,
+      phone,
+    } = req.body;
     if (!Array.isArray(items) || items.length === 0) return res.status(400).json({ message: 'Cart is empty' });
 
     const productIds = items.map((i) => i.productId).filter(Boolean);
@@ -58,11 +69,29 @@ async function createOrder(req, res) {
     const seq = String(now.getTime() % 10000).padStart(4, '0');
     const orderNumber = `TP-${datePart}-${seq}`;
 
+    let resolvedAddressId = addressId || null;
+    if (!resolvedAddressId && address && city) {
+      const dbUser = await prisma.user.findUnique({ where: { id: userId } });
+      const addr = await prisma.address.create({
+        data: {
+          userId,
+          label: 'Checkout',
+          fullName: dbUser?.name || 'Customer',
+          phone: phone || dbUser?.phone || 'N/A',
+          street: address,
+          city,
+          district: city,
+          postalCode: postalCode || null,
+        },
+      });
+      resolvedAddressId = addr.id;
+    }
+
     const order = await prisma.order.create({
       data: {
         orderNumber,
         userId,
-        addressId: addressId || null,
+        addressId: resolvedAddressId,
         couponId,
         couponDiscount,
         subtotal,
@@ -90,12 +119,36 @@ async function myOrders(req, res) {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: 'Authentication required' });
 
-    const orders = await prisma.order.findMany({
-      where: { userId },
+    const { product, month, year, sort = 'newest' } = req.query;
+    const where = { userId };
+
+    if (month && year) {
+      const m = parseInt(month, 10);
+      const y = parseInt(year, 10);
+      const start = new Date(y, m - 1, 1);
+      const end = new Date(y, m, 1);
+      where.createdAt = { gte: start, lt: end };
+    }
+
+    let orderBy = { createdAt: 'desc' };
+    if (sort === 'oldest') orderBy = { createdAt: 'asc' };
+    else if (sort === 'amount_desc') orderBy = { totalAmount: 'desc' };
+    else if (sort === 'amount_asc') orderBy = { totalAmount: 'asc' };
+
+    let orders = await prisma.order.findMany({
+      where,
       include: { items: true, payment: true, address: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy,
     });
-    res.json({ orders });
+
+    if (product) {
+      const q = product.toLowerCase();
+      orders = orders.filter((o) =>
+        o.items.some((item) => item.productName.toLowerCase().includes(q))
+      );
+    }
+
+    res.json({ orders, items: orders });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -190,6 +243,16 @@ async function getOrderById(req, res) {
   }
 }
 
+async function deductStockForOrder(orderId) {
+  const items = await prisma.orderItem.findMany({ where: { orderId } });
+  for (const item of items) {
+    await prisma.product.update({
+      where: { id: item.productId },
+      data: { stockQty: { decrement: item.quantity } },
+    });
+  }
+}
+
 async function updateOrderStatus(req, res) {
   try {
     const { id } = req.params;
@@ -199,6 +262,9 @@ async function updateOrderStatus(req, res) {
     const validStatuses = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'];
     if (!validStatuses.includes(status)) return res.status(400).json({ message: 'Invalid status' });
 
+    const existing = await prisma.order.findUnique({ where: { id } });
+    if (!existing) return res.status(404).json({ message: 'Order not found' });
+
     const order = await prisma.order.update({
       where: { id },
       data: {
@@ -206,6 +272,11 @@ async function updateOrderStatus(req, res) {
         statusHistory: { create: { status, note: note || null } },
       },
     });
+
+    if (status === 'DELIVERED' && existing.status !== 'DELIVERED') {
+      await deductStockForOrder(id);
+    }
+
     res.json({ data: order });
   } catch (err) {
     console.error(err);
@@ -213,4 +284,75 @@ async function updateOrderStatus(req, res) {
   }
 }
 
-module.exports = { createOrder, myOrders, getMyOrderById, cancelOrder, getAllOrders, getOrderById, updateOrderStatus };
+async function trackOrder(req, res) {
+  try {
+    const { orderNumber, email } = req.query;
+    if (!orderNumber) return res.status(400).json({ message: 'Order number is required' });
+
+    const order = await prisma.order.findFirst({
+      where: { orderNumber: { equals: orderNumber, mode: 'insensitive' } },
+      include: {
+        items: true,
+        address: true,
+        statusHistory: { orderBy: { changedAt: 'asc' } },
+        user: { select: { email: true, name: true } },
+      },
+    });
+
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (email && order.user.email.toLowerCase() !== email.toLowerCase()) {
+      return res.status(403).json({ message: 'Email does not match this order' });
+    }
+
+    res.json({
+      data: {
+        id: order.id,
+        orderNumber: order.orderNumber,
+        status: order.status,
+        paymentStatus: order.paymentStatus,
+        totalAmount: order.totalAmount,
+        subtotal: order.subtotal,
+        deliveryCharge: order.deliveryCharge,
+        createdAt: order.createdAt,
+        items: order.items,
+        address: order.address,
+        statusHistory: order.statusHistory,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+async function getRecentPendingCount(req, res) {
+  try {
+    const since = req.query.since ? new Date(req.query.since) : new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const count = await prisma.order.count({
+      where: { status: 'PENDING', createdAt: { gte: since } },
+    });
+    const latest = await prisma.order.findMany({
+      where: { createdAt: { gte: since } },
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      include: { user: { select: { name: true } } },
+    });
+    res.json({ data: { count, latest } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = {
+  createOrder,
+  myOrders,
+  getMyOrderById,
+  cancelOrder,
+  getAllOrders,
+  getOrderById,
+  updateOrderStatus,
+  trackOrder,
+  getRecentPendingCount,
+};

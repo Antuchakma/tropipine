@@ -64,6 +64,8 @@ export default function Footer() {
               { name: 'Shop All Fruits', to: '/shop' },
               { name: 'Gallery', to: '/gallery' },
               { name: 'About Us', to: '/about' },
+              { name: 'Contact', to: '/contact' },
+              { name: 'Track Order', to: '/track-order' },
             ].map((l) => (
               <li key={l.name}>
                 <Link to={l.to} className="text-sm text-white/55 hover:text-white transition-colors duration-200">

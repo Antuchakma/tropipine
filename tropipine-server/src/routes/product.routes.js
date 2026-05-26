@@ -4,6 +4,7 @@ const upload = require('../middleware/upload.middleware');
 const { authenticate } = require('../middleware/auth.middleware');
 const { requireAdmin } = require('../middleware/role.middleware');
 const {
+  listFruitTypes,
   listProducts,
   getProduct,
   createProduct,
@@ -18,6 +19,7 @@ const {
 } = require('../controllers/product.controller');
 
 // Public routes
+router.get('/fruit-types', listFruitTypes);
 router.get('/', listProducts);
 router.get('/:id', getProduct);
 
