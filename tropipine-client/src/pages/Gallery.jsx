@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { motion } from 'framer-motion'
 
 export default function Gallery() {
   const [images, setImages] = useState([])
@@ -41,15 +42,28 @@ export default function Gallery() {
 
   return (
     <div className="min-h-screen bg-surface">
-      <section className="bg-white border-b border-edge">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-16">
-          <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-3">Gallery</p>
-          <h1 className="font-display text-5xl font-black text-ink mb-3">
-            Moments of <span className="text-brand-500">Freshness</span>
-          </h1>
-          <p className="text-ink-muted max-w-2xl">
-            Explore our farms, harvesting process, and premium fruit handling journey.
-          </p>
+      <section
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-[400px]">
+          <div className="max-w-2xl space-y-4 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Gallery</p>
+              <h1 className="font-display text-5xl font-black text-white mb-3">
+                Moments of <span className="text-orange-500">Freshness</span>
+              </h1>
+              <p className="text-white/80 max-w-2xl">
+                Explore our farms, harvesting process, and premium fruit handling journey.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 

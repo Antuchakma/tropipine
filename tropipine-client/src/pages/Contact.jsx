@@ -31,13 +31,24 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-surface">
-      <section className="bg-white border-b border-edge">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-16">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-            <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-3">Connect With Us</p>
-            <h1 className="font-display text-4xl sm:text-5xl font-black text-ink mb-3">We&apos;d Love to Hear From You</h1>
-            <p className="text-ink-muted max-w-xl">Questions about orders, wholesale, or partnerships — send us a message.</p>
-          </motion.div>
+      <section
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-screen">
+          <div className="max-w-2xl space-y-8 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Connect With Us</p>
+              <h1 className="font-display text-4xl sm:text-5xl font-black text-white mb-3">We&apos;d Love to Hear From You</h1>
+              <p className="text-white/80 max-w-xl">Questions about orders, wholesale, or partnerships — send us a message.</p>
+            </motion.div>
+          </div>
         </div>
       </section>
 

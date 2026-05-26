@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { motion } from 'framer-motion'
 import { loginSuccess, loginError } from '../store/slices/authSlice'
 import api from '../services/api'
 import GoogleSignIn from '../components/GoogleSignIn'
@@ -62,134 +63,174 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center px-6">
-
-      {/* ================= CARD ================= */}
-      <div className="w-full max-w-md">
-
-        <div className="bg-white border border-edge rounded-3xl shadow-card p-10">
-
-          {/* TITLE */}
-          <h1 className="text-3xl font-black text-center mb-2">
-            Welcome Back
-          </h1>
-
-          <p className="text-center text-[#6A625B] text-sm mb-8">
-            Sign in to continue your fresh journey
-          </p>
-
-          {/* ERROR */}
-          {error && (
-            <div className="mb-6 bg-[#F6F1E8] border border-[#E7DBCF] text-[#8B5E3C] px-4 py-3 rounded-2xl text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* FORM */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-
-            {/* EMAIL */}
-            <div>
-              <label className="block text-sm font-medium text-[#5A5149] mb-2">
-                Email
-              </label>
-
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="you@example.com"
-                className="
-                  w-full px-4 py-3
-                  rounded-2xl
-                  border border-[#E7DBCF]
-                  bg-[#F6F1E8]/40
-                  outline-none
-                  focus:border-[#8B5E3C]
-                  transition
-                "
-              />
-            </div>
-
-            {/* PASSWORD */}
-            <div>
-              <label className="block text-sm font-medium text-[#5A5149] mb-2">
-                Password
-              </label>
-
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="
-                  w-full px-4 py-3
-                  rounded-2xl
-                  border border-[#E7DBCF]
-                  bg-[#F6F1E8]/40
-                  outline-none
-                  focus:border-[#8B5E3C]
-                  transition
-                "
-              />
-            </div>
-
-            {/* BUTTON */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="
-                w-full
-                bg-[#8B5E3C]
-                hover:bg-[#7a4e2f]
-                text-white
-                py-3
-                rounded-2xl
-                font-medium
-                transition-all duration-300
-                disabled:opacity-50
-                disabled:cursor-not-allowed
-              "
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-edge" />
-            <span className="text-xs text-ink-faint">or</span>
-            <div className="flex-1 h-px bg-edge" />
-          </div>
-
-          <div className="flex justify-center">
-            <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
-          </div>
-
-          {/* LINKS */}
-          <div className="text-center mt-6 space-y-3">
-
-            <p className="text-sm text-[#6A625B]">
-              Don’t have an account?{' '}
-              <Link
-                to="/register"
-                className="text-[#8B5E3C] font-medium hover:underline"
-              >
-                Register
-              </Link>
-            </p>
-
-            <Link
-              to="/forgot-password"
-              className="text-xs text-[#8A817A] hover:text-[#8B5E3C]"
-            >
-              Forgot password?
-            </Link>
-
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-brand-900 via-brand-800 to-surface flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      {/* Background video-like animated gradient */}
+      <div className="absolute inset-0 opacity-30">
+        <motion.div
+          animate={{ 
+            background: [
+              'radial-gradient(400px at 20% 50%, rgba(255, 107, 53, 0.3) 0%, transparent 50%)',
+              'radial-gradient(400px at 80% 50%, rgba(255, 152, 0, 0.3) 0%, transparent 50%)',
+              'radial-gradient(400px at 20% 50%, rgba(255, 107, 53, 0.3) 0%, transparent 50%)',
+            ]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="w-full h-full"
+        />
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="w-full max-w-5xl relative z-10"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          
+          {/* LEFT SIDE - Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-white space-y-6 hidden lg:block"
+          >
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/40 rounded-full">
+                <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                <span className="text-sm font-semibold text-orange-300">Welcome Back</span>
+              </div>
+              <h1 className="text-5xl font-black leading-tight">
+                Sign In to <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-brand-400">TropiPine</span>
+              </h1>
+              <p className="text-lg text-white/70">Continue your fresh fruit journey. Access your orders, wishlist, and exclusive deals.</p>
+            </div>
+
+            {/* Benefits list */}
+            <div className="space-y-4 pt-4">
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-orange-400 font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Quick checkout</h3>
+                  <p className="text-sm text-white/60">Save your favorite fruits for faster ordering</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-orange-400 font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Track orders</h3>
+                  <p className="text-sm text-white/60">Real-time delivery updates to your door</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-orange-400 font-bold">✓</span>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Exclusive rewards</h3>
+                  <p className="text-sm text-white/60">Earn points on every purchase</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* RIGHT SIDE - Form Card */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="w-full"
+          >
+            <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl p-8 space-y-6 border border-white/20">
+              
+              {/* Error */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-50 border-l-4 border-red-500 p-4 rounded"
+                >
+                  <p className="text-red-700 font-medium text-sm">{error}</p>
+                </motion.div>
+              )}
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-semibold text-ink mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-3 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-semibold text-ink">Password</label>
+                    <Link
+                      to="/forgot-password"
+                      className="text-xs text-brand-600 hover:text-brand-700 font-semibold"
+                    >
+                      Forgot?
+                    </Link>
+                  </div>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="••••••••"
+                    className="w-full px-4 py-3 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                  />
+                </div>
+
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-3 rounded-lg font-bold text-white text-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden group"
+                  style={{
+                    background: 'linear-gradient(135deg, rgb(255, 107, 53) 0%, rgb(255, 152, 0) 100%)',
+                  }}
+                >
+                  <span className="relative">
+                    {loading ? 'Signing in...' : 'Sign In'}
+                  </span>
+                </motion.button>
+              </form>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-edge"></div>
+                <span className="text-xs text-ink-muted font-semibold">OR</span>
+                <div className="flex-1 h-px bg-edge"></div>
+              </div>
+
+              {/* Google Sign In */}
+              <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+
+              {/* Sign Up */}
+              <p className="text-center text-ink-muted text-sm">
+                Don't have an account?{' '}
+                <Link
+                  to="/register"
+                  className="font-bold text-brand-600 hover:text-brand-700"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
     </div>
   )
 }

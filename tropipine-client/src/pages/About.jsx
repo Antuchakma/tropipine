@@ -18,17 +18,28 @@ const specialties = [
 export default function About() {
   return (
     <div className="min-h-screen bg-surface">
-      <section className="bg-white border-b border-edge">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-20">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-            <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-4">About TropiPine</p>
-            <h1 className="font-display text-5xl md:text-6xl font-black text-ink mb-4">
-              Fresh Fruits, <span className="text-brand-500">Pure Care</span>
-            </h1>
-            <p className="text-ink-muted max-w-2xl text-lg leading-relaxed">
-              We connect farms to homes with a focus on freshness, simplicity, and honest quality.
-            </p>
-          </motion.div>
+      <section
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1488566169025-ce58df917c61?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-screen">
+          <div className="max-w-2xl space-y-8 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-4">About TropiPine</p>
+              <h1 className="font-display text-5xl md:text-6xl font-black text-white mb-4">
+                Fresh Fruits, <span className="text-orange-500">Pure Care</span>
+              </h1>
+              <p className="text-white/80 max-w-2xl text-lg leading-relaxed">
+                We connect farms to homes with a focus on freshness, simplicity, and honest quality.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 

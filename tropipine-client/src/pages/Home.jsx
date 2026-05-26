@@ -43,14 +43,24 @@ export default function Home() {
     <div className="bg-surface overflow-x-hidden">
 
       {/* ─────────── HERO ─────────── */}
-      <section className="relative bg-[#100C08] text-white overflow-hidden">
+      <section 
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+
         {/* Decorative blobs */}
         <div className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-brand-600/20 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-brand-800/15 blur-[100px] pointer-events-none" />
 
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left copy */}
-          <div className="space-y-8">
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-screen">
+          {/* Content */}
+          <div className="max-w-2xl space-y-8 text-center">
             <motion.div {...fade(0.05)}>
               
             </motion.div>
@@ -61,7 +71,7 @@ export default function Home() {
               Your Door.
             </motion.h1>
 
-            <motion.p {...fade(0.2)} className="text-lg text-white/60 max-w-md leading-relaxed">
+            <motion.p {...fade(0.2)} className="text-lg text-white/80 max-w-md leading-relaxed">
               Handpicked premium mangoes, lychees, and seasonal fruits — delivered with care from the farms of Rajshahi and Chapainawabganj.
             </motion.p>
 
@@ -80,48 +90,7 @@ export default function Home() {
                 ✦ Exclusive Picks
               </Link>
             </motion.div>
-
-            <motion.div {...fade(0.36)} className="flex flex-wrap gap-6 pt-4">
-              {features.slice(0, 3).map((f) => (
-                <div key={f.title} className="flex items-center gap-2 text-white/70 text-sm">
-                  <span>{f.icon}</span>
-                  <span>{f.title}</span>
-                </div>
-              ))}
-            </motion.div>
           </div>
-
-          {/* Right image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="relative hidden lg:block"
-          >
-            <div className="relative rounded-[36px] overflow-hidden border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.4)]">
-              <img
-                src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=1200&auto=format&fit=crop"
-                alt="Premium tropical fruits"
-                className="w-full h-[540px] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-            </div>
-
-            {/* Floating badge */}
-            <div className="absolute -bottom-6 -left-8 bg-white text-ink rounded-3xl px-6 py-4 shadow-card-hover border border-edge">
-              <p className="text-xs text-ink-muted mb-1">Avg. delivery time</p>
-              <p className="font-display text-2xl font-black text-ink">Under 4h</p>
-            </div>
-
-            {/* Fruit emoji float */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-              className="absolute -top-4 -right-4 w-16 h-16 rounded-2xl bg-brand-500 shadow-brand flex items-center justify-center text-3xl"
-            >
-              🥭
-            </motion.div>
-          </motion.div>
         </div>
       </section>
 

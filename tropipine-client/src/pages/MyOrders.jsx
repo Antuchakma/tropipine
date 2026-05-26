@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { motion } from 'framer-motion'
 import api from '../services/api'
 
 const SORT_OPTIONS = [
@@ -52,15 +53,32 @@ export default function MyOrders() {
   const years = Array.from({ length: 5 }, (_, i) => String(new Date().getFullYear() - i))
 
   return (
-    <div className="min-h-screen bg-surface py-12">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="mb-8">
-          <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-2">Account</p>
-          <h1 className="font-display text-4xl font-black text-ink">My Orders</h1>
-          <p className="text-ink-muted text-sm mt-2">View and track your order history. Orders cannot be edited or deleted.</p>
+    <div className="min-h-screen bg-surface">
+      {/* Hero Section */}
+      <section
+        className="relative text-white overflow-hidden"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1552821554-5fefe8c9ef14?q=80&w=1200&auto=format&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-20 flex items-center justify-center">
+          <div className="max-w-2xl space-y-4 text-center">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Account</p>
+              <h1 className="font-display text-4xl font-black text-white">My Orders</h1>
+              <p className="text-white/80 text-sm mt-2">View and track your order history</p>
+            </motion.div>
+          </div>
         </div>
+      </section>
 
-        <div className="bg-white border border-edge rounded-3xl p-6 mb-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="min-h-screen bg-surface py-12">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="bg-white border border-edge rounded-3xl p-6 mb-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs font-semibold text-ink-muted mb-1.5">Filter by product</label>
             <input
@@ -140,6 +158,7 @@ export default function MyOrders() {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   )
