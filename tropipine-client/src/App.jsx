@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
 import ScrollToTop from './components/ScrollToTop'
+import AuthInitializer from './components/AuthInitializer'
 
 // Pages
 import Home from './pages/Home'
@@ -38,8 +39,9 @@ function Layout({ children }) {
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <ScrollToTop />
+      <AuthInitializer>
+        <BrowserRouter>
+          <ScrollToTop />
         <Routes>
           <Route
             path="/"
@@ -171,6 +173,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+      </AuthInitializer>
     </Provider>
   )
 }

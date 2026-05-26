@@ -23,7 +23,7 @@ export default function About() {
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
             <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-4">About TropiPine</p>
             <h1 className="font-display text-5xl md:text-6xl font-black text-ink mb-4">
-              Fresh Fruits, <span className="text-brand-600">Pure Care</span>
+              Fresh Fruits, <span className="text-brand-500">Pure Care</span>
             </h1>
             <p className="text-ink-muted max-w-2xl text-lg leading-relaxed">
               We connect farms to homes with a focus on freshness, simplicity, and honest quality.

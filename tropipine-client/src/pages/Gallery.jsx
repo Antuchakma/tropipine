@@ -45,7 +45,7 @@ export default function Gallery() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 py-16">
           <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-3">Gallery</p>
           <h1 className="font-display text-5xl font-black text-ink mb-3">
-            Moments of <span className="text-brand-600">Freshness</span>
+            Moments of <span className="text-brand-500">Freshness</span>
           </h1>
           <p className="text-ink-muted max-w-2xl">
             Explore our farms, harvesting process, and premium fruit handling journey.
