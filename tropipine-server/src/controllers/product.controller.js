@@ -16,12 +16,12 @@ async function listFruitTypes(req, res) {
     const rows = await prisma.product.groupBy({
       by: ['fruitType'],
       where: { fruitType: { not: null }, isAvailable: true },
-      _count: { fruitType: true },
+      _count: { _all: true },
     });
     const types = rows
-      .map((r) => r.fruitType)
-      .filter(Boolean)
-      .sort();
+      .map((r) => ({ type: r.fruitType, count: r._count._all }))
+      .filter((t) => t.type)
+      .sort((a, b) => a.type.localeCompare(b.type));
     res.json({ data: types });
   } catch (err) {
     console.error(err);

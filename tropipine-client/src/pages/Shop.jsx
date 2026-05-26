@@ -132,19 +132,23 @@ export default function Shop() {
               {f.label}
             </button>
           ))}
-          {fruitTypes.map((type) => (
-            <button
-              key={type}
-              onClick={() => { setSelectedFruitType(selectedFruitType === type ? '' : type); setPage(1) }}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
-                selectedFruitType === type
-                  ? 'bg-ink text-white border-transparent'
-                  : 'bg-white text-ink-muted border-edge hover:border-brand-300 hover:text-ink'
-              }`}
-            >
-              {type}
-            </button>
-          ))}
+          {fruitTypes.map((item) => {
+            const typeValue = typeof item === 'string' ? item : item.type;
+            const count = typeof item === 'string' ? null : item.count;
+            return (
+              <button
+                key={typeValue}
+                onClick={() => { setSelectedFruitType(selectedFruitType === typeValue ? '' : typeValue); setPage(1) }}
+                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+                  selectedFruitType === typeValue
+                    ? 'bg-ink text-white border-transparent'
+                    : 'bg-white text-ink-muted border-edge hover:border-brand-300 hover:text-ink'
+                }`}
+              >
+                {typeValue}{count ? ` (${count})` : ''}
+              </button>
+            );
+          })}
           {categories.slice(0, 5).map((cat) => (
             <button
               key={cat.id}
