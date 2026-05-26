@@ -52,10 +52,7 @@ export default function Home() {
           {/* Left copy */}
           <div className="space-y-8">
             <motion.div {...fade(0.05)}>
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/15 border border-brand-500/30 text-brand-300 text-sm font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
-                Premium Tropical Fruits · Free delivery over ৳999
-              </span>
+              
             </motion.div>
 
             <motion.h1 {...fade(0.12)} className="font-display text-5xl sm:text-6xl xl:text-7xl font-black leading-[1.04] tracking-tight text-balance">
