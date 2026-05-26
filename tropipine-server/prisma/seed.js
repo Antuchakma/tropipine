@@ -23,6 +23,8 @@ async function main() {
       {
         name: 'Haribhanga Mango',
         slug: 'haribhanga-mango',
+        fruitType: 'Mango',
+        variant: 'Haribhanga',
         description: 'Premium Haribhanga mango — sweet and aromatic.',
         basePrice: 250,
         finalPrice: 250,
@@ -35,6 +37,8 @@ async function main() {
       {
         name: 'Gopalbhog Mango',
         slug: 'gopalbhog-mango',
+        fruitType: 'Mango',
+        variant: 'Gopalbhog',
         description: 'Gopalbhog mango — rich flavor, limited season.',
         basePrice: 220,
         finalPrice: 220,
@@ -47,6 +51,8 @@ async function main() {
       {
         name: 'TropiPine Pineapple',
         slug: 'tropipine-pineapple',
+        fruitType: 'Pineapple',
+        variant: 'Standard',
         description: 'Fresh pineapple from local farms.',
         basePrice: 120,
         finalPrice: 120,

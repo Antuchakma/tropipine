@@ -3,9 +3,12 @@ import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
 import { btn, brandGrad, card, tableHead, tableCell, tableRow } from '../utils/ui';
 
+const FRUIT_TYPES = ['Mango', 'Pineapple', 'Lychee', 'Jackfruit', 'Papaya', 'Banana', 'Seasonal', 'Other'];
+
 const emptyForm = {
   name: '', description: '', categoryId: '', basePrice: '',
-  unit: 'kg', stockQty: '', isFeatured: false, isBestSeller: false,
+  unit: 'kg', stockQty: '', fruitType: '', variant: '',
+  isFeatured: false, isBestSeller: false,
   isExclusive: false, exclusiveLabel: '',
 };
 
@@ -17,6 +20,8 @@ export default function ProductsPage() {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState(emptyForm);
   const [toast, setToast] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const showToast = (msg, type = 'success') => {
     setToast({ msg, type });
@@ -45,13 +50,27 @@ export default function ProductsPage() {
   const openAdd = () => {
     setFormData(emptyForm);
     setEditingId(null);
+    setImageFile(null);
+    setImagePreview(null);
     setShowForm(true);
   };
 
   const openEdit = (product) => {
     setFormData({ ...emptyForm, ...product });
     setEditingId(product.id);
+    setImageFile(null);
+    setImagePreview(product.images?.[0]?.url || null);
     setShowForm(true);
+  };
+
+  const buildFormData = () => {
+    const fd = new FormData();
+    Object.entries(formData).forEach(([key, val]) => {
+      if (typeof val === 'boolean') fd.append(key, String(val));
+      else if (val !== '' && val != null) fd.append(key, val);
+    });
+    if (imageFile) fd.append('image', imageFile);
+    return fd;
   };
 
   const handleSubmit = async (e) => {
@@ -59,14 +78,30 @@ export default function ProductsPage() {
     try {
       if (editingId) {
         await api.patch(`/products/${editingId}`, formData);
+        if (imageFile) {
+          const fd = new FormData();
+          fd.append('image', imageFile);
+          await api.post(`/products/${editingId}/images`, fd, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          });
+        }
         showToast('Product updated!');
       } else {
-        await api.post('/products', formData);
+        await api.post('/products', buildFormData(), {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
         showToast('Product created!');
       }
       setShowForm(false);
       fetchProducts();
     } catch (err) { showToast(err.response?.data?.message || 'Error saving product', 'error'); }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
   const handleDelete = async (id) => {
@@ -127,6 +162,27 @@ export default function ProductsPage() {
                   />
                 </div>
               ))}
+
+              <div>
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Fruit Type</label>
+                <select name="fruitType" value={formData.fruitType} onChange={handleInputChange} className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition">
+                  <option value="">Select type</option>
+                  {FRUIT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Variant</label>
+                <input type="text" name="variant" placeholder="e.g. Haribhanga, Gopalbhog" value={formData.variant} onChange={handleInputChange} className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition" />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Product Image</label>
+                <input type="file" accept="image/*" onChange={handleImageChange} className="w-full text-sm text-ink-muted" />
+                {imagePreview && (
+                  <img src={imagePreview} alt="Preview" className="mt-3 h-32 w-32 object-cover rounded-xl border border-edge" />
+                )}
+              </div>
 
               <div>
                 <label className="block text-xs font-semibold text-ink-muted mb-1.5">Category</label>
@@ -217,7 +273,7 @@ export default function ProductsPage() {
           <table className="w-full">
             <thead style={{ background: '#FAFAF8' }}>
               <tr>
-                {['Product', 'Category', 'Price', 'Stock', 'Flags', ''].map((h) => (
+                {['Product', 'Type / Variant', 'Price', 'Stock', 'Flags', ''].map((h) => (
                   <th key={h} className={tableHead}>{h}</th>
                 ))}
               </tr>
@@ -236,7 +292,9 @@ export default function ProductsPage() {
               ) : products.map((p) => (
                 <tr key={p.id} className={tableRow}>
                   <td className={`${tableCell} font-semibold text-ink max-w-[200px] truncate`}>{p.name}</td>
-                  <td className={`${tableCell} text-ink-muted`}>{p.category?.name || '—'}</td>
+                  <td className={`${tableCell} text-ink-muted text-xs`}>
+                    {p.fruitType || '—'}{p.variant ? ` · ${p.variant}` : ''}
+                  </td>
                   <td className={tableCell}>
                     <span className="font-semibold text-ink">৳{p.finalPrice || p.basePrice}</span>
                     {p.discountPercent > 0 && (

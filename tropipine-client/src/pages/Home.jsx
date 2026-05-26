@@ -81,16 +81,11 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            {/* Stats */}
-            <motion.div {...fade(0.36)} className="flex gap-10 pt-4">
-              {[
-                { val: '10K+', label: 'Happy Customers' },
-                { val: '50+', label: 'Fruit Varieties' },
-                { val: '4.9★', label: 'Average Rating' },
-              ].map((s) => (
-                <div key={s.val}>
-                  <p className="font-display text-2xl font-black text-brand-400">{s.val}</p>
-                  <p className="text-xs text-white/45 mt-0.5">{s.label}</p>
+            <motion.div {...fade(0.36)} className="flex flex-wrap gap-6 pt-4">
+              {features.slice(0, 3).map((f) => (
+                <div key={f.title} className="flex items-center gap-2 text-white/70 text-sm">
+                  <span>{f.icon}</span>
+                  <span>{f.title}</span>
                 </div>
               ))}
             </motion.div>

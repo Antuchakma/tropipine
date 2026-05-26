@@ -5,8 +5,19 @@ async function submitPayment(req, res) {
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: 'Authentication required' });
 
-    const { orderId, method, senderNumber, transactionId, amount } = req.body;
-    if (!orderId || !method || !senderNumber || !transactionId || !amount) {
+    const {
+      orderId,
+      method: methodBody,
+      paymentMethod,
+      senderNumber,
+      transactionId,
+      amount: amountBody,
+    } = req.body;
+
+    const method = methodBody || paymentMethod;
+    const amount = amountBody != null ? amountBody : undefined;
+
+    if (!orderId || !method || !senderNumber || !transactionId) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -17,13 +28,15 @@ async function submitPayment(req, res) {
     const existing = await prisma.payment.findUnique({ where: { transactionId } });
     if (existing) return res.status(409).json({ message: 'Transaction ID already used' });
 
+    const payAmount = amount != null ? parseFloat(amount) : order.totalAmount;
+
     const payment = await prisma.payment.create({
       data: {
         orderId: order.id,
         method,
         senderNumber,
         transactionId,
-        amount: parseFloat(amount),
+        amount: payAmount,
         status: 'PENDING_VERIFICATION',
       },
     });

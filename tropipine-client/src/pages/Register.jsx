@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from '../store/slices/authSlice'
 import api from '../services/api'
+import GoogleSignIn from '../components/GoogleSignIn'
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -43,7 +44,7 @@ export default function Register() {
         password: formData.password,
       })
 
-      const { user, token } = response.data.data
+      const { user, token } = response.data.data || response.data
 
       dispatch(
         loginSuccess({
@@ -60,8 +61,23 @@ export default function Register() {
     }
   }
 
+  const handleGoogle = async (credential) => {
+    setLoading(true)
+    setError('')
+    try {
+      const response = await api.post('/auth/google', { credential })
+      const { user, token } = response.data.data
+      dispatch(loginSuccess({ user, token }))
+      navigate('/profile')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Google sign-in failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-[#F6F1E8] flex items-center justify-center py-12 px-6">
+    <div className="min-h-screen bg-surface flex items-center justify-center py-12 px-6">
       <div className="w-full max-w-md">
         <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-10">
           <h1 className="text-3xl font-black text-center mb-2">Join TropiPine</h1>
@@ -147,6 +163,15 @@ export default function Register() {
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="flex-1 h-px bg-edge" />
+            <span className="text-xs text-ink-faint">or</span>
+            <div className="flex-1 h-px bg-edge" />
+          </div>
+          <div className="flex justify-center">
+            <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+          </div>
 
           <p className="text-center text-[#6A625B] text-sm mt-6">
             Already have an account?{' '}

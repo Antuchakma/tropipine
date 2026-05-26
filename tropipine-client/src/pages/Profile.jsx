@@ -21,7 +21,7 @@ export default function Profile() {
     const fetchOrders = async () => {
       try {
         const response = await api.get('/orders/my-orders')
-        setOrders(response.data.items || [])
+        setOrders(response.data.orders || response.data.items || [])
       } catch (error) {
         console.error('Failed to fetch orders:', error)
       } finally {
@@ -58,12 +58,8 @@ export default function Profile() {
 
             <nav className="space-y-2 border-t border-[#E7DBCF] pt-6">
               <button
-                onClick={() => setActiveTab('orders')}
-                className={`w-full text-left px-4 py-3 rounded-2xl transition font-medium ${
-                  activeTab === 'orders'
-                    ? 'bg-[#8B5E3C] text-white'
-                    : 'text-[#5A5149] hover:bg-[#F6F1E8]'
-                }`}
+                onClick={() => navigate('/orders')}
+                className="w-full text-left px-4 py-3 rounded-2xl transition font-medium text-[#5A5149] hover:bg-[#F6F1E8]"
               >
                 My Orders
               </button>
@@ -102,7 +98,7 @@ export default function Profile() {
                       <div key={order.id} className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-6 hover:shadow-md transition">
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <p className="text-sm text-[#8B5E3C] font-medium">Order #{order.id}</p>
+                            <p className="text-sm text-[#8B5E3C] font-medium">{order.orderNumber || `Order #${order.id.slice(0, 8)}`}</p>
                             <p className="font-black text-2xl text-[#1E1E1E]">
                               ৳{order.totalAmount?.toFixed(2)}
                             </p>
@@ -120,8 +116,8 @@ export default function Profile() {
                           </span>
                         </div>
 
-                        <p className="text-sm text-[#6A625B] mb-2">
-                          📍 {order.address}, {order.city}
+                            <p className="text-sm text-[#6A625B] mb-2">
+                          📍 {order.address?.street || order.address}{order.address?.city ? `, ${order.address.city}` : ''}
                         </p>
                         <p className="text-sm text-[#6A625B] mb-4">
                           {new Date(order.createdAt).toLocaleDateString()}

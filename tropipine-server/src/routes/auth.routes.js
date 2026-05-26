@@ -9,11 +9,13 @@ const {
   changePassword,
   forgotPassword,
   resetPassword,
+  googleAuth,
 } = require('../controllers/auth.controller');
 const { authenticate } = require('../middleware/auth.middleware');
 
 router.post('/register', register);
 router.post('/login', login);
+router.post('/google', googleAuth);
 router.post('/logout', authenticate, logout);
 router.get('/me', authenticate, me);
 router.patch('/update-profile', authenticate, updateProfile);

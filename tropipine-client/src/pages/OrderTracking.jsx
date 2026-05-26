@@ -1,201 +1,107 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import api from '../services/api'
+
+const STATUSES = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED']
 
 export default function OrderTracking() {
   const { orderId } = useParams()
   const navigate = useNavigate()
-
   const [order, setOrder] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const response = await api.get(`/orders/${orderId}`)
-        setOrder(response.data)
+        const response = await api.get(`/orders/my-orders/${orderId}`)
+        setOrder(response.data.data)
       } catch (error) {
         console.error('Failed to fetch order:', error)
       } finally {
         setLoading(false)
       }
     }
-
     fetchOrder()
   }, [orderId])
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F6F1E8] flex items-center justify-center">
-        <div className="h-12 w-12 rounded-full border-4 border-[#E7DBCF] border-t-[#8B5E3C] animate-spin"></div>
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <div className="h-12 w-12 rounded-full border-4 border-edge border-t-brand-500 animate-spin" />
       </div>
     )
   }
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-[#F6F1E8] flex items-center justify-center">
-        <p className="text-[#6A625B]">Order not found</p>
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center gap-4">
+        <p className="text-ink-muted">Order not found</p>
+        <Link to="/orders" className="text-brand-600 font-semibold">Back to orders</Link>
       </div>
     )
   }
 
-  const statuses = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED']
-  const currentIndex = statuses.indexOf(order.status)
+  const currentIndex = STATUSES.indexOf(order.status)
 
   return (
-    <div className="min-h-screen bg-[#F6F1E8] text-[#1E1E1E]">
-
-      {/* ================= HEADER ================= */}
-      <div className="border-b border-[#E7DBCF] bg-white/60 backdrop-blur-md">
+    <div className="min-h-screen bg-surface">
+      <div className="bg-white border-b border-edge">
         <div className="max-w-5xl mx-auto px-6 py-8">
-
-          <button
-            onClick={() => navigate('/profile')}
-            className="text-[#8B5E3C] text-sm font-medium hover:underline mb-4"
-          >
+          <button type="button" onClick={() => navigate('/orders')} className="text-brand-600 text-sm font-medium hover:underline mb-4">
             ← Back to Orders
           </button>
-
-          <h1 className="text-3xl font-black">
-            Order <span className="text-[#8B5E3C]">#{order.id}</span>
+          <h1 className="font-display text-3xl font-black text-ink">
+            Order <span className="text-brand-600">{order.orderNumber || order.id}</span>
           </h1>
-
-          <p className="text-[#6A625B] text-sm mt-2">
-            Placed on {new Date(order.createdAt).toLocaleDateString()}
-          </p>
+          <p className="text-ink-muted text-sm mt-2">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
         </div>
       </div>
 
-      {/* ================= CONTENT ================= */}
-      <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
-
-        {/* ================= STATUS ================= */}
-        <div className="bg-white border border-[#E7DBCF] rounded-3xl p-8">
-          <h2 className="text-xl font-bold mb-6">Delivery Status</h2>
-
-          <div className="space-y-6">
-            {statuses.map((status, index) => {
+      <div className="max-w-5xl mx-auto px-6 py-12 space-y-8">
+        <div className="bg-white border border-edge rounded-3xl p-8">
+          <h2 className="text-xl font-bold text-ink mb-6">Delivery Status</h2>
+          <div className="space-y-5">
+            {STATUSES.map((status, index) => {
               const active = index <= currentIndex
-
               return (
                 <div key={status} className="flex items-center gap-4">
-
-                  {/* DOT */}
-                  <div
-                    className={`
-                      w-10 h-10 rounded-full flex items-center justify-center
-                      border
-                      transition-all duration-300
-                      ${
-                        active
-                          ? 'bg-[#8B5E3C] border-[#8B5E3C] text-white'
-                          : 'bg-[#F6F1E8] border-[#E7DBCF] text-[#B8B0A8]'
-                      }
-                    `}
-                  >
-                    ●
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${active ? 'gradient-brand text-white' : 'bg-surface border border-edge text-ink-faint'}`}>
+                    {index + 1}
                   </div>
-
-                  {/* LABEL */}
-                  <p
-                    className={`
-                      font-medium text-sm tracking-wide
-                      ${
-                        active
-                          ? 'text-[#1E1E1E]'
-                          : 'text-[#B8B0A8]'
-                      }
-                    `}
-                  >
-                    {status}
-                  </p>
+                  <p className={`font-medium text-sm ${active ? 'text-ink' : 'text-ink-faint'}`}>{status}</p>
                 </div>
               )
             })}
           </div>
         </div>
 
-        {/* ================= ITEMS ================= */}
-        <div className="bg-white border border-[#E7DBCF] rounded-3xl p-8">
-          <h2 className="text-xl font-bold mb-5">Items</h2>
-
+        <div className="bg-white border border-edge rounded-3xl p-8">
+          <h2 className="text-xl font-bold text-ink mb-5">Items</h2>
           <div className="space-y-3">
             {order.items?.map((item) => (
-              <div
-                key={item.id}
-                className="flex justify-between text-sm text-[#5A5149]"
-              >
-                <span>
-                  {item.product?.name || 'Product'} × {item.quantity}
-                </span>
-
-                <span className="font-medium text-[#1E1E1E]">
-                  ৳{(item.price * item.quantity).toFixed(2)}
-                </span>
+              <div key={item.id} className="flex justify-between text-sm text-ink-muted">
+                <span>{item.productName} × {item.quantity}</span>
+                <span className="font-medium text-ink">৳{item.subtotal?.toFixed(2)}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ================= DELIVERY INFO ================= */}
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <div className="bg-white border border-[#E7DBCF] rounded-3xl p-6">
-            <h3 className="font-semibold mb-2 text-[#1E1E1E]">
-              Delivery Address
-            </h3>
-
-            <p className="text-sm text-[#6A625B] leading-relaxed">
-              {order.address}
-              <br />
-              {order.city}
-            </p>
+        {order.address && (
+          <div className="bg-white border border-edge rounded-3xl p-6">
+            <h3 className="font-semibold text-ink mb-2">Delivery Address</h3>
+            <p className="text-sm text-ink-muted">{order.address.street}, {order.address.city}</p>
+            <p className="text-sm text-ink-muted mt-1">{order.address.phone}</p>
           </div>
+        )}
 
-          <div className="bg-white border border-[#E7DBCF] rounded-3xl p-6">
-            <h3 className="font-semibold mb-2 text-[#1E1E1E]">
-              Contact
-            </h3>
-
-            <p className="text-sm text-[#6A625B]">
-              {order.phone}
-            </p>
+        <div className="bg-white border border-edge rounded-3xl p-8">
+          <div className="flex justify-between text-lg font-bold text-ink border-t border-edge pt-4">
+            <span>Total</span>
+            <span>৳{order.totalAmount?.toFixed(2)}</span>
           </div>
-
+          <p className="text-sm text-ink-muted mt-2">Payment: {order.paymentStatus}</p>
         </div>
-
-        {/* ================= TOTAL ================= */}
-        <div className="bg-white border border-[#E7DBCF] rounded-3xl p-8">
-
-          <div className="space-y-3 text-sm">
-
-            <div className="flex justify-between text-[#5A5149]">
-              <span>Subtotal</span>
-              <span className="text-[#1E1E1E] font-medium">
-                ৳{order.subtotal?.toFixed(2)}
-              </span>
-            </div>
-
-            {order.discountAmount > 0 && (
-              <div className="flex justify-between text-[#8B5E3C]">
-                <span>Discount</span>
-                <span>
-                  -৳{order.discountAmount?.toFixed(2)}
-                </span>
-              </div>
-            )}
-
-            <div className="border-t border-[#E7DBCF] pt-4 flex justify-between text-lg font-bold">
-              <span>Total</span>
-              <span className="text-[#1E1E1E]">
-                ৳{order.totalAmount?.toFixed(2)}
-              </span>
-            </div>
-
-          </div>
-        </div>
-
       </div>
     </div>
   )

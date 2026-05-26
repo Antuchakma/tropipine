@@ -11,6 +11,24 @@ function calculateFinalPrice(basePrice, discountPercent, discountAmount) {
   return Math.max(0, parseFloat(final.toFixed(2)));
 }
 
+async function listFruitTypes(req, res) {
+  try {
+    const rows = await prisma.product.groupBy({
+      by: ['fruitType'],
+      where: { fruitType: { not: null }, isAvailable: true },
+      _count: { fruitType: true },
+    });
+    const types = rows
+      .map((r) => r.fruitType)
+      .filter(Boolean)
+      .sort();
+    res.json({ data: types });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
 async function listProducts(req, res) {
   try {
     const {
@@ -26,6 +44,7 @@ async function listProducts(req, res) {
       isSeasonal,
       search,
       sortBy,
+      fruitType,
     } = req.query;
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -45,11 +64,16 @@ async function listProducts(req, res) {
     if (isFeatured === 'true') where.isFeatured = true;
     if (isBestSeller === 'true') where.isBestSeller = true;
     if (isSeasonal === 'true') where.isSeasonal = true;
+    if (fruitType) {
+      where.fruitType = { equals: fruitType, mode: 'insensitive' };
+    }
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
         { tags: { has: search.toLowerCase() } },
+        { fruitType: { contains: search, mode: 'insensitive' } },
+        { variant: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -115,7 +139,7 @@ async function createProduct(req, res) {
       discountPercent, discountAmount, unit, minOrderQty, maxOrderQty,
       stockQty, lowStockThreshold, isAvailable, isFeatured, isBestSeller,
       isExclusive, exclusiveLabel, isSeasonal, seasonStart, seasonEnd,
-      origin, harvestDate, shelfLife, tags, sortOrder,
+      origin, harvestDate, shelfLife, tags, sortOrder, fruitType, variant,
     } = req.body;
 
     if (!name || !description || basePrice == null) {
@@ -158,11 +182,32 @@ async function createProduct(req, res) {
         shelfLife: shelfLife || null,
         tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map((t) => t.trim()) : []),
         sortOrder: parseInt(sortOrder || 0),
+        fruitType: fruitType || null,
+        variant: variant || null,
       },
       include: { images: true, category: true },
     });
 
-    res.status(201).json(product);
+    if (req.file) {
+      const result = await uploadImage(req.file.path || req.file.buffer);
+      await prisma.productImage.create({
+        data: {
+          productId: product.id,
+          url: result.secure_url,
+          publicId: result.public_id,
+          altText: product.name,
+          isPrimary: true,
+          sortOrder: 0,
+        },
+      });
+    }
+
+    const withImages = await prisma.product.findUnique({
+      where: { id: product.id },
+      include: { images: true, category: true },
+    });
+
+    res.status(201).json(withImages);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error', error: err.message });
@@ -178,7 +223,7 @@ async function updateProduct(req, res) {
     const data = {};
     const fields = [
       'name', 'slug', 'description', 'nutritionInfo', 'categoryId', 'unit',
-      'exclusiveLabel', 'origin', 'shelfLife',
+      'exclusiveLabel', 'origin', 'shelfLife', 'fruitType', 'variant',
     ];
     fields.forEach((f) => { if (req.body[f] !== undefined) data[f] = req.body[f]; });
 
@@ -371,6 +416,7 @@ async function deleteProductImage(req, res) {
 }
 
 module.exports = {
+  listFruitTypes,
   listProducts,
   getProduct,
   createProduct,

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginSuccess, loginError } from '../store/slices/authSlice'
 import api from '../services/api'
+import GoogleSignIn from '../components/GoogleSignIn'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -45,13 +46,28 @@ export default function Login() {
     }
   }
 
+  const handleGoogle = async (credential) => {
+    setLoading(true)
+    setError('')
+    try {
+      const response = await api.post('/auth/google', { credential })
+      const { user, token } = response.data.data
+      dispatch(loginSuccess({ user, token }))
+      navigate('/profile')
+    } catch (err) {
+      setError(err.response?.data?.message || 'Google sign-in failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-[#F6F1E8] flex items-center justify-center px-6">
+    <div className="min-h-screen bg-surface flex items-center justify-center px-6">
 
       {/* ================= CARD ================= */}
       <div className="w-full max-w-md">
 
-        <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-10">
+        <div className="bg-white border border-edge rounded-3xl shadow-card p-10">
 
           {/* TITLE */}
           <h1 className="text-3xl font-black text-center mb-2">
@@ -140,6 +156,16 @@ export default function Login() {
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
+
+          <div className="my-6 flex items-center gap-3">
+            <div className="flex-1 h-px bg-edge" />
+            <span className="text-xs text-ink-faint">or</span>
+            <div className="flex-1 h-px bg-edge" />
+          </div>
+
+          <div className="flex justify-center">
+            <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+          </div>
 
           {/* LINKS */}
           <div className="text-center mt-6 space-y-3">

@@ -40,43 +40,31 @@ export default function Gallery() {
       : images.filter((img) => img.category === activeCategory)
 
   return (
-    <div className="min-h-screen bg-[#F6F1E8] text-[#1E1E1E]">
-
-      {/* ================= HERO ================= */}
-      <section className="border-b border-[#E7DBCF] bg-white/60 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <p className="text-[#8B5E3C] uppercase tracking-[0.25em] text-sm mb-3">
-            Gallery
-          </p>
-
-          <h1 className="text-5xl font-black mb-3">
-            Moments of <span className="text-[#8B5E3C]">Freshness</span>
+    <div className="min-h-screen bg-surface">
+      <section className="bg-white border-b border-edge">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-16">
+          <p className="text-xs uppercase tracking-widest text-brand-500 font-semibold mb-3">Gallery</p>
+          <h1 className="font-display text-5xl font-black text-ink mb-3">
+            Moments of <span className="text-brand-600">Freshness</span>
           </h1>
-
-          <p className="text-[#5A5149] max-w-2xl">
+          <p className="text-ink-muted max-w-2xl">
             Explore our farms, harvesting process, and premium fruit handling journey.
           </p>
         </div>
       </section>
 
-      {/* ================= CONTENT ================= */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-
-        {/* ================= FILTER ================= */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-16">
         <div className="flex flex-wrap gap-3 mb-10">
           {categories.map((cat) => (
             <button
               key={cat}
+              type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`
-                px-5 py-2 rounded-full text-sm font-medium
-                border transition-all duration-300
-                ${
-                  activeCategory === cat
-                    ? 'bg-[#1F1F1F] text-white border-[#1F1F1F]'
-                    : 'bg-white text-[#5A5149] border-[#E7DBCF] hover:border-[#8B5E3C] hover:text-[#8B5E3C]'
-                }
-              `}
+              className={`px-5 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+                activeCategory === cat
+                  ? 'gradient-brand text-white border-transparent shadow-brand'
+                  : 'bg-white text-ink-muted border-edge hover:border-brand-300'
+              }`}
             >
               {cat}
             </button>
@@ -86,11 +74,11 @@ export default function Gallery() {
         {/* ================= STATES ================= */}
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="h-12 w-12 rounded-full border-4 border-[#E7DBCF] border-t-[#8B5E3C] animate-spin"></div>
+            <div className="h-12 w-12 rounded-full border-4 border-edge border-t-brand-500 animate-spin" />
           </div>
         ) : filteredImages.length === 0 ? (
-          <div className="bg-white border border-[#E7DBCF] rounded-3xl p-12 text-center">
-            <p className="text-[#6A625B]">
+          <div className="bg-white border border-edge rounded-3xl p-12 text-center">
+            <p className="text-ink-muted">
               No images available in this category.
             </p>
           </div>
@@ -103,15 +91,14 @@ export default function Gallery() {
                 onClick={() => setSelectedImage(image)}
                 className="
                   group cursor-pointer
-                  bg-white border border-[#E7DBCF]
-                  rounded-3xl overflow-hidden
-                  hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)]
+                  bg-white border border-edge
+                  rounded-3xl overflow-hidden shadow-card hover:shadow-card-hover
                   transition-all duration-300
                 "
               >
-                <div className="relative overflow-hidden h-64 bg-[#F6F1E8]">
+                <div className="relative overflow-hidden h-64 bg-surface">
                   <img
-                    src={image.imageUrl}
+                    src={image.url || image.imageUrl}
                     alt={image.caption}
                     className="
                       w-full h-full object-cover
@@ -124,7 +111,7 @@ export default function Gallery() {
                 </div>
 
                 <div className="p-4">
-                  <p className="text-sm text-[#5A5149] line-clamp-2">
+                  <p className="text-sm text-ink-muted line-clamp-2">
                     {image.caption || 'No caption'}
                   </p>
                 </div>
@@ -154,11 +141,11 @@ export default function Gallery() {
           ].map((item, i) => (
             <div
               key={i}
-              className="bg-white border border-[#E7DBCF] rounded-3xl p-6 text-center"
+              className="bg-white border border-edge rounded-3xl p-6 text-center shadow-card"
             >
               <div className="text-4xl mb-3">{item.icon}</div>
-              <h3 className="font-semibold mb-1">{item.title}</h3>
-              <p className="text-sm text-[#6A625B]">{item.desc}</p>
+              <h3 className="font-semibold text-ink mb-1">{item.title}</h3>
+              <p className="text-sm text-ink-muted">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -175,19 +162,19 @@ export default function Gallery() {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={selectedImage.imageUrl}
+              src={selectedImage.url || selectedImage.imageUrl}
               alt={selectedImage.caption}
               className="w-full max-h-[70vh] object-cover"
             />
 
             <div className="p-5 flex justify-between items-center">
-              <p className="text-[#5A5149] text-sm">
+              <p className="text-ink-muted text-sm">
                 {selectedImage.caption || 'No caption'}
               </p>
 
               <button
                 onClick={() => setSelectedImage(null)}
-                className="text-[#8B5E3C] font-bold text-lg"
+                className="text-brand-600 font-bold text-lg"
               >
                 ✕
               </button>

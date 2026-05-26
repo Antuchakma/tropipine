@@ -6,6 +6,7 @@ import store from './store'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
+import ScrollToTop from './components/ScrollToTop'
 
 // Pages
 import Home from './pages/Home'
@@ -14,12 +15,15 @@ import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import OrderTracking from './pages/OrderTracking'
+import MyOrders from './pages/MyOrders'
+import TrackOrder from './pages/TrackOrder'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import Wishlist from './pages/Wishlist'
 import Gallery from './pages/Gallery'
 import About from './pages/About'
+import Contact from './pages/Contact'
 
 function Layout({ children }) {
   return (
@@ -35,6 +39,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route
             path="/"
@@ -79,12 +84,38 @@ function App() {
             }
           />
           <Route
+            path="/orders"
+            element={
+              <Layout>
+                <PrivateRoute>
+                  <MyOrders />
+                </PrivateRoute>
+              </Layout>
+            }
+          />
+          <Route
             path="/orders/:orderId"
             element={
               <Layout>
                 <PrivateRoute>
                   <OrderTracking />
                 </PrivateRoute>
+              </Layout>
+            }
+          />
+          <Route
+            path="/track-order"
+            element={
+              <Layout>
+                <TrackOrder />
+              </Layout>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <Layout>
+                <Contact />
               </Layout>
             }
           />

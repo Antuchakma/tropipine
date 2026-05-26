@@ -10,7 +10,8 @@ model User {
   id                String    @id @default(cuid())
   name              String
   email             String    @unique
-  password          String
+  password          String?
+  googleId          String?   @unique
   phone             String?
   role              String    @default("USER")
   isActive          Boolean   @default(true)
@@ -59,6 +60,8 @@ model Product {
   id              String        @id @default(cuid())
   name            String
   slug            String        @unique
+  fruitType       String?
+  variant         String?
   description     String
   nutritionInfo   String?
   categoryId      String?
@@ -237,4 +240,15 @@ model SiteSettings {
   key             String   @unique
   value           String
   updatedAt       DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

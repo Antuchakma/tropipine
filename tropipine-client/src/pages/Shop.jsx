@@ -36,6 +36,8 @@ export default function Shop() {
   const [sortBy, setSortBy] = useState('')
   const [activeFilter, setActiveFilter] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [fruitTypes, setFruitTypes] = useState([])
+  const [selectedFruitType, setSelectedFruitType] = useState('')
 
   // Debounce search
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function Shop() {
 
   useEffect(() => {
     api.get('/categories').then((r) => setCategories(r.data.data || [])).catch(() => {})
+    api.get('/products/fruit-types').then((r) => setFruitTypes(r.data.data || [])).catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -59,12 +62,13 @@ export default function Shop() {
     if (sortBy) params.set('sortBy', sortBy)
     if (activeFilter) params.set(activeFilter, 'true')
     if (selectedCategory) params.set('category', selectedCategory)
+    if (selectedFruitType) params.set('fruitType', selectedFruitType)
 
     api.get(`/products?${params}`)
       .then((r) => { setProducts(r.data.items || []); setTotal(r.data.total || 0) })
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [page, debouncedSearch, sortBy, activeFilter, selectedCategory])
+  }, [page, debouncedSearch, sortBy, activeFilter, selectedCategory, selectedFruitType])
 
   const totalPages = Math.ceil(total / LIMIT)
 
@@ -128,6 +132,19 @@ export default function Shop() {
               {f.label}
             </button>
           ))}
+          {fruitTypes.map((type) => (
+            <button
+              key={type}
+              onClick={() => { setSelectedFruitType(selectedFruitType === type ? '' : type); setPage(1) }}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+                selectedFruitType === type
+                  ? 'bg-ink text-white border-transparent'
+                  : 'bg-white text-ink-muted border-edge hover:border-brand-300 hover:text-ink'
+              }`}
+            >
+              {type}
+            </button>
+          ))}
           {categories.slice(0, 5).map((cat) => (
             <button
               key={cat.id}
@@ -188,7 +205,7 @@ export default function Shop() {
               <h3 className="font-display text-xl font-bold text-ink mb-2">No products found</h3>
               <p className="text-ink-muted text-sm mb-6">Try clearing your filters or searching for something else.</p>
               <button
-                onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSortBy('') }}
+                onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSelectedFruitType(''); setSortBy('') }}
                 className="px-6 py-3 rounded-2xl gradient-brand text-white text-sm font-semibold shadow-brand hover:opacity-90 transition"
               >
                 Clear All Filters
