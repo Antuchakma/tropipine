@@ -11,6 +11,7 @@ import SettingsPage from './pages/SettingsPage';
 import CustomersPage from './pages/CustomersPage';
 import InventoryPage from './pages/InventoryPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import ReviewsPage from './pages/ReviewsPage';
 import './styles/index.css';
 
 function PrivateRoute({ children }) {
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/coupons" element={<Protected><CouponsPage /></Protected>} />
         <Route path="/customers" element={<Protected><CustomersPage /></Protected>} />
         <Route path="/analytics" element={<Protected><AnalyticsPage /></Protected>} />
+        <Route path="/reviews" element={<Protected><ReviewsPage /></Protected>} />
         <Route path="/gallery" element={<Protected><GalleryPage /></Protected>} />
         <Route path="/settings" element={<Protected><SettingsPage /></Protected>} />
         <Route path="/" element={<Navigate to="/dashboard" />} />

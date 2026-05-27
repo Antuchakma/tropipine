@@ -11,6 +11,7 @@ const navItems = [
   { to: '/orders', label: 'Orders' },
   { to: '/payments', label: 'Payments' },
   { to: '/coupons', label: 'Coupons' },
+  { to: '/reviews', label: 'Reviews' },
   { to: '/customers', label: 'Customers' },
   { to: '/analytics', label: 'Analytics' },
   { to: '/gallery', label: 'Gallery' },
@@ -20,9 +21,9 @@ const navItems = [
 const sidebarGroups = [
   { label: 'Overview', items: navItems.slice(0, 1) },
   { label: 'Catalogue', items: navItems.slice(1, 3) },
-  { label: 'Commerce', items: navItems.slice(3, 6) },
-  { label: 'Insights', items: navItems.slice(6, 9) },
-  { label: 'System', items: navItems.slice(9) },
+  { label: 'Commerce', items: navItems.slice(3, 7) },
+  { label: 'Insights', items: navItems.slice(7, 10) },
+  { label: 'System', items: navItems.slice(10) },
 ];
 
 export default function AdminLayout({ children }) {

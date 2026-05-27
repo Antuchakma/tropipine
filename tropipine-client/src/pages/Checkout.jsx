@@ -31,7 +31,7 @@ export default function Checkout() {
   const [orderItemsSnapshot, setOrderItemsSnapshot] = useState([])
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const discount = (subtotal * couponDiscount) / 100
+  const discount = couponDiscount  // absolute dollar amount from backend
   const selectedZone = deliveryZones.find((z) => z.id === formData.deliveryZoneId)
   const deliveryCharge = selectedZone ? parseFloat(selectedZone.charge) : 0
   const total = subtotal - discount + deliveryCharge
@@ -243,11 +243,12 @@ export default function Checkout() {
             <h2 className="text-2xl font-black mb-6 text-ink">Order Total</h2>
             <div className="space-y-3 mb-6 text-ink-muted">
               <div className="flex justify-between"><span>Subtotal:</span><span className="font-semibold text-ink">{subtotal.toFixed(2)}</span></div>
-              {couponCode && (
+              {couponCode && discount > 0 && (
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                   <p className="text-xs text-green-700 font-semibold mb-2">Coupon Applied: {couponCode}</p>
                   <div className="flex justify-between text-sm">
-                    <span className="text-green-700">Discount ({couponDiscount}%):</span><span className="font-bold text-green-600 text-lg">-{discount.toFixed(2)}</span>
+                    <span className="text-green-700">Discount:</span>
+                    <span className="font-bold text-green-600 text-lg">-{discount.toFixed(2)}</span>
                   </div>
                 </div>
               )}

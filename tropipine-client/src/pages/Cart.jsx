@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
-import { removeFromCart, updateQuantity, setCoupon, clearCart } from '../store/slices/cartSlice'
+import { removeFromCart, updateQuantity, setCoupon, clearCoupon } from '../store/slices/cartSlice'
 import api from '../services/api'
 import { FaTrash, FaMinus, FaPlus } from 'react-icons/fa'
 
@@ -16,7 +16,7 @@ export default function Cart() {
   const [error, setError] = useState('')
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const discount = (subtotal * couponDiscount) / 100
+  const discount = couponDiscount  // absolute dollar amount from backend
   const total = subtotal - discount
 
   const handleApplyCoupon = async () => {
@@ -36,8 +36,10 @@ export default function Cart() {
 
       if (response.data.valid) {
         dispatch(setCoupon({
-          code: couponInput,
-          discount: response.data.discount || 0,
+          code: couponInput.trim().toUpperCase(),
+          discountAmount: response.data.discountAmount || 0,
+          couponType: response.data.coupon?.type,
+          couponValue: response.data.coupon?.value,
         }))
         setCouponInput('')
       } else {
@@ -196,10 +198,13 @@ export default function Cart() {
                   Apply
                 </button>
               </div>
-              {couponCode && (
-                <p className="text-[#8B5E3C] text-sm mt-2 font-medium"> {couponCode} applied</p>
+              {couponCode && discount > 0 && (
+                <div className="mt-2 flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+                  <p className="text-green-700 text-sm font-medium">✓ {couponCode} — saving {discount.toFixed(2)}</p>
+                  <button onClick={() => dispatch(clearCoupon())} className="text-green-600 hover:text-green-800 text-xs ml-2">✕</button>
+                </div>
               )}
-              {error && <p className="text-[#8B5E3C] text-sm mt-2">{error}</p>}
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             </div>
 
             {/* Totals */}
@@ -209,8 +214,8 @@ export default function Cart() {
                 <span>{subtotal.toFixed(2)}</span>
               </div>
               {discount > 0 && (
-                <div className="flex justify-between text-[#8B5E3C] font-medium">
-                  <span>Discount ({couponDiscount}%):</span>
+                <div className="flex justify-between text-green-600 font-medium">
+                  <span>Coupon ({couponCode}):</span>
                   <span>-{discount.toFixed(2)}</span>
                 </div>
               )}

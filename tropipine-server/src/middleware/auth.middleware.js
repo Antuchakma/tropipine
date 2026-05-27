@@ -16,4 +16,15 @@ function authenticate(req, res, next) {
   }
 }
 
-module.exports = { authenticate };
+function optionalAuthenticate(req, res, next) {
+  try {
+    const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+    if (token) {
+      const payload = jwt.verify(token, JWT_SECRET);
+      req.user = payload;
+    }
+  } catch (_) {}
+  next();
+}
+
+module.exports = { authenticate, optionalAuthenticate };
