@@ -31,8 +31,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
         {/* Brand */}
         <div>
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center text-lg shadow-brand">🍍</div>
+          <div className="mb-5">
             <span className="font-display text-lg font-bold">TropiPine</span>
           </div>
           <p className="text-white/50 text-sm leading-relaxed mb-6">
@@ -118,7 +117,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/35">
-          <span>© {new Date().getFullYear()} TropiPine. All rights reserved.</span>
+          <span> {new Date().getFullYear()} TropiPine. All rights reserved.</span>
           <div className="flex gap-5">
             <a href="#" className="hover:text-white/70 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white/70 transition-colors">Terms of Service</a>

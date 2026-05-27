@@ -130,7 +130,7 @@ export default function MyOrders() {
                 <div className="flex flex-wrap justify-between gap-4 mb-4">
                   <div>
                     <p className="text-sm text-brand-600 font-semibold">{order.orderNumber || order.id}</p>
-                    <p className="font-display text-2xl font-black text-ink">৳{order.totalAmount?.toFixed(2)}</p>
+                    <p className="font-display text-2xl font-black text-ink">{order.totalAmount?.toFixed(2)}</p>
                     <p className="text-xs text-ink-muted mt-1">{new Date(order.createdAt).toLocaleString()}</p>
                   </div>
                   <div className="text-right space-y-1">
@@ -141,7 +141,7 @@ export default function MyOrders() {
 
                 <ul className="text-sm text-ink-muted mb-4 space-y-1">
                   {order.items?.map((item) => (
-                    <li key={item.id}>{item.productName} × {item.quantity}</li>
+                    <li key={item.id}>{item.productName}  {item.quantity}</li>
                   ))}
                 </ul>
 
@@ -152,7 +152,7 @@ export default function MyOrders() {
                 )}
 
                 <Link to={`/orders/${order.id}`} className="text-brand-600 font-semibold text-sm hover:underline">
-                  Track this order →
+                  Track this order
                 </Link>
               </div>
             ))}

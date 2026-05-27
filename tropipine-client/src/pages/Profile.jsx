@@ -100,7 +100,7 @@ export default function Profile() {
                           <div>
                             <p className="text-sm text-[#8B5E3C] font-medium">{order.orderNumber || `Order #${order.id.slice(0, 8)}`}</p>
                             <p className="font-black text-2xl text-[#1E1E1E]">
-                              ৳{order.totalAmount?.toFixed(2)}
+                              {order.totalAmount?.toFixed(2)}
                             </p>
                           </div>
                           <span
@@ -117,7 +117,7 @@ export default function Profile() {
                         </div>
 
                             <p className="text-sm text-[#6A625B] mb-2">
-                          📍 {order.address?.street || order.address}{order.address?.city ? `, ${order.address.city}` : ''}
+                           {order.address?.street || order.address}{order.address?.city ? `, ${order.address.city}` : ''}
                         </p>
                         <p className="text-sm text-[#6A625B] mb-4">
                           {new Date(order.createdAt).toLocaleDateString()}
@@ -127,7 +127,7 @@ export default function Profile() {
                           onClick={() => navigate(`/orders/${order.id}`)}
                           className="text-[#8B5E3C] hover:text-[#7a4e2f] font-bold text-sm"
                         >
-                          View Details →
+                          View Details
                         </button>
                       </div>
                     ))}
@@ -176,7 +176,7 @@ export default function Profile() {
 
                   <div className="bg-blue-50 p-4 rounded mt-6">
                     <p className="text-sm text-blue-700">
-                      💡 Contact support to update your profile information
+                       Contact support to update your profile information
                     </p>
                   </div>
                 </div>

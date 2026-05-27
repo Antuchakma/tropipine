@@ -2,17 +2,17 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const values = [
-  { icon: '🌿', title: 'Quality First', desc: 'Carefully selected fresh fruits from trusted farms.' },
-  { icon: '🚚', title: 'Fast Delivery', desc: 'Same-day in Dhaka, reliable nationwide shipping.' },
-  { icon: '🌾', title: 'Farm Direct', desc: 'Sourced directly from growers — fair prices for everyone.' },
-  { icon: '🔒', title: 'Secure Payment', desc: 'bKash, Nagad, Rocket with verified checkout.' },
+  { icon: '', title: 'Quality First', desc: 'Carefully selected fresh fruits from trusted farms.' },
+  { icon: '', title: 'Fast Delivery', desc: 'Same-day in Dhaka, reliable nationwide shipping.' },
+  { icon: '', title: 'Farm Direct', desc: 'Sourced directly from growers  fair prices for everyone.' },
+  { icon: '', title: 'Secure Payment', desc: 'bKash, Nagad, Rocket with verified checkout.' },
 ]
 
 const specialties = [
-  { name: 'Haribhanga Mango', emoji: '🥭', type: 'Mango' },
-  { name: 'Gopalbhog Mango', emoji: '🥭', type: 'Mango' },
-  { name: 'Pineapple', emoji: '🍍', type: 'Pineapple' },
-  { name: 'Seasonal Fruits', emoji: '🍊', type: 'Seasonal' },
+  { name: 'Haribhanga Mango', emoji: '', type: 'Mango' },
+  { name: 'Gopalbhog Mango', emoji: '', type: 'Mango' },
+  { name: 'Pineapple', emoji: '', type: 'Pineapple' },
+  { name: 'Seasonal Fruits', emoji: '', type: 'Seasonal' },
 ]
 
 export default function About() {
@@ -21,7 +21,7 @@ export default function About() {
       <section
         className="relative text-white overflow-hidden"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1488566169025-ce58df917c61?q=80&w=1200&auto=format&fit=crop)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -48,14 +48,14 @@ export default function About() {
           <div>
             <h2 className="font-display text-3xl font-bold text-ink mb-5">Our Story</h2>
             <p className="text-ink-muted leading-relaxed mb-4">
-              TropiPine started with a simple idea — deliver fresh tropical fruits directly from farmers to customers without unnecessary complexity or loss of quality.
+              TropiPine started with a simple idea  deliver fresh tropical fruits directly from farmers to customers without unnecessary complexity or loss of quality.
             </p>
             <p className="text-ink-muted leading-relaxed">
               We work with local farmers across Bangladesh to ensure better pricing for growers and fresher fruits for families.
             </p>
           </div>
           <div className="bg-white border border-edge rounded-3xl p-10 text-center shadow-card">
-            <div className="text-6xl mb-4">🌾</div>
+            <div className="text-6xl mb-4"></div>
             <h3 className="font-semibold text-brand-600">Farm to Table</h3>
             <p className="text-ink-muted text-sm mt-2">Direct sourcing, no middle layers</p>
           </div>
@@ -66,18 +66,18 @@ export default function About() {
             <h3 className="font-display text-2xl font-bold text-ink mb-4">Our Mission</h3>
             <p className="text-ink-muted mb-6 leading-relaxed">Make fresh tropical fruits accessible through a fair and simple supply chain.</p>
             <ul className="space-y-2 text-ink-muted text-sm">
-              <li>✓ Premium quality fruits</li>
-              <li>✓ Fair support for farmers</li>
-              <li>✓ Sustainable sourcing</li>
+              <li> Premium quality fruits</li>
+              <li> Fair support for farmers</li>
+              <li> Sustainable sourcing</li>
             </ul>
           </div>
           <div className="bg-white border border-edge rounded-3xl p-8 shadow-card">
             <h3 className="font-display text-2xl font-bold text-ink mb-4">Our Vision</h3>
             <p className="text-ink-muted mb-6 leading-relaxed">Become a trusted tropical fruit brand in South Asia built on simplicity and quality.</p>
             <ul className="space-y-2 text-ink-muted text-sm">
-              <li>✓ Expand regional reach</li>
-              <li>✓ Support local farming communities</li>
-              <li>✓ Eco-friendly operations</li>
+              <li> Expand regional reach</li>
+              <li> Support local farming communities</li>
+              <li> Eco-friendly operations</li>
             </ul>
           </div>
         </section>

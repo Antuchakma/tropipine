@@ -46,7 +46,7 @@ export default function Contact() {
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
               <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Connect With Us</p>
               <h1 className="font-display text-4xl sm:text-5xl font-black text-white mb-3">We&apos;d Love to Hear From You</h1>
-              <p className="text-white/80 max-w-xl">Questions about orders, wholesale, or partnerships — send us a message.</p>
+              <p className="text-white/80 max-w-xl">Questions about orders, wholesale, or partnerships  send us a message.</p>
             </motion.div>
           </div>
         </div>

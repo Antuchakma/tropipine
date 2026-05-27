@@ -45,7 +45,7 @@ export default function Gallery() {
       <section
         className="relative text-white overflow-hidden"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1464454709131-ffd692591ee5?q=80&w=1200&auto=format&fit=crop)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -138,7 +138,7 @@ export default function Gallery() {
         <div className="grid md:grid-cols-3 gap-6 mt-16">
           {[
             {
-              icon: '🚜',
+              icon: '',
               title: 'Farm Fresh',
               desc: 'Directly sourced from trusted farms',
             },
@@ -190,7 +190,7 @@ export default function Gallery() {
                 onClick={() => setSelectedImage(null)}
                 className="text-brand-600 font-bold text-lg"
               >
-                ✕
+
               </button>
             </div>
           </div>

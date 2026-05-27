@@ -78,22 +78,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-900 via-brand-800 to-surface flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Background video-like animated gradient */}
-      <div className="absolute inset-0 opacity-30">
-        <motion.div
-          animate={{ 
-            background: [
-              'radial-gradient(400px at 20% 50%, rgba(255, 107, 53, 0.3) 0%, transparent 50%)',
-              'radial-gradient(400px at 80% 50%, rgba(255, 152, 0, 0.3) 0%, transparent 50%)',
-              'radial-gradient(400px at 20% 50%, rgba(255, 107, 53, 0.3) 0%, transparent 50%)',
-            ]
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="w-full h-full"
-        />
-      </div>
-
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -101,7 +86,7 @@ export default function Register() {
         className="w-full max-w-5xl relative z-10"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          
+
           {/* LEFT SIDE - Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -110,12 +95,9 @@ export default function Register() {
             className="text-white space-y-6 hidden lg:block"
           >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/40 rounded-full">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold text-green-300">Join Us Today</span>
-              </div>
+              
               <h1 className="text-5xl font-black leading-tight">
-                Start Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-brand-400">Fresh Journey</span>
+                Start Your <span className="text-white">Fresh Journey</span>
               </h1>
               <p className="text-lg text-white/70">Create your account and discover the finest tropical fruits delivered fresh to your door.</p>
             </div>
@@ -123,27 +105,21 @@ export default function Register() {
             {/* Benefits list */}
             <div className="space-y-4 pt-4">
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-green-400 font-bold">✓</span>
-                </div>
+               
                 <div>
                   <h3 className="font-semibold text-white">Free first order</h3>
                   <p className="text-sm text-white/60">Use code WELCOME for 20% off</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-green-400 font-bold">✓</span>
-                </div>
+                
                 <div>
                   <h3 className="font-semibold text-white">Loyalty rewards</h3>
                   <p className="text-sm text-white/60">Earn points on every purchase</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-green-400 font-bold">✓</span>
-                </div>
+                
                 <div>
                   <h3 className="font-semibold text-white">Premium support</h3>
                   <p className="text-sm text-white/60">24/7 customer service team</p>
@@ -160,7 +136,7 @@ export default function Register() {
             className="w-full"
           >
             <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl p-8 space-y-5 border border-white/20">
-              
+
               {/* Header */}
               <div className="space-y-2">
                 <h2 className="text-2xl font-black text-ink">Create Account</h2>
@@ -244,7 +220,7 @@ export default function Register() {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      placeholder="••••••••"
+                      placeholder=""
                       className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
@@ -256,7 +232,7 @@ export default function Register() {
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       required
-                      placeholder="••••••••"
+                      placeholder=""
                       className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>

@@ -14,7 +14,7 @@ const statCards = (s) => [
     label: "Today's Revenue",
     value: `৳${(s.todayRevenue || 0).toLocaleString()}`,
     sub: 'Paid orders today',
-    icon: '💰',
+    icon: '$',
     color: '#FF5C2E',
     bg: '#FFF3EE',
   },
@@ -22,7 +22,7 @@ const statCards = (s) => [
     label: 'Total Orders',
     value: s.totalOrders || 0,
     sub: 'All time',
-    icon: '🧾',
+    icon: '#',
     color: '#6366F1',
     bg: '#EEF2FF',
   },
@@ -30,7 +30,7 @@ const statCards = (s) => [
     label: 'Pending Payments',
     value: s.pendingPayments || 0,
     sub: 'Need verification',
-    icon: '💳',
+    icon: 'C',
     color: s.pendingPayments > 0 ? '#EF4444' : '#10B981',
     bg: s.pendingPayments > 0 ? '#FEF2F2' : '#F0FDF4',
     urgent: s.pendingPayments > 0,
@@ -40,7 +40,7 @@ const statCards = (s) => [
     label: 'Low Stock Alerts',
     value: s.lowStockProducts || 0,
     sub: 'Below threshold',
-    icon: '📦',
+    icon: 'S',
     color: '#F59E0B',
     bg: '#FFFBEB',
     link: '/inventory',
@@ -78,7 +78,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>
-              Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'} 👋
+              Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 17 ? 'Afternoon' : 'Evening'}
             </h2>
             <p className="text-sm text-ink-muted mt-1">Here's what's happening with TropiPine today.</p>
           </div>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
             className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
             style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)', boxShadow: '0 4px 14px rgba(255,92,46,0.35)' }}
           >
-            View All Orders →
+            View All Orders
           </Link>
         </div>
 
@@ -156,10 +156,10 @@ export default function DashboardPage() {
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F5" vertical={false} />
                       <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `৳${v}`} />
+                      <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
                       <Tooltip
                         contentStyle={{ borderRadius: '12px', border: '1px solid #E8E8F0', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}
-                        formatter={(v) => [`৳${v.toLocaleString()}`, 'Revenue']}
+                        formatter={(v) => [`${v.toLocaleString()}`, 'Revenue']}
                       />
                       <Line type="monotone" dataKey="revenue" stroke="url(#revenueGrad)" strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: '#FF5C2E' }} />
                     </LineChart>
@@ -226,9 +226,9 @@ export default function DashboardPage() {
             {/* Quick Actions */}
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { to: '/products', icon: '➕', label: 'Add New Product', desc: 'Create a product listing', color: '#FF5C2E', bg: '#FFF3EE' },
-                { to: '/payments', icon: '✅', label: 'Verify Payments', desc: `${stats.pendingPayments || 0} pending`, color: '#6366F1', bg: '#EEF2FF' },
-                { to: '/inventory', icon: '📦', label: 'Manage Inventory', desc: `${stats.lowStockProducts || 0} low stock`, color: '#10B981', bg: '#F0FDF4' },
+                { to: '/products', icon: '+', label: 'Add New Product', desc: 'Create a product listing', color: '#FF5C2E', bg: '#FFF3EE' },
+                { to: '/payments', icon: 'V', label: 'Verify Payments', desc: `${stats.pendingPayments || 0} pending`, color: '#6366F1', bg: '#EEF2FF' },
+                { to: '/inventory', icon: 'I', label: 'Manage Inventory', desc: `${stats.lowStockProducts || 0} low stock`, color: '#10B981', bg: '#F0FDF4' },
               ].map((a) => (
                 <Link
                   key={a.to}

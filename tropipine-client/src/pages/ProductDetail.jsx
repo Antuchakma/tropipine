@@ -87,17 +87,17 @@ export default function ProductDetail() {
             <p className="text-[#6A625B] mb-5 text-lg leading-relaxed">{product.description}</p>
 
             {product.origin && (
-              <p className="text-sm text-[#8B5E3C] mb-6 font-medium">📍 Origin: {product.origin}</p>
+              <p className="text-sm text-[#8B5E3C] mb-6 font-medium"> Origin: {product.origin}</p>
             )}
 
             {/* Pricing */}
             <div className="mb-8 pb-8 border-b border-[#E7DBCF]">
               {discount > 0 && (
-                <span className="text-[#6A625B] line-through block mb-2">৳{product.basePrice}</span>
+                <span className="text-[#6A625B] line-through block mb-2">{product.basePrice}</span>
               )}
               <div className="flex items-center gap-4">
                 <span className="text-5xl font-black text-[#8B5E3C]">
-                  ৳{product.finalPrice || product.price}
+                  {product.finalPrice || product.price}
                 </span>
                 {discount > 0 && (
                   <span className="bg-[#8B5E3C] text-white px-4 py-2 rounded-full text-sm font-bold">
@@ -114,7 +114,7 @@ export default function ProductDetail() {
                   product.stockQty > 0 ? 'text-[#8B5E3C]' : 'text-[#6A625B]'
                 }`}
               >
-                {product.stockQty > 0 ? `✓ In Stock (${product.stockQty})` : 'Out of Stock'}
+                {product.stockQty > 0 ? ` In Stock (${product.stockQty})` : 'Out of Stock'}
               </p>
             </div>
 
@@ -126,7 +126,7 @@ export default function ProductDetail() {
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="px-4 py-2 text-[#8B5E3C] hover:bg-[#E7DBCF] rounded-l-2xl transition"
                 >
-                  −
+
                 </button>
                 <span className="px-6 font-medium text-[#1E1E1E]">{quantity}</span>
                 <button
@@ -151,7 +151,7 @@ export default function ProductDetail() {
               <button
                 onClick={handleWishlist}
                 className={`w-full flex items-center justify-center gap-2 border-2 py-4 rounded-2xl font-semibold transition ${
-                  isInWishlist 
+                  isInWishlist
                     ? 'bg-[#8B5E3C] text-white border-[#8B5E3C]'
                     : 'border-[#E7DBCF] text-[#8B5E3C] bg-white hover:border-[#8B5E3C]'
                 }`}

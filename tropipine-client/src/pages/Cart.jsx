@@ -31,13 +31,13 @@ export default function Cart() {
     try {
       const response = await api.post('/coupons/validate', {
         code: couponInput,
-        subtotal,
+        cartTotal: subtotal,
       })
 
       if (response.data.valid) {
         dispatch(setCoupon({
           code: couponInput,
-          discount: response.data.discountPercentage || 0,
+          discount: response.data.discount || 0,
         }))
         setCouponInput('')
       } else {
@@ -122,7 +122,7 @@ export default function Cart() {
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold text-[#1E1E1E]">{item.name}</h3>
-                      <p className="text-[#8B5E3C] font-bold">৳{item.price}</p>
+                      <p className="text-[#8B5E3C] font-bold">{item.price}</p>
                     </div>
 
                     {/* Quantity Controls */}
@@ -158,7 +158,7 @@ export default function Cart() {
 
                     {/* Subtotal */}
                     <div className="w-28 text-right">
-                      <p className="font-bold text-[#1E1E1E]">৳{(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-bold text-[#1E1E1E]">{(item.price * item.quantity).toFixed(2)}</p>
                     </div>
 
                     {/* Remove */}
@@ -197,7 +197,7 @@ export default function Cart() {
                 </button>
               </div>
               {couponCode && (
-                <p className="text-[#8B5E3C] text-sm mt-2 font-medium">✓ {couponCode} applied</p>
+                <p className="text-[#8B5E3C] text-sm mt-2 font-medium"> {couponCode} applied</p>
               )}
               {error && <p className="text-[#8B5E3C] text-sm mt-2">{error}</p>}
             </div>
@@ -206,17 +206,17 @@ export default function Cart() {
             <div className="space-y-3 border-t border-[#E7DBCF] pt-4 mb-6">
               <div className="flex justify-between text-[#5A5149]">
                 <span>Subtotal:</span>
-                <span>৳{subtotal.toFixed(2)}</span>
+                <span>{subtotal.toFixed(2)}</span>
               </div>
               {discount > 0 && (
                 <div className="flex justify-between text-[#8B5E3C] font-medium">
                   <span>Discount ({couponDiscount}%):</span>
-                  <span>-৳{discount.toFixed(2)}</span>
+                  <span>-{discount.toFixed(2)}</span>
                 </div>
               )}
               <div className="flex justify-between text-lg font-black border-t border-[#E7DBCF] pt-3 text-[#1E1E1E]">
                 <span>Total:</span>
-                <span>৳{total.toFixed(2)}</span>
+                <span>{total.toFixed(2)}</span>
               </div>
             </div>
 

@@ -98,7 +98,7 @@ export default function CouponsPage() {
               <h3 className="text-lg font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>
                 {editingId ? 'Edit Coupon' : 'New Coupon'}
               </h3>
-              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted flex items-center justify-center text-lg">✕</button>
+              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted flex items-center justify-center text-lg"></button>
             </div>
             <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
               <div>
@@ -122,13 +122,13 @@ export default function CouponsPage() {
                   className="w-full px-3.5 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
                 >
                   <option value="PERCENTAGE">Percentage (%)</option>
-                  <option value="FIXED">Fixed Amount (৳)</option>
+                  <option value="FIXED">Fixed Amount ()</option>
                 </select>
               </div>
               {[
-                { name: 'value', label: formData.type === 'PERCENTAGE' ? 'Discount % *' : 'Discount Amount ৳ *', placeholder: formData.type === 'PERCENTAGE' ? '20' : '100', required: true },
+                { name: 'value', label: formData.type === 'PERCENTAGE' ? 'Discount % *' : 'Discount Amount  *', placeholder: formData.type === 'PERCENTAGE' ? '20' : '100', required: true },
                 { name: 'minOrderAmount', label: 'Min Order Amount', placeholder: '500' },
-                { name: 'maxDiscount', label: 'Max Discount Cap (৳)', placeholder: 'No cap' },
+                { name: 'maxDiscount', label: 'Max Discount Cap ()', placeholder: 'No cap' },
                 { name: 'usageLimit', label: 'Total Usage Limit', placeholder: 'Unlimited' },
                 { name: 'perUserLimit', label: 'Per-User Limit', placeholder: '1' },
               ].map(({ name, label, placeholder, required }) => (
@@ -179,11 +179,11 @@ export default function CouponsPage() {
                 <tr key={c.id} className={tableRow}>
                   <td className={`${tableCell} font-mono font-bold text-ink`}>{c.code}</td>
                   <td className={`${tableCell} text-ink-muted`}>{c.type}</td>
-                  <td className={`${tableCell} font-semibold`}>{c.type === 'PERCENTAGE' ? `${c.value}%` : `৳${c.value}`}</td>
-                  <td className={tableCell}>{c.minOrderAmount > 0 ? `৳${c.minOrderAmount}` : '—'}</td>
+                  <td className={`${tableCell} font-semibold`}>{c.type === 'PERCENTAGE' ? `${c.value}%` : `${c.value}`}</td>
+                  <td className={tableCell}>{c.minOrderAmount > 0 ? `${c.minOrderAmount}` : ''}</td>
                   <td className={tableCell}>
                     <span className="font-semibold text-ink">{c.usedCount}</span>
-                    <span className="text-ink-muted"> / {c.usageLimit || '∞'}</span>
+                    <span className="text-ink-muted"> / {c.usageLimit || ''}</span>
                   </td>
                   <td className={tableCell}>
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${c.isActive ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-surface text-ink-faint border-edge'}`}>

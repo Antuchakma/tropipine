@@ -4,9 +4,9 @@ import api from '../utils/api';
 import { btn, brandGrad, card, tableHead, tableCell, tableRow, paymentStatusColors } from '../utils/ui';
 
 const STATUS_TABS = [
-  { value: 'PENDING_VERIFICATION', label: '⏳ Pending' },
-  { value: 'PAID', label: '✅ Verified' },
-  { value: 'FAILED', label: '❌ Rejected' },
+  { value: 'PENDING_VERIFICATION', label: 'Pending' },
+  { value: 'PAID', label: 'Verified' },
+  { value: 'FAILED', label: 'Rejected' },
   { value: '', label: 'All' },
 ];
 
@@ -81,7 +81,7 @@ export default function PaymentsPage() {
           <div>
             <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Payment Verification</h2>
             {pendingCount > 0 && statusFilter === 'PENDING_VERIFICATION' && (
-              <p className="text-sm text-red-500 font-medium mt-0.5">⚠️ {pendingCount} payment{pendingCount > 1 ? 's' : ''} need{pendingCount === 1 ? 's' : ''} review</p>
+              <p className="text-sm text-red-500 font-medium mt-0.5">Alert: {pendingCount} payment{pendingCount > 1 ? 's' : ''} need{pendingCount === 1 ? 's' : ''} review</p>
             )}
           </div>
           {/* Tabs */}
@@ -105,7 +105,7 @@ export default function PaymentsPage() {
             <div className={`${card} p-7 max-w-lg w-full shadow-2xl rounded-2xl`}>
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Payment Detail</h3>
-                <button onClick={() => { setSelectedPayment(null); setRejectionNote(''); }} className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-ink-muted hover:text-ink text-lg">✕</button>
+                <button onClick={() => { setSelectedPayment(null); setRejectionNote(''); }} className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-ink-muted hover:text-ink text-lg"></button>
               </div>
 
               <div className="space-y-3 mb-6">
@@ -115,7 +115,7 @@ export default function PaymentsPage() {
                   { label: 'Method', val: selectedPayment.method },
                   { label: 'Sender Number', val: selectedPayment.senderNumber },
                   { label: 'Transaction ID', val: <span className="font-mono font-bold text-ink text-base">{selectedPayment.transactionId}</span> },
-                  { label: 'Amount', val: <span className="text-2xl font-bold text-ink">৳{selectedPayment.amount}</span> },
+                  { label: 'Amount', val: <span className="text-2xl font-bold text-ink">{selectedPayment.amount}</span> },
                   { label: 'Status', val: <Badge label={selectedPayment.status} /> },
                 ].map(({ label, val }) => (
                   <div key={label} className="flex justify-between items-center py-2.5 border-b border-edge last:border-0">
@@ -132,7 +132,7 @@ export default function PaymentsPage() {
                     className={`${btn.primary} w-full justify-center`}
                     style={brandGrad}
                   >
-                    ✅ Verify Payment — ৳{selectedPayment.amount}
+                     Verify Payment  {selectedPayment.amount}
                   </button>
                   <div>
                     <p className="text-xs font-semibold text-ink-muted mb-2">Rejection reason (required to reject):</p>
@@ -147,7 +147,7 @@ export default function PaymentsPage() {
                       onClick={() => handleReject(selectedPayment.id)}
                       className="mt-2 w-full py-2.5 rounded-xl text-sm font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-all"
                     >
-                      ❌ Reject Payment
+                       Reject Payment
                     </button>
                   </div>
                 </div>
@@ -179,16 +179,16 @@ export default function PaymentsPage() {
                 <tr><td colSpan="8" className="px-5 py-16 text-center text-sm text-ink-muted">No payments found</td></tr>
               ) : payments.map((payment) => (
                 <tr key={payment.id} className={tableRow}>
-                  <td className={`${tableCell} font-semibold`}>{payment.order?.orderNumber || '—'}</td>
-                  <td className={tableCell}>{payment.order?.user?.name || '—'}</td>
+                  <td className={`${tableCell} font-semibold`}>{payment.order?.orderNumber || ''}</td>
+                  <td className={tableCell}>{payment.order?.user?.name || ''}</td>
                   <td className={`${tableCell} font-medium`}>{payment.method}</td>
-                  <td className={`${tableCell} font-bold`}>৳{payment.amount}</td>
+                  <td className={`${tableCell} font-bold`}>{payment.amount}</td>
                   <td className={`${tableCell} font-mono text-xs`}>{payment.transactionId}</td>
                   <td className={tableCell}><Badge label={payment.status} /></td>
                   <td className={`${tableCell} text-ink-muted`}>{new Date(payment.createdAt).toLocaleDateString()}</td>
                   <td className={tableCell}>
                     <button onClick={() => setSelectedPayment(payment)} className={btn.ghost}>
-                      Review →
+                      Review
                     </button>
                   </td>
                 </tr>

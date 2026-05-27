@@ -63,22 +63,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-900 via-brand-800 to-surface flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Background video-like animated gradient */}
-      <div className="absolute inset-0 opacity-30">
-        <motion.div
-          animate={{ 
-            background: [
-              'radial-gradient(400px at 20% 50%, rgba(255, 107, 53, 0.3) 0%, transparent 50%)',
-              'radial-gradient(400px at 80% 50%, rgba(255, 152, 0, 0.3) 0%, transparent 50%)',
-              'radial-gradient(400px at 20% 50%, rgba(255, 107, 53, 0.3) 0%, transparent 50%)',
-            ]
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-          className="w-full h-full"
-        />
-      </div>
-
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -86,7 +71,7 @@ export default function Login() {
         className="w-full max-w-5xl relative z-10"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          
+
           {/* LEFT SIDE - Content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -95,12 +80,9 @@ export default function Login() {
             className="text-white space-y-6 hidden lg:block"
           >
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/40 rounded-full">
-                <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold text-orange-300">Welcome Back</span>
-              </div>
+         
               <h1 className="text-5xl font-black leading-tight">
-                Sign In to <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-brand-400">TropiPine</span>
+                Sign In to <span className="text-white">TropiPine</span>
               </h1>
               <p className="text-lg text-white/70">Continue your fresh fruit journey. Access your orders, wishlist, and exclusive deals.</p>
             </div>
@@ -108,27 +90,21 @@ export default function Login() {
             {/* Benefits list */}
             <div className="space-y-4 pt-4">
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-orange-400 font-bold">✓</span>
-                </div>
+                
                 <div>
                   <h3 className="font-semibold text-white">Quick checkout</h3>
                   <p className="text-sm text-white/60">Save your favorite fruits for faster ordering</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-orange-400 font-bold">✓</span>
-                </div>
+                
                 <div>
                   <h3 className="font-semibold text-white">Track orders</h3>
                   <p className="text-sm text-white/60">Real-time delivery updates to your door</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-orange-400 font-bold">✓</span>
-                </div>
+                
                 <div>
                   <h3 className="font-semibold text-white">Exclusive rewards</h3>
                   <p className="text-sm text-white/60">Earn points on every purchase</p>
@@ -145,7 +121,7 @@ export default function Login() {
             className="w-full"
           >
             <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl p-8 space-y-6 border border-white/20">
-              
+
               {/* Error */}
               {error && (
                 <motion.div
@@ -186,7 +162,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    placeholder="••••••••"
+                    placeholder=""
                     className="w-full px-4 py-3 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>

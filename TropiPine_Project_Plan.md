@@ -1,5 +1,5 @@
-# 🍍 TropiPine — Full PERN Stack Project Workflow
-> Version 2.0 — Detailed Developer Guide for Copilot Agent
+# TropiPine  Full PERN Stack Project Workflow
+> Version 2.0  Detailed Developer Guide for Copilot Agent
 
 ---
 
@@ -10,9 +10,9 @@
 3. [Technology Stack](#3-technology-stack)
 4. [Folder Structure](#4-folder-structure)
 5. [Database Schema (PostgreSQL + Prisma)](#5-database-schema-postgresql--prisma)
-6. [Backend API — All Endpoints](#6-backend-api--all-endpoints)
-7. [Frontend — User Website](#7-frontend--user-website)
-8. [Frontend — Admin Dashboard](#8-frontend--admin-dashboard)
+6. [Backend API  All Endpoints](#6-backend-api--all-endpoints)
+7. [Frontend  User Website](#7-frontend--user-website)
+8. [Frontend  Admin Dashboard](#8-frontend--admin-dashboard)
 9. [Payment System (bKash / Nagad / Rocket)](#9-payment-system-bkash--nagad--rocket)
 10. [Discount & Coupon System](#10-discount--coupon-system)
 11. [Exclusive Stock System](#11-exclusive-stock-system)
@@ -39,24 +39,24 @@
 ## 2. Architecture
 
 ```
-www.tropipine.com          → Customer Website (React + Vite)
-admin.tropipine.com        → Admin Dashboard (React + Vite, separate app)
-api.tropipine.com          → Shared Backend API (Node.js + Express)
+www.tropipine.com           Customer Website (React + Vite)
+admin.tropipine.com         Admin Dashboard (React + Vite, separate app)
+api.tropipine.com           Shared Backend API (Node.js + Express)
 ```
 
 - Both frontends communicate with the **same backend API**
-- Admin routes are protected by role-based middleware — never exposed in the user-facing website
+- Admin routes are protected by role-based middleware  never exposed in the user-facing website
 - Admin dashboard is a completely separate React application deployed separately
 
 ```
 [User Browser]              [Admin Browser]
-      ↓                           ↓
+
 [tropipine.com]         [admin.tropipine.com]
-      ↓                           ↓
+
          [api.tropipine.com]
-                  ↓
+
          [PostgreSQL Database]
-                  ↓
+
          [Cloudinary (Images)]
 ```
 
@@ -89,204 +89,204 @@ api.tropipine.com          → Shared Backend API (Node.js + Express)
 
 ## 4. Folder Structure
 
-### 4.1 User Frontend — `tropipine-client/`
+### 4.1 User Frontend  `tropipine-client/`
 
 ```
 tropipine-client/
-├── public/
-│   └── favicon.ico
-├── src/
-│   ├── assets/                    # Static images, logos
-│   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   └── ScrollToTop.jsx
-│   │   ├── ui/
-│   │   │   ├── Button.jsx
-│   │   │   ├── Badge.jsx
-│   │   │   ├── Spinner.jsx
-│   │   │   ├── Modal.jsx
-│   │   │   ├── Toast.jsx
-│   │   │   └── StarRating.jsx
-│   │   ├── product/
-│   │   │   ├── ProductCard.jsx
-│   │   │   ├── ProductGrid.jsx
-│   │   │   ├── ProductFilters.jsx
-│   │   │   ├── ProductImageGallery.jsx
-│   │   │   └── StockBadge.jsx
-│   │   ├── cart/
-│   │   │   ├── CartDrawer.jsx
-│   │   │   ├── CartItem.jsx
-│   │   │   └── CartSummary.jsx
-│   │   └── home/
-│   │       ├── HeroSection.jsx
-│   │       ├── FeaturedProducts.jsx
-│   │       ├── ExclusiveSection.jsx
-│   │       ├── SeasonalOffers.jsx
-│   │       ├── Testimonials.jsx
-│   │       └── DeliveryInfo.jsx
-│   ├── pages/
-│   │   ├── HomePage.jsx
-│   │   ├── ShopPage.jsx
-│   │   ├── ProductDetailPage.jsx
-│   │   ├── CartPage.jsx
-│   │   ├── CheckoutPage.jsx
-│   │   ├── OrderSuccessPage.jsx
-│   │   ├── OrderTrackingPage.jsx
-│   │   ├── WishlistPage.jsx
-│   │   ├── GalleryPage.jsx
-│   │   ├── AboutPage.jsx
-│   │   ├── LoginPage.jsx
-│   │   ├── RegisterPage.jsx
-│   │   ├── ForgotPasswordPage.jsx
-│   │   ├── ResetPasswordPage.jsx
-│   │   └── ProfilePage.jsx
-│   ├── store/
-│   │   ├── index.js
-│   │   ├── slices/
-│   │   │   ├── authSlice.js
-│   │   │   ├── cartSlice.js
-│   │   │   └── wishlistSlice.js
-│   │   └── api/
-│   │       ├── productApi.js
-│   │       ├── orderApi.js
-│   │       ├── authApi.js
-│   │       └── reviewApi.js
-│   ├── hooks/
-│   │   ├── useAuth.js
-│   │   ├── useCart.js
-│   │   └── useDebounce.js
-│   ├── utils/
-│   │   ├── formatPrice.js
-│   │   ├── formatDate.js
-│   │   └── validators.js
-│   ├── constants/
-│   │   └── categories.js
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── .env
-├── .env.example
-├── vite.config.js
-├── tailwind.config.js
-└── package.json
+ public/
+    favicon.ico
+ src/
+    assets/                    # Static images, logos
+    components/
+       layout/
+          Navbar.jsx
+          Footer.jsx
+          ScrollToTop.jsx
+       ui/
+          Button.jsx
+          Badge.jsx
+          Spinner.jsx
+          Modal.jsx
+          Toast.jsx
+          StarRating.jsx
+       product/
+          ProductCard.jsx
+          ProductGrid.jsx
+          ProductFilters.jsx
+          ProductImageGallery.jsx
+          StockBadge.jsx
+       cart/
+          CartDrawer.jsx
+          CartItem.jsx
+          CartSummary.jsx
+       home/
+           HeroSection.jsx
+           FeaturedProducts.jsx
+           ExclusiveSection.jsx
+           SeasonalOffers.jsx
+           Testimonials.jsx
+           DeliveryInfo.jsx
+    pages/
+       HomePage.jsx
+       ShopPage.jsx
+       ProductDetailPage.jsx
+       CartPage.jsx
+       CheckoutPage.jsx
+       OrderSuccessPage.jsx
+       OrderTrackingPage.jsx
+       WishlistPage.jsx
+       GalleryPage.jsx
+       AboutPage.jsx
+       LoginPage.jsx
+       RegisterPage.jsx
+       ForgotPasswordPage.jsx
+       ResetPasswordPage.jsx
+       ProfilePage.jsx
+    store/
+       index.js
+       slices/
+          authSlice.js
+          cartSlice.js
+          wishlistSlice.js
+       api/
+           productApi.js
+           orderApi.js
+           authApi.js
+           reviewApi.js
+    hooks/
+       useAuth.js
+       useCart.js
+       useDebounce.js
+    utils/
+       formatPrice.js
+       formatDate.js
+       validators.js
+    constants/
+       categories.js
+    App.jsx
+    main.jsx
+    index.css
+ .env
+ .env.example
+ vite.config.js
+ tailwind.config.js
+ package.json
 ```
 
 ---
 
-### 4.2 Admin Dashboard — `tropipine-admin/`
+### 4.2 Admin Dashboard  `tropipine-admin/`
 
 ```
 tropipine-admin/
-├── src/
-│   ├── components/
-│   │   ├── layout/
-│   │   │   ├── AdminLayout.jsx
-│   │   │   ├── Sidebar.jsx
-│   │   │   └── AdminNavbar.jsx
-│   │   ├── charts/
-│   │   │   ├── RevenueChart.jsx
-│   │   │   ├── OrdersChart.jsx
-│   │   │   └── TopProductsChart.jsx
-│   │   └── ui/
-│   │       ├── StatCard.jsx
-│   │       ├── DataTable.jsx
-│   │       └── ConfirmModal.jsx
-│   ├── pages/
-│   │   ├── DashboardPage.jsx
-│   │   ├── products/
-│   │   │   ├── ProductListPage.jsx
-│   │   │   ├── AddProductPage.jsx
-│   │   │   └── EditProductPage.jsx
-│   │   ├── orders/
-│   │   │   ├── OrderListPage.jsx
-│   │   │   └── OrderDetailPage.jsx
-│   │   ├── inventory/
-│   │   │   └── InventoryPage.jsx
-│   │   ├── discounts/
-│   │   │   ├── CouponListPage.jsx
-│   │   │   ├── AddCouponPage.jsx
-│   │   │   └── ProductDiscountPage.jsx
-│   │   ├── payments/
-│   │   │   └── PaymentVerificationPage.jsx
-│   │   ├── gallery/
-│   │   │   └── GalleryPage.jsx
-│   │   ├── customers/
-│   │   │   └── CustomerListPage.jsx
-│   │   ├── analytics/
-│   │   │   └── AnalyticsPage.jsx
-│   │   └── AdminLoginPage.jsx
-│   ├── store/
-│   ├── hooks/
-│   ├── utils/
-│   ├── App.jsx
-│   └── main.jsx
-├── .env
-└── package.json
+ src/
+    components/
+       layout/
+          AdminLayout.jsx
+          Sidebar.jsx
+          AdminNavbar.jsx
+       charts/
+          RevenueChart.jsx
+          OrdersChart.jsx
+          TopProductsChart.jsx
+       ui/
+           StatCard.jsx
+           DataTable.jsx
+           ConfirmModal.jsx
+    pages/
+       DashboardPage.jsx
+       products/
+          ProductListPage.jsx
+          AddProductPage.jsx
+          EditProductPage.jsx
+       orders/
+          OrderListPage.jsx
+          OrderDetailPage.jsx
+       inventory/
+          InventoryPage.jsx
+       discounts/
+          CouponListPage.jsx
+          AddCouponPage.jsx
+          ProductDiscountPage.jsx
+       payments/
+          PaymentVerificationPage.jsx
+       gallery/
+          GalleryPage.jsx
+       customers/
+          CustomerListPage.jsx
+       analytics/
+          AnalyticsPage.jsx
+       AdminLoginPage.jsx
+    store/
+    hooks/
+    utils/
+    App.jsx
+    main.jsx
+ .env
+ package.json
 ```
 
 ---
 
-### 4.3 Backend — `tropipine-server/`
+### 4.3 Backend  `tropipine-server/`
 
 ```
 tropipine-server/
-├── src/
-│   ├── config/
-│   │   ├── db.js                  # Prisma client instance
-│   │   ├── cloudinary.js          # Cloudinary config
-│   │   └── corsOptions.js
-│   ├── controllers/
-│   │   ├── auth.controller.js
-│   │   ├── product.controller.js
-│   │   ├── category.controller.js
-│   │   ├── order.controller.js
-│   │   ├── payment.controller.js
-│   │   ├── review.controller.js
-│   │   ├── coupon.controller.js
-│   │   ├── gallery.controller.js
-│   │   ├── user.controller.js
-│   │   ├── wishlist.controller.js
-│   │   └── analytics.controller.js
-│   ├── routes/
-│   │   ├── auth.routes.js
-│   │   ├── product.routes.js
-│   │   ├── category.routes.js
-│   │   ├── order.routes.js
-│   │   ├── payment.routes.js
-│   │   ├── review.routes.js
-│   │   ├── coupon.routes.js
-│   │   ├── gallery.routes.js
-│   │   ├── user.routes.js
-│   │   ├── wishlist.routes.js
-│   │   └── analytics.routes.js
-│   ├── middleware/
-│   │   ├── auth.middleware.js      # verifyToken
-│   │   ├── role.middleware.js      # requireAdmin, requireSuperAdmin
-│   │   ├── validate.middleware.js  # Zod schema validation
-│   │   ├── upload.middleware.js    # Multer setup
-│   │   └── rateLimiter.js
-│   ├── services/
-│   │   ├── cloudinary.service.js
-│   │   ├── email.service.js        # Nodemailer
-│   │   └── payment.service.js
-│   ├── utils/
-│   │   ├── generateToken.js
-│   │   ├── hashPassword.js
-│   │   └── ApiError.js
-│   ├── validations/
-│   │   ├── auth.schema.js
-│   │   ├── product.schema.js
-│   │   ├── order.schema.js
-│   │   └── coupon.schema.js
-│   └── server.js
-├── prisma/
-│   ├── schema.prisma
-│   └── seed.js
-├── .env
-├── .env.example
-└── package.json
+ src/
+    config/
+       db.js                  # Prisma client instance
+       cloudinary.js          # Cloudinary config
+       corsOptions.js
+    controllers/
+       auth.controller.js
+       product.controller.js
+       category.controller.js
+       order.controller.js
+       payment.controller.js
+       review.controller.js
+       coupon.controller.js
+       gallery.controller.js
+       user.controller.js
+       wishlist.controller.js
+       analytics.controller.js
+    routes/
+       auth.routes.js
+       product.routes.js
+       category.routes.js
+       order.routes.js
+       payment.routes.js
+       review.routes.js
+       coupon.routes.js
+       gallery.routes.js
+       user.routes.js
+       wishlist.routes.js
+       analytics.routes.js
+    middleware/
+       auth.middleware.js      # verifyToken
+       role.middleware.js      # requireAdmin, requireSuperAdmin
+       validate.middleware.js  # Zod schema validation
+       upload.middleware.js    # Multer setup
+       rateLimiter.js
+    services/
+       cloudinary.service.js
+       email.service.js        # Nodemailer
+       payment.service.js
+    utils/
+       generateToken.js
+       hashPassword.js
+       ApiError.js
+    validations/
+       auth.schema.js
+       product.schema.js
+       order.schema.js
+       coupon.schema.js
+    server.js
+ prisma/
+    schema.prisma
+    seed.js
+ .env
+ .env.example
+ package.json
 ```
 
 ---
@@ -305,9 +305,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // USER
-// ─────────────────────────────────────────────────────────────
+//
 model User {
   id                String    @id @default(cuid())
   name              String
@@ -333,9 +333,9 @@ enum Role {
   SUPER_ADMIN
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // ADDRESS
-// ─────────────────────────────────────────────────────────────
+//
 model Address {
   id          String   @id @default(cuid())
   userId      String
@@ -353,9 +353,9 @@ model Address {
   orders      Order[]
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // CATEGORY
-// ─────────────────────────────────────────────────────────────
+//
 model Category {
   id          String    @id @default(cuid())
   name        String    @unique
@@ -369,9 +369,9 @@ model Category {
   products    Product[]
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // PRODUCT
-// ─────────────────────────────────────────────────────────────
+//
 model Product {
   id              String        @id @default(cuid())
   name            String
@@ -423,9 +423,9 @@ model ProductImage {
   product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // GALLERY
-// ─────────────────────────────────────────────────────────────
+//
 model GalleryImage {
   id          String   @id @default(cuid())
   url         String
@@ -444,14 +444,14 @@ enum GalleryCategory {
   TEAM
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // COUPON
-// ─────────────────────────────────────────────────────────────
+//
 model Coupon {
   id              String      @id @default(cuid())
   code            String      @unique
   type            CouponType
-  value           Float       // Percentage (e.g. 10 = 10%) or flat amount (e.g. 50 = ৳50)
+  value           Float       // Percentage (e.g. 10 = 10%) or flat amount (e.g. 50 = 50)
   minOrderAmount  Float       @default(0)
   maxDiscount     Float?      // Max cap for percentage coupons
   usageLimit      Int?        // How many times total this coupon can be used
@@ -469,9 +469,9 @@ enum CouponType {
   FIXED
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // ORDER
-// ─────────────────────────────────────────────────────────────
+//
 model Order {
   id                String        @id @default(cuid())
   orderNumber       String        @unique  // e.g. TP-20240601-0001
@@ -546,9 +546,9 @@ enum PaymentStatus {
   REFUNDED
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // PAYMENT
-// ─────────────────────────────────────────────────────────────
+//
 model Payment {
   id              String        @id @default(cuid())
   orderId         String        @unique
@@ -565,9 +565,9 @@ model Payment {
   order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // REVIEW
-// ─────────────────────────────────────────────────────────────
+//
 model Review {
   id          String   @id @default(cuid())
   userId      String
@@ -582,9 +582,9 @@ model Review {
   product     Product  @relation(fields: [productId], references: [id])
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // WISHLIST
-// ─────────────────────────────────────────────────────────────
+//
 model Wishlist {
   id        String   @id @default(cuid())
   userId    String
@@ -597,9 +597,9 @@ model Wishlist {
   @@unique([userId, productId])
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // DELIVERY CONFIG
-// ─────────────────────────────────────────────────────────────
+//
 model DeliveryConfig {
   id              String   @id @default(cuid())
   name            String   // e.g. "Inside Dhaka", "Outside Dhaka"
@@ -609,22 +609,22 @@ model DeliveryConfig {
   updatedAt       DateTime @updatedAt
 }
 
-// ─────────────────────────────────────────────────────────────
+//
 // SITE SETTINGS
-// ─────────────────────────────────────────────────────────────
+//
 model SiteSettings {
   id              String   @id @default(cuid())
   key             String   @unique
   value           String
   updatedAt       DateTime @updatedAt
 }
-// Keys: bkash_number, nagad_number, rocket_number, 
+// Keys: bkash_number, nagad_number, rocket_number,
 //       free_delivery_threshold, maintenance_mode, etc.
 ```
 
 ---
 
-## 6. Backend API — All Endpoints
+## 6. Backend API  All Endpoints
 
 ### Base URL: `https://api.tropipine.com/api/v1`
 
@@ -632,7 +632,7 @@ model SiteSettings {
 
 ---
 
-### 6.1 Authentication — `/auth`
+### 6.1 Authentication  `/auth`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -647,7 +647,7 @@ model SiteSettings {
 
 ---
 
-### 6.2 Products — `/products`
+### 6.2 Products  `/products`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -683,7 +683,7 @@ model SiteSettings {
 
 ---
 
-### 6.3 Categories — `/categories`
+### 6.3 Categories  `/categories`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -695,7 +695,7 @@ model SiteSettings {
 
 ---
 
-### 6.4 Orders — `/orders`
+### 6.4 Orders  `/orders`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -721,7 +721,7 @@ model SiteSettings {
 
 ---
 
-### 6.5 Payments — `/payments`
+### 6.5 Payments  `/payments`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -735,7 +735,7 @@ model SiteSettings {
 
 ---
 
-### 6.6 Coupons — `/coupons`
+### 6.6 Coupons  `/coupons`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -748,7 +748,7 @@ model SiteSettings {
 
 ---
 
-### 6.7 Reviews — `/reviews`
+### 6.7 Reviews  `/reviews`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -760,7 +760,7 @@ model SiteSettings {
 
 ---
 
-### 6.8 Wishlist — `/wishlist`
+### 6.8 Wishlist  `/wishlist`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -770,7 +770,7 @@ model SiteSettings {
 
 ---
 
-### 6.9 Addresses — `/addresses`
+### 6.9 Addresses  `/addresses`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -782,7 +782,7 @@ model SiteSettings {
 
 ---
 
-### 6.10 Gallery — `/gallery`
+### 6.10 Gallery  `/gallery`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -793,7 +793,7 @@ model SiteSettings {
 
 ---
 
-### 6.11 Users (Admin) — `/users`
+### 6.11 Users (Admin)  `/users`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -804,7 +804,7 @@ model SiteSettings {
 
 ---
 
-### 6.12 Analytics — `/analytics`
+### 6.12 Analytics  `/analytics`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -816,7 +816,7 @@ model SiteSettings {
 
 ---
 
-### 6.13 Delivery Config — `/delivery`
+### 6.13 Delivery Config  `/delivery`
 
 | Method | Route | Access | Description |
 |---|---|---|---|
@@ -827,7 +827,7 @@ model SiteSettings {
 
 ---
 
-## 7. Frontend — User Website
+## 7. Frontend  User Website
 
 ### 7.1 Routing (React Router v6)
 
@@ -865,7 +865,7 @@ model SiteSettings {
 - Animated fruit elements with Framer Motion
 
 **Exclusive Stock Section** (prominent placement, before Featured):
-- Title: "✨ Exclusive Premium Collection"
+- Title: " Exclusive Premium Collection"
 - Horizontal scroll row of exclusive products
 - Each card shows: gold "Exclusive" badge, variety label (e.g. "Haribhanga Mango"), origin, price
 - "Limited Stock" red indicator if stock < 10
@@ -879,20 +879,20 @@ model SiteSettings {
 - Auto-generated based on `isSeasonal = true` and date range
 
 **Best Sellers:**
-- 4–6 product cards flagged `isBestSeller = true`
+- 46 product cards flagged `isBestSeller = true`
 
 **Delivery Info Strip:**
-- Icons: 🚚 Fast Delivery | 🌿 Farm Fresh | 🔒 Secure Payment | 📦 Safe Packaging
+- Icons:  Fast Delivery |  Farm Fresh |  Secure Payment |  Safe Packaging
 
 **Testimonials:**
-- 3–4 customer reviews in a carousel
+- 34 customer reviews in a carousel
 
 ---
 
 ### 7.3 Shop Page
 
 - Left sidebar: Category filter, Price range slider, In-stock only toggle, Exclusive only toggle
-- Top bar: Search input, Sort dropdown (Newest, Price ↑↓, Popular), Results count
+- Top bar: Search input, Sort dropdown (Newest, Price , Popular), Results count
 - Product grid: 3 columns (desktop), 2 (tablet), 1 (mobile)
 - Pagination: Page-based (12 per page)
 - Each ProductCard:
@@ -900,7 +900,7 @@ model SiteSettings {
   - Category badge
   - Exclusive badge (gold) if `isExclusive`
   - Name and origin
-  - Price — if discounted, show original strikethrough + discounted price in green
+  - Price  if discounted, show original strikethrough + discounted price in green
   - Stock badge: "In Stock" / "Low Stock (3 left)" / "Out of Stock"
   - Add to Cart / View buttons
 
@@ -926,7 +926,7 @@ model SiteSettings {
 - Persistent cart stored in Redux (localStorage sync for guests, API sync for logged-in users)
 - CartDrawer (slide-in from right) on desktop; full page on mobile
 - Line items: image, name, unit, price, quantity stepper, remove button
-- Coupon input: enter code → validate via API → show discount applied
+- Coupon input: enter code  validate via API  show discount applied
 - Order summary: Subtotal, Coupon Discount (if any), Delivery Charge, **Total**
 - Proceed to Checkout button
 
@@ -936,22 +936,22 @@ model SiteSettings {
 
 Three-step flow (stepper UI):
 
-**Step 1 — Delivery Address:**
+**Step 1  Delivery Address:**
 - Show saved addresses (if logged in) with radio select
 - Option to add new address
-- Delivery zone selector → updates delivery charge
+- Delivery zone selector  updates delivery charge
 
-**Step 2 — Payment:**
+**Step 2  Payment:**
 - Payment method selector: bKash | Nagad | Rocket | Cash on Delivery
 - On selecting MFS method, show:
   - Merchant number to send money to
-  - Instructions: "Send ৳{totalAmount} to {merchantNumber} and enter the transaction ID below"
+  - Instructions: "Send {totalAmount} to {merchantNumber} and enter the transaction ID below"
   - Input: Your {bKash/Nagad/Rocket} number
   - Input: Transaction ID (TrxID)
 - Note: "Your order will be confirmed after payment verification (usually within 1 hour)"
 - Cash on Delivery: available only if enabled in SiteSettings
 
-**Step 3 — Review & Place Order:**
+**Step 3  Review & Place Order:**
 - Summary of items, address, payment method
 - Special note input
 - Place Order button
@@ -964,7 +964,7 @@ Three-step flow (stepper UI):
 - Order number, placed date
 - Status timeline stepper:
   ```
-  ✅ Order Placed → ✅ Confirmed → 🔄 Processing → 🚚 Shipped → 📦 Delivered
+   Order Placed   Confirmed   Processing   Shipped   Delivered
   ```
 - Each status shows timestamp
 - Payment status badge
@@ -976,14 +976,14 @@ Three-step flow (stepper UI):
 ### 7.8 User Profile
 
 Tabs:
-- **My Orders** — list with status, order number, total, date, View button
-- **Saved Addresses** — manage addresses
-- **Wishlist** — shortcut to wishlist page
-- **Account Settings** — name, phone, password change
+- **My Orders**  list with status, order number, total, date, View button
+- **Saved Addresses**  manage addresses
+- **Wishlist**  shortcut to wishlist page
+- **Account Settings**  name, phone, password change
 
 ---
 
-## 8. Frontend — Admin Dashboard
+## 8. Frontend  Admin Dashboard
 
 ### 8.1 Admin Routing
 
@@ -1017,7 +1017,7 @@ Tabs:
 ### 8.2 Admin Dashboard Page
 
 **Stat Cards (top row):**
-- Today's Revenue (৳)
+- Today's Revenue ()
 - Total Orders (with pending count badge)
 - Pending Payment Verifications (urgent badge if > 0)
 - Low Stock Products (alert if any)
@@ -1052,7 +1052,7 @@ Tabs:
   - Discount type: None | Percentage | Flat Amount
   - Discount value input
   - Final price preview (auto-calculated)
-- Flags: Featured ✓ | Best Seller ✓ | Exclusive ✓ | Seasonal ✓
+- Flags: Featured  | Best Seller  | Exclusive  | Seasonal
 - Exclusive label input (shows if Exclusive is checked)
 - Season start/end dates (shows if Seasonal is checked)
 - Origin, harvest date
@@ -1080,7 +1080,7 @@ Tabs:
 
 ### 8.5 Payment Verification Page
 
-> This is a dedicated page — the most time-sensitive admin page.
+> This is a dedicated page  the most time-sensitive admin page.
 
 - Tabs: **Pending Verification** | **Verified** | **Rejected**
 - Each pending payment card shows:
@@ -1088,11 +1088,11 @@ Tabs:
   - Amount to verify
   - Payment method (bKash/Nagad/Rocket) with logo
   - Sender's number
-  - Transaction ID (TrxID) — prominent display
+  - Transaction ID (TrxID)  prominent display
   - Time since submission
-  - [✅ Verify] and [❌ Reject] buttons
-- On Verify → order status changes to CONFIRMED, payment status → PAID
-- On Reject → admin enters rejection note, customer can resubmit
+  - [ Verify] and [ Reject] buttons
+- On Verify  order status changes to CONFIRMED, payment status  PAID
+- On Reject  admin enters rejection note, customer can resubmit
 
 ---
 
@@ -1139,21 +1139,21 @@ Tabs:
 
 ```
 Customer selects bKash/Nagad/Rocket at checkout
-         ↓
+
 System shows merchant number + amount to send
-         ↓
+
 Customer sends money via their MFS app
-         ↓
+
 Customer enters: sender number + Transaction ID (TrxID)
-         ↓
+
 Order placed with status: PENDING, PaymentStatus: PENDING_VERIFICATION
-         ↓
+
 Admin receives notification on dashboard
-         ↓
-Admin manually verifies TrxID → clicks Verify
-         ↓
-Order status → CONFIRMED, PaymentStatus → PAID
-         ↓
+
+Admin manually verifies TrxID  clicks Verify
+
+Order status  CONFIRMED, PaymentStatus  PAID
+
 Customer sees order confirmed on tracking page
 ```
 
@@ -1183,13 +1183,13 @@ Customer sees order confirmed on tracking page
 
 // PATCH /payments/:id/verify (Admin)
 // 1. Load payment
-// 2. Update payment status → PAID, set verifiedAt, verifiedBy
-// 3. Update order status → CONFIRMED
+// 2. Update payment status  PAID, set verifiedAt, verifiedBy
+// 3. Update order status  CONFIRMED
 // 4. Add status history entry
 // 5. Send confirmation email to customer (optional)
 
 // PATCH /payments/:id/reject (Admin)
-// 1. Update payment status → FAILED
+// 1. Update payment status  FAILED
 // 2. Save rejection note
 // 3. Order status remains PENDING
 // 4. Customer can resubmit payment
@@ -1200,8 +1200,8 @@ Customer sees order confirmed on tracking page
 ```javascript
 // routes/payment.routes.js
 router.post('/sslcommerz/init', requireAuth, (req, res) => {
-  res.status(503).json({ 
-    message: 'SSLCommerz integration coming soon. Please use bKash, Nagad, or Rocket.' 
+  res.status(503).json({
+    message: 'SSLCommerz integration coming soon. Please use bKash, Nagad, or Rocket.'
   });
 });
 ```
@@ -1244,7 +1244,7 @@ Validation endpoint (`POST /coupons/validate`):
 
 - Original price shown with strikethrough when discounted
 - "X% OFF" badge (green/red pill) on product cards
-- Coupon discount shown as a line item in cart summary: `- ৳{amount} (Coupon: SUMMER10)`
+- Coupon discount shown as a line item in cart summary: `- {amount} (Coupon: SUMMER10)`
 
 ---
 
@@ -1252,7 +1252,7 @@ Validation endpoint (`POST /coupons/validate`):
 
 ### 11.1 What "Exclusive" Means
 
-Exclusive products are premium, high-quality variants of fruits — e.g.:
+Exclusive products are premium, high-quality variants of fruits  e.g.:
 - **Haribhanga Mango** (origin: Rajshahi)
 - **Gopalbhog Mango** (origin: Chapainawabganj)
 - **Langra Mango** (origin: Dinajpur)
@@ -1272,8 +1272,8 @@ These products have:
 <section className="exclusive-section">
   <div className="section-header">
     <GoldCrownIcon />
-    <h2>✨ Exclusive Premium Collection</h2>
-    <p>Handpicked, superior-grade varieties — limited quantities available</p>
+    <h2> Exclusive Premium Collection</h2>
+    <p>Handpicked, superior-grade varieties  limited quantities available</p>
   </div>
   <HorizontalScrollRow products={exclusiveProducts} />
 </section>
@@ -1350,12 +1350,12 @@ const createProductSchema = z.object({
 ### 12.5 Other Security Practices
 
 - Passwords hashed with bcrypt (salt rounds: 12)
-- All DB queries through Prisma (parameterized — no SQL injection)
+- All DB queries through Prisma (parameterized  no SQL injection)
 - Cloudinary for images (no local file storage)
 - `.env` files gitignored, `.env.example` committed
 - HTTPS enforced in production
-- Admin frontend on separate subdomain — admin routes never referenced in user bundle
-- Transaction IDs stored with unique constraint — prevents duplicate payment submissions
+- Admin frontend on separate subdomain  admin routes never referenced in user bundle
+- Transaction IDs stored with unique constraint  prevents duplicate payment submissions
 
 ---
 
@@ -1380,10 +1380,10 @@ const createProductSchema = z.object({
 ### 13.2 Component Rules
 
 - **ProductCard:** Consistent 4:3 image ratio, always show price (never blank)
-- **Badges:** Color-coded — green (in stock), yellow (low stock), red (out of stock), gold (exclusive), orange (discount %)
+- **Badges:** Color-coded  green (in stock), yellow (low stock), red (out of stock), gold (exclusive), orange (discount %)
 - **Buttons:** Primary = green filled, Secondary = green outline, Danger = red
 - **Loading States:** Skeleton loaders (not spinners) for product grids
-- **Empty States:** Illustrated empty states with CTA (e.g. "No products found — Browse All")
+- **Empty States:** Illustrated empty states with CTA (e.g. "No products found  Browse All")
 - **Mobile Nav:** Bottom navigation bar (Home, Shop, Cart, Profile)
 - **Toast Notifications:** Bottom-right, auto-dismiss 3s (success green, error red)
 
@@ -1408,14 +1408,14 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 | Breakpoint | Layout |
 |---|---|
 | Mobile (< 640px) | 1 column, bottom nav |
-| Tablet (640–1024px) | 2 columns, top nav |
+| Tablet (6401024px) | 2 columns, top nav |
 | Desktop (> 1024px) | 3 columns + sidebar, top nav |
 
 ---
 
 ## 14. Development Phases
 
-### Phase 1 — Project Setup (Day 1–2)
+### Phase 1  Project Setup (Day 12)
 
 - [ ] Create 3 GitHub repos: `tropipine-client`, `tropipine-admin`, `tropipine-server`
 - [ ] Initialize backend: `npm init`, install Express, Prisma, bcrypt, jsonwebtoken, cookie-parser, helmet, cors, multer, cloudinary, zod, nodemailer
@@ -1427,11 +1427,11 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 
 ---
 
-### Phase 2 — Backend Core (Day 3–8)
+### Phase 2  Backend Core (Day 38)
 
 - [ ] Auth system: register, login, logout, forgot/reset password, JWT middleware
 - [ ] Category CRUD
-- [ ] Product CRUD with image upload (Multer → Cloudinary)
+- [ ] Product CRUD with image upload (Multer  Cloudinary)
 - [ ] Price and discount update logic
 - [ ] Stock management
 - [ ] Order placement logic (validate cart, apply coupon, calculate delivery charge, create order + items)
@@ -1447,7 +1447,7 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 
 ---
 
-### Phase 3 — User Frontend (Day 9–18)
+### Phase 3  User Frontend (Day 918)
 
 - [ ] Setup Redux store, RTK Query API slices
 - [ ] Navbar + Footer + layout
@@ -1466,7 +1466,7 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 
 ---
 
-### Phase 4 — Admin Dashboard (Day 19–26)
+### Phase 4  Admin Dashboard (Day 1926)
 
 - [ ] Admin login (separate auth flow)
 - [ ] Admin layout: sidebar, top bar
@@ -1484,7 +1484,7 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 
 ---
 
-### Phase 5 — Testing (Day 27–30)
+### Phase 5  Testing (Day 2730)
 
 - [ ] Test all API endpoints (Postman / Thunder Client)
 - [ ] Test auth flow (register, login, token expiry)
@@ -1499,7 +1499,7 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 
 ---
 
-### Phase 6 — Deployment (Day 31–33)
+### Phase 6  Deployment (Day 3133)
 
 - [ ] Deploy backend to Render/Railway, set environment variables
 - [ ] Deploy database to Neon, run production migrations
@@ -1514,7 +1514,7 @@ animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }}
 
 ## 15. Environment Variables
 
-### Backend — `.env`
+### Backend  `.env`
 
 ```env
 # Database
@@ -1529,7 +1529,7 @@ CLOUDINARY_CLOUD_NAME=""
 CLOUDINARY_API_KEY=""
 CLOUDINARY_API_SECRET=""
 
-# Email (Nodemailer — for password reset)
+# Email (Nodemailer  for password reset)
 EMAIL_HOST="smtp.gmail.com"
 EMAIL_PORT=587
 EMAIL_USER="your@gmail.com"
@@ -1542,20 +1542,20 @@ PORT=5000
 CLIENT_URL="http://localhost:5173"
 ADMIN_URL="http://localhost:5174"
 
-# SSLCommerz (placeholder — configure later)
+# SSLCommerz (placeholder  configure later)
 SSLCOMMERZ_STORE_ID=""
 SSLCOMMERZ_STORE_PASS=""
 SSLCOMMERZ_IS_LIVE=false
 ```
 
-### User Frontend — `.env`
+### User Frontend  `.env`
 
 ```env
 VITE_API_URL="http://localhost:5000/api/v1"
 VITE_APP_NAME="TropiPine"
 ```
 
-### Admin Frontend — `.env`
+### Admin Frontend  `.env`
 
 ```env
 VITE_API_URL="http://localhost:5000/api/v1"
@@ -1574,7 +1574,7 @@ VITE_APP_NAME="TropiPine Admin"
 4. Add all env variables in Render dashboard
 5. Set custom domain: `api.tropipine.com`
 
-### Frontend — User (Vercel)
+### Frontend  User (Vercel)
 
 1. Connect `tropipine-client` to Vercel
 2. Framework: Vite
@@ -1583,7 +1583,7 @@ VITE_APP_NAME="TropiPine Admin"
 5. Add env vars in Vercel dashboard
 6. Set custom domain: `tropipine.com`
 
-### Frontend — Admin (Vercel)
+### Frontend  Admin (Vercel)
 
 1. Connect `tropipine-admin` to Vercel (separate project)
 2. Same build settings as user frontend
@@ -1601,19 +1601,19 @@ VITE_APP_NAME="TropiPine Admin"
 
 ## Key Development Notes for Copilot Agent
 
-1. **Always calculate `finalPrice` server-side** when price or discount changes — never trust client-sent finalPrice
-2. **Snapshot product prices in `OrderItem`** — store `productName` and `unitPrice` at order time so price changes don't affect historical orders
-3. **Transaction ID uniqueness** — add unique constraint on `transactionId` in Payment model to prevent duplicate payment submissions
-4. **Cart is client-side (Redux + localStorage)** — sync to server only on checkout
-5. **Prisma `updatedAt`** — all price and stock fields should trigger `updatedAt` for audit trail
-6. **Admin app has its own login** — uses same `/auth/login` endpoint but validates `role === 'ADMIN' || 'SUPER_ADMIN'` before allowing dashboard access
-7. **Exclusive products** filter: `GET /products?isExclusive=true` — use the same product endpoint with query params
-8. **Image primary flag** — `ProductImage.isPrimary = true` for the first/main image; use this in product cards
-9. **Low stock badge** — show when `stockQty <= lowStockThreshold`, computed server-side in product response
-10. **Delivery charge** — fetched from `DeliveryConfig` based on zone selected at checkout; stored in `Order.deliveryCharge` as snapshot
-11. **Order number format** — generate as `TP-YYYYMMDD-{4-digit-sequence}` using a DB sequence or timestamp-based logic
-12. **Review gating** — only allow review submission if user has a DELIVERED order containing that product
-13. **Coupon per-user limit** — check by counting orders where `couponId = X` and `userId = Y`
+1. **Always calculate `finalPrice` server-side** when price or discount changes  never trust client-sent finalPrice
+2. **Snapshot product prices in `OrderItem`**  store `productName` and `unitPrice` at order time so price changes don't affect historical orders
+3. **Transaction ID uniqueness**  add unique constraint on `transactionId` in Payment model to prevent duplicate payment submissions
+4. **Cart is client-side (Redux + localStorage)**  sync to server only on checkout
+5. **Prisma `updatedAt`**  all price and stock fields should trigger `updatedAt` for audit trail
+6. **Admin app has its own login**  uses same `/auth/login` endpoint but validates `role === 'ADMIN' || 'SUPER_ADMIN'` before allowing dashboard access
+7. **Exclusive products** filter: `GET /products?isExclusive=true`  use the same product endpoint with query params
+8. **Image primary flag**  `ProductImage.isPrimary = true` for the first/main image; use this in product cards
+9. **Low stock badge**  show when `stockQty <= lowStockThreshold`, computed server-side in product response
+10. **Delivery charge**  fetched from `DeliveryConfig` based on zone selected at checkout; stored in `Order.deliveryCharge` as snapshot
+11. **Order number format**  generate as `TP-YYYYMMDD-{4-digit-sequence}` using a DB sequence or timestamp-based logic
+12. **Review gating**  only allow review submission if user has a DELIVERED order containing that product
+13. **Coupon per-user limit**  check by counting orders where `couponId = X` and `userId = Y`
 
 ---
 

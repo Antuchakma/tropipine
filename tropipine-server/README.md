@@ -1,4 +1,4 @@
-# TropiPine Server — Quick Start
+# TropiPine Server  Quick Start
 
 Requirements
 - Node.js 18+ and npm

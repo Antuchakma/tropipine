@@ -70,9 +70,9 @@ export default function InventoryPage() {
         {/* Summary */}
         <div className="grid sm:grid-cols-3 gap-5">
           {[
-            { label: 'Total Products', val: products.length, icon: '📦', bg: '#F0F5FF', color: '#4F46E5' },
-            { label: 'Low Stock', val: lowCount, icon: '⚠️', bg: '#FFFBEB', color: '#D97706' },
-            { label: 'Out of Stock', val: outCount, icon: '🚫', bg: '#FEF2F2', color: '#DC2626' },
+            { label: 'Total Products', val: products.length, icon: 'P', bg: '#F0F5FF', color: '#4F46E5' },
+            { label: 'Low Stock', val: lowCount, icon: 'L', bg: '#FFFBEB', color: '#D97706' },
+            { label: 'Out of Stock', val: outCount, icon: 'X', bg: '#FEF2F2', color: '#DC2626' },
           ].map((s) => (
             <div key={s.label} className={`${card} p-6 flex items-center gap-4`}>
               <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl" style={{ background: s.bg }}>
@@ -126,7 +126,7 @@ export default function InventoryPage() {
                 return (
                   <tr key={p.id} className={tableRow} style={isOut ? { background: '#FEF2F2' } : isLow ? { background: '#FFFDF0' } : {}}>
                     <td className={`${tableCell} font-semibold text-ink`}>{p.name}</td>
-                    <td className={`${tableCell} text-ink-muted`}>{p.category?.name || '—'}</td>
+                    <td className={`${tableCell} text-ink-muted`}>{p.category?.name || ''}</td>
                     <td className={tableCell}>{p.unit}</td>
                     <td className={tableCell}>
                       <span className={`font-bold ${isOut ? 'text-red-600' : isLow ? 'text-orange-600' : 'text-ink'}`}>
@@ -156,7 +156,7 @@ export default function InventoryPage() {
                             autoFocus
                           />
                           <button onClick={() => handleSaveStock(p.id)} className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style={brandGrad}>Save</button>
-                          <button onClick={() => setEditingId(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-surface border border-edge text-ink-muted">✕</button>
+                          <button onClick={() => setEditingId(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-surface border border-edge text-ink-muted"></button>
                         </div>
                       ) : (
                         <button

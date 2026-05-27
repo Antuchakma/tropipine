@@ -44,11 +44,7 @@ export default function AdminLoginPage() {
         <div className="absolute bottom-0 right-0 w-[300px] h-[300px] rounded-full opacity-20 blur-[80px]"
           style={{ background: '#6366F1' }} />
 
-        <div className="relative flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl font-bold"
-            style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)' }}>
-            🍍
-          </div>
+        <div className="relative">
           <div>
             <p className="text-white font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>TropiPine</p>
             <p className="text-white/30 text-xs">Admin Dashboard</p>
@@ -63,12 +59,12 @@ export default function AdminLoginPage() {
             </span>
           </h1>
           <p className="text-white/45 text-base leading-relaxed max-w-sm">
-            Track orders, manage inventory, verify payments, and grow your tropical fruit business — all in one place.
+            Track orders, manage inventory, verify payments, and grow your tropical fruit business  all in one place.
           </p>
         </div>
 
         <div className="relative flex gap-8">
-          {[['10K+', 'Happy Customers'], ['99%', 'Uptime'], ['4.9★', 'App Rating']].map(([val, lbl]) => (
+          {[['10K+', 'Happy Customers'], ['99%', 'Uptime'], ['4.9', 'App Rating']].map(([val, lbl]) => (
             <div key={lbl}>
               <p className="text-white font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>{val}</p>
               <p className="text-white/35 text-xs mt-0.5">{lbl}</p>
@@ -80,11 +76,7 @@ export default function AdminLoginPage() {
       {/* Right login form */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-sm">
-          <div className="mb-8 lg:hidden flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-              style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)' }}>
-              🍍
-            </div>
+          <div className="mb-8 lg:hidden">
             <p className="text-white font-bold text-lg">TropiPine Admin</p>
           </div>
 
@@ -128,7 +120,7 @@ export default function AdminLoginPage() {
                 className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 disabled:opacity-50 mt-2"
                 style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)', boxShadow: '0 4px 14px rgba(255,92,46,0.4)' }}
               >
-                {loading ? 'Signing in…' : 'Sign In to Dashboard'}
+                {loading ? 'Signing in' : 'Sign In to Dashboard'}
               </button>
             </form>
 

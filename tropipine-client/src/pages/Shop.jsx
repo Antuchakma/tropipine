@@ -15,11 +15,11 @@ const SORT_OPTIONS = [
 
 const QUICK_FILTERS = [
   { label: 'All', key: null },
-  { label: '✦ Exclusive', key: 'isExclusive' },
-  { label: '⭐ Best Sellers', key: 'isBestSeller' },
-  { label: '🌟 Featured', key: 'isFeatured' },
-  { label: '🍃 Seasonal', key: 'isSeasonal' },
-  { label: '📦 In Stock', key: 'inStock' },
+  { label: ' Exclusive', key: 'isExclusive' },
+  { label: ' Best Sellers', key: 'isBestSeller' },
+  { label: ' Featured', key: 'isFeatured' },
+  { label: ' Seasonal', key: 'isSeasonal' },
+  { label: ' In Stock', key: 'inStock' },
 ]
 
 const LIMIT = 12
@@ -78,7 +78,7 @@ export default function Shop() {
       <section
         className="relative text-white overflow-hidden"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1488567046910-6a266dd8d07a?q=80&w=1200&auto=format&fit=crop)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -106,7 +106,7 @@ export default function Shop() {
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-faint text-sm" />
             <input
               type="text"
-              placeholder="Search by name, variety, origin…"
+              placeholder="Search by name, variety, origin"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-11 pr-10 py-3 rounded-2xl border border-edge bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"
@@ -216,7 +216,7 @@ export default function Shop() {
               animate={{ opacity: 1 }}
               className="text-center py-24 bg-white rounded-3xl border border-edge"
             >
-              <p className="text-5xl mb-4">🍃</p>
+              <p className="text-5xl mb-4"></p>
               <h3 className="font-display text-xl font-bold text-ink mb-2">No products found</h3>
               <p className="text-ink-muted text-sm mb-6">Try clearing your filters or searching for something else.</p>
               <button
@@ -237,7 +237,7 @@ export default function Shop() {
               disabled={page === 1}
               className="px-5 py-2.5 rounded-xl border border-edge bg-white text-sm font-medium text-ink-muted hover:text-ink hover:border-brand-300 disabled:opacity-40 transition"
             >
-              ← Previous
+               Previous
             </button>
             <div className="flex gap-1.5">
               {[...Array(Math.min(5, totalPages))].map((_, i) => {
@@ -262,7 +262,7 @@ export default function Shop() {
               disabled={page >= totalPages}
               className="px-5 py-2.5 rounded-xl border border-edge bg-white text-sm font-medium text-ink-muted hover:text-ink hover:border-brand-300 disabled:opacity-40 transition"
             >
-              Next →
+              Next
             </button>
           </div>
         )}

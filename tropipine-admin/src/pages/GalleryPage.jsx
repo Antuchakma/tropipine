@@ -70,7 +70,7 @@ export default function GalleryPage() {
 
         <div>
           <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Gallery</h2>
-          <p className="text-sm text-ink-muted mt-0.5">{images.length} images · Farm, packaging and delivery photos</p>
+          <p className="text-sm text-ink-muted mt-0.5">{images.length} images  Farm, packaging and delivery photos</p>
         </div>
 
         {/* Upload form */}
@@ -81,13 +81,13 @@ export default function GalleryPage() {
               <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} className="hidden" />
               {selectedFile ? (
                 <div className="text-center">
-                  <p className="text-2xl mb-2">📎</p>
+                  <p className="text-2xl mb-2">Check</p>
                   <p className="font-semibold text-ink text-sm">{selectedFile.name}</p>
                   <p className="text-xs text-ink-muted mt-1">Click to change</p>
                 </div>
               ) : (
                 <div className="text-center">
-                  <p className="text-4xl mb-3 group-hover:scale-110 transition-transform">📸</p>
+                  <p className="text-4xl mb-3 group-hover:scale-110 transition-transform">Img</p>
                   <p className="font-semibold text-ink text-sm">Click to select image</p>
                   <p className="text-xs text-ink-muted mt-1">PNG, JPG, WebP · Max 5MB</p>
                 </div>
@@ -99,7 +99,7 @@ export default function GalleryPage() {
                 <label className="block text-xs font-semibold text-ink-muted mb-1.5">Caption</label>
                 <input
                   type="text"
-                  placeholder="Optional caption…"
+                  placeholder="Optional caption"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
@@ -123,7 +123,7 @@ export default function GalleryPage() {
               className={`${btn.primary} disabled:opacity-50`}
               style={!uploading && selectedFile ? brandGrad : { background: '#E8E8F0', color: '#9CA3AF', boxShadow: 'none' }}
             >
-              {uploading ? '⏳ Uploading…' : '⬆ Upload Image'}
+              {uploading ? 'Uploading...' : 'Upload Image'}
             </button>
           </form>
         </div>

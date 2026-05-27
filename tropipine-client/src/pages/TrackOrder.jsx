@@ -99,14 +99,14 @@ export default function TrackOrder() {
               <ul className="space-y-2 text-sm text-ink-muted">
                 {order.items?.map((item) => (
                   <li key={item.id} className="flex justify-between">
-                    <span>{item.productName} × {item.quantity}</span>
-                    <span className="text-ink font-medium">৳{item.subtotal?.toFixed(2)}</span>
+                    <span>{item.productName}  {item.quantity}</span>
+                    <span className="text-ink font-medium">{item.subtotal?.toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
               <div className="border-t border-edge mt-4 pt-4 flex justify-between font-bold text-ink">
                 <span>Total</span>
-                <span>৳{order.totalAmount?.toFixed(2)}</span>
+                <span>{order.totalAmount?.toFixed(2)}</span>
               </div>
             </div>
 

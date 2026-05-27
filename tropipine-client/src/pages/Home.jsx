@@ -12,14 +12,14 @@ const fade = (delay = 0) => ({
 })
 
 const features = [
-  { icon: '🌿', title: 'Farm Fresh', desc: 'Harvested daily from trusted farms across Bangladesh.' },
-  { icon: '🚚', title: 'Fast Delivery', desc: 'Same-day delivery within Dhaka. Next-day nationwide.' },
-  { icon: '🔒', title: 'Secure Payment', desc: 'Pay via bKash, Nagad, Rocket or Cash on Delivery.' },
-  { icon: '📦', title: 'Safe Packaging', desc: 'Temperature-controlled packaging keeps every fruit perfect.' },
+  { icon: '', title: 'Farm Fresh', desc: 'Harvested daily from trusted farms across Bangladesh.' },
+  { icon: '', title: 'Fast Delivery', desc: 'Same-day delivery within Dhaka. Next-day nationwide.' },
+  { icon: '', title: 'Secure Payment', desc: 'Pay via bKash, Nagad, Rocket or Cash on Delivery.' },
+  { icon: '', title: 'Safe Packaging', desc: 'Temperature-controlled packaging keeps every fruit perfect.' },
 ]
 
 const testimonials = [
-  { name: 'Ayesha Rahman', loc: 'Dhaka', rating: 5, text: 'The Haribhanga mangoes were absolutely divine — perfectly ripe and fragrant. Will reorder!' },
+  { name: 'Ayesha Rahman', loc: 'Dhaka', rating: 5, text: 'The Haribhanga mangoes were absolutely divine  perfectly ripe and fragrant. Will reorder!' },
   { name: 'Rahim Chowdhury', loc: 'Chittagong', rating: 5, text: 'Super fresh quality. The packaging was excellent and delivery was right on time.' },
   { name: 'Nadia Islam', loc: 'Sylhet', rating: 5, text: 'Best online fruit shop I\'ve used. The exclusive collection is genuinely premium.' },
 ]
@@ -42,8 +42,8 @@ export default function Home() {
   return (
     <div className="bg-surface overflow-x-hidden">
 
-      {/* ─────────── HERO ─────────── */}
-      <section 
+      {/*  HERO  */}
+      <section
         className="relative text-white overflow-hidden"
         style={{
           backgroundImage: 'url(https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=1200&auto=format&fit=crop)',
@@ -62,7 +62,7 @@ export default function Home() {
           {/* Content */}
           <div className="max-w-2xl space-y-8 text-center">
             <motion.div {...fade(0.05)}>
-              
+
             </motion.div>
 
             <motion.h1 {...fade(0.12)} className="font-display text-5xl sm:text-6xl xl:text-7xl font-black leading-[1.04] tracking-tight text-balance">
@@ -72,7 +72,7 @@ export default function Home() {
             </motion.h1>
 
             <motion.p {...fade(0.2)} className="text-lg text-white/80 max-w-md leading-relaxed">
-              Handpicked premium mangoes, lychees, and seasonal fruits — delivered with care from the farms of Rajshahi and Chapainawabganj.
+              Handpicked premium mangoes, lychees, and seasonal fruits  delivered with care from the farms of Rajshahi and Chapainawabganj.
             </motion.p>
 
             <motion.div {...fade(0.28)} className="flex flex-wrap gap-4">
@@ -87,14 +87,14 @@ export default function Home() {
                 to="/shop?isExclusive=true"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/15 transition-all duration-200"
               >
-                ✦ Exclusive Picks
+                 Exclusive Picks
               </Link>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ─────────── FEATURES ─────────── */}
+      {/*  FEATURES  */}
       <section className="max-w-7xl mx-auto px-6 sm:px-8 py-20">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((f, i) => (
@@ -106,9 +106,7 @@ export default function Home() {
               transition={{ delay: i * 0.08 }}
               className="bg-white rounded-3xl p-7 border border-edge shadow-card hover:shadow-card-hover transition-shadow group"
             >
-              <div className="w-14 h-14 rounded-2xl bg-brand-50 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">
-                {f.icon}
-              </div>
+              
               <h3 className="font-display text-base font-bold text-ink mb-2">{f.title}</h3>
               <p className="text-sm text-ink-muted leading-relaxed">{f.desc}</p>
             </motion.div>
@@ -116,7 +114,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─────────── EXCLUSIVE ─────────── */}
+      {/*  EXCLUSIVE  */}
       {exclusive.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 sm:px-8 pb-20">
           <div className="bg-[#100C08] rounded-[40px] px-8 py-14 overflow-hidden relative">
@@ -125,10 +123,10 @@ export default function Home() {
               <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
                 <div>
                   <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D4A017]/20 border border-[#D4A017]/40 text-[#D4A017] text-xs font-semibold mb-3">
-                    ✦ Premium Collection
+                     Premium Collection
                   </span>
                   <h2 className="font-display text-3xl sm:text-4xl font-black text-white">Exclusive Varieties</h2>
-                  <p className="text-white/50 mt-2 text-sm">Handpicked superior-grade mangoes — limited quantities.</p>
+                  <p className="text-white/50 mt-2 text-sm">Handpicked superior-grade mangoes  limited quantities.</p>
                 </div>
                 <Link to="/shop?isExclusive=true" className="text-sm font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1.5 transition-colors">
                   View all <FaArrowRight size={11} />
@@ -152,7 +150,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* ─────────── FEATURED PRODUCTS ─────────── */}
+      {/*  FEATURED PRODUCTS  */}
       <section className="max-w-7xl mx-auto px-6 sm:px-8 pb-20">
         <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
           <div>
@@ -194,14 +192,14 @@ export default function Home() {
           </div>
         ) : (
           <div className="text-center py-16 bg-white rounded-3xl border border-edge">
-            <p className="text-4xl mb-3">🍃</p>
+            <p className="text-4xl mb-3"></p>
             <p className="text-ink-muted">No featured products right now.</p>
             <Link to="/shop" className="mt-4 inline-block text-sm font-semibold text-brand-600 hover:underline">Browse all products</Link>
           </div>
         )}
       </section>
 
-      {/* ─────────── TESTIMONIALS ─────────── */}
+      {/*  TESTIMONIALS  */}
       <section className="bg-white border-y border-edge py-20">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="text-center mb-12">
@@ -239,7 +237,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─────────── CTA ─────────── */}
+      {/*  CTA  */}
       <section className="max-w-7xl mx-auto px-6 sm:px-8 py-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}

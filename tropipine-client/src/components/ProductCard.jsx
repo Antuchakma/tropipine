@@ -80,7 +80,7 @@ export default function ProductCard({ product }) {
           )}
           {product.isExclusive && (
             <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#D4A017] text-white">
-              ✦ Exclusive
+               Exclusive
             </span>
           )}
           {product.isBestSeller && !product.isExclusive && (
@@ -116,7 +116,7 @@ export default function ProductCard({ product }) {
 
         {/* Origin */}
         {product.origin && (
-          <p className="text-xs text-ink-faint mb-2 h-5">📍 {product.origin}</p>
+          <p className="text-xs text-ink-faint mb-2 h-5"> {product.origin}</p>
         )}
 
         {/* Rating */}
@@ -137,10 +137,10 @@ export default function ProductCard({ product }) {
         <div className="flex items-end justify-between mb-4">
           <div>
             {discount > 0 && (
-              <p className="text-xs text-ink-faint line-through leading-none mb-1">৳{product.basePrice}/{product.unit}</p>
+              <p className="text-xs text-ink-faint line-through leading-none mb-1">{product.basePrice}/{product.unit}</p>
             )}
             <p className="text-xl font-display font-bold text-ink leading-none">
-              ৳{product.finalPrice || product.basePrice}
+              {product.finalPrice || product.basePrice}
               <span className="text-xs font-normal text-ink-muted ml-1">/{product.unit || 'kg'}</span>
             </p>
           </div>

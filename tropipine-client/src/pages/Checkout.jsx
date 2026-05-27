@@ -21,8 +21,10 @@ export default function Checkout() {
     paymentMethod: 'bkash',
     senderNumber: '',
     transactionId: '',
+    deliveryZoneId: '',
   })
   const [paymentConfig, setPaymentConfig] = useState({})
+  const [deliveryZones, setDeliveryZones] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [orderCreated, setOrderCreated] = useState(null)
@@ -30,11 +32,22 @@ export default function Checkout() {
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const discount = (subtotal * couponDiscount) / 100
-  const deliveryCharge = 50
+  const selectedZone = deliveryZones.find((z) => z.id === formData.deliveryZoneId)
+  const deliveryCharge = selectedZone ? parseFloat(selectedZone.charge) : 0
   const total = subtotal - discount + deliveryCharge
 
   useEffect(() => {
-    api.get('/payments/config').then((r) => setPaymentConfig(r.data.data || {})).catch(() => {})
+    Promise.all([
+      api.get('/payments/config').catch(() => ({ data: { data: {} } })),
+      api.get('/delivery').catch(() => ({ data: { data: [] } })),
+    ]).then(([paymentRes, deliveryRes]) => {
+      setPaymentConfig(paymentRes.data.data || {})
+      const zones = deliveryRes.data.data || []
+      setDeliveryZones(zones)
+      if (zones.length > 0 && !formData.deliveryZoneId) {
+        setFormData((prev) => ({ ...prev, deliveryZoneId: zones[0].id }))
+      }
+    })
   }, [])
 
   const handleChange = (e) => {
@@ -57,6 +70,7 @@ export default function Checkout() {
           quantity: item.quantity,
         })),
         couponCode,
+        deliveryZoneId: formData.deliveryZoneId,
         deliveryCharge,
         paymentMethod: formData.paymentMethod,
         specialNote: formData.specialNote,
@@ -162,6 +176,17 @@ export default function Checkout() {
                 </div>
 
                 <div>
+                  <label className="block text-sm font-medium text-ink-muted mb-2">Delivery Zone</label>
+                  <select name="deliveryZoneId" value={formData.deliveryZoneId} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400">
+                    {deliveryZones.map((zone) => (
+                      <option key={zone.id} value={zone.id}>
+                        {zone.name} ({zone.charge} - {zone.estimatedDays} days)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium text-ink-muted mb-2">Special Notes</label>
                   <textarea name="specialNote" value={formData.specialNote} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" rows="2" />
                 </div>
@@ -185,7 +210,7 @@ export default function Checkout() {
             {step === 2 && orderCreated && (
               <div className="bg-white border border-edge rounded-3xl shadow-card p-8 space-y-5">
                 <h2 className="text-2xl font-black text-ink">Complete Payment</h2>
-                <p className="text-brand-600 font-semibold">Order {orderCreated.orderNumber} created — pay ৳{(orderCreated.totalAmount ?? total).toFixed(2)}</p>
+                <p className="text-brand-600 font-semibold">Order {orderCreated.orderNumber} created  pay {(orderCreated.totalAmount ?? total).toFixed(2)}</p>
 
                 {error && (
                   <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl text-sm">{error}</div>
@@ -194,7 +219,7 @@ export default function Checkout() {
                 <div className="bg-surface border border-edge rounded-2xl p-5 text-sm space-y-2">
                   <p className="font-bold text-ink">Send payment to ({formData.paymentMethod})</p>
                   <p className="text-ink-muted">Merchant number: <span className="font-mono font-bold text-ink">{merchantNumber}</span></p>
-                  <p className="text-ink-muted">Amount: <span className="font-bold text-ink">৳{(orderCreated.totalAmount ?? total).toFixed(2)}</span></p>
+                  <p className="text-ink-muted">Amount: <span className="font-bold text-ink">{(orderCreated.totalAmount ?? total).toFixed(2)}</span></p>
                 </div>
 
                 <div>
@@ -217,11 +242,18 @@ export default function Checkout() {
           <div className="bg-white border border-edge rounded-3xl shadow-card p-8 h-fit">
             <h2 className="text-2xl font-black mb-6 text-ink">Order Total</h2>
             <div className="space-y-3 mb-6 text-ink-muted">
-              <div className="flex justify-between"><span>Subtotal:</span><span>৳{subtotal.toFixed(2)}</span></div>
-              {discount > 0 && <div className="flex justify-between text-brand-600"><span>Discount:</span><span>-৳{discount.toFixed(2)}</span></div>}
-              <div className="flex justify-between"><span>Delivery:</span><span>৳{deliveryCharge}</span></div>
+              <div className="flex justify-between"><span>Subtotal:</span><span className="font-semibold text-ink">{subtotal.toFixed(2)}</span></div>
+              {couponCode && (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                  <p className="text-xs text-green-700 font-semibold mb-2">Coupon Applied: {couponCode}</p>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-700">Discount ({couponDiscount}%):</span><span className="font-bold text-green-600 text-lg">-{discount.toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
+              <div className="flex justify-between"><span>Delivery Charge:</span><span className="font-semibold text-ink">{deliveryCharge.toFixed(2)}</span></div>
               <div className="flex justify-between text-lg font-black border-t border-edge pt-3 text-ink">
-                <span>Total:</span><span>৳{(orderCreated?.totalAmount ?? total).toFixed(2)}</span>
+                <span>Total Amount:</span><span className="text-brand-600">{(orderCreated?.totalAmount ?? total).toFixed(2)}</span>
               </div>
             </div>
             <div className="bg-surface border border-edge p-5 rounded-2xl text-sm space-y-2">

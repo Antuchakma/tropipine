@@ -80,7 +80,7 @@ export default function SettingsPage() {
         </div>
 
         {loading ? (
-          <div className="text-center py-16 text-ink-muted">Loading settings…</div>
+          <div className="text-center py-16 text-ink-muted">Loading settings</div>
         ) : (
           <>
             {/* MFS */}
@@ -136,7 +136,7 @@ export default function SettingsPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs text-ink-muted mb-1.5">Charge (৳)</label>
+                      <label className="block text-xs text-ink-muted mb-1.5">Charge ()</label>
                       <input
                         type="number"
                         placeholder="80"
@@ -171,7 +171,7 @@ export default function SettingsPage() {
                     <div key={z.id} className="flex items-center justify-between px-5 py-4 rounded-2xl bg-surface border border-edge">
                       <div>
                         <p className="font-semibold text-ink text-sm">{z.name}</p>
-                        <p className="text-xs text-ink-muted mt-0.5">৳{z.charge} · {z.estimatedDays}</p>
+                        <p className="text-xs text-ink-muted mt-0.5">{z.charge}  {z.estimatedDays}</p>
                       </div>
                       <button
                         onClick={() => handleDeleteZone(z.id)}

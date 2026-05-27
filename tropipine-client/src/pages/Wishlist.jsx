@@ -89,7 +89,7 @@ export default function Wishlist() {
                 />
                 <div className="p-5">
                   <h3 className="font-semibold mb-2 text-ink">{item.name}</h3>
-                  <p className="text-brand-600 font-bold mb-5">৳{item.price}</p>
+                  <p className="text-brand-600 font-bold mb-5">{item.price}</p>
                   <button
                     onClick={() => handleAddToCart(item)}
                     className="w-full gradient-brand text-white py-2 rounded-2xl hover:opacity-90 mb-2 font-medium transition"

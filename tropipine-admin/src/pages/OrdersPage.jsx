@@ -102,13 +102,13 @@ export default function OrdersPage() {
                   </h3>
                   <p className="text-xs text-ink-muted mt-0.5">{new Date(selectedOrder.createdAt).toLocaleString()}</p>
                 </div>
-                <button onClick={() => setShowDetail(false)} className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-ink-muted hover:text-ink transition-colors text-lg">✕</button>
+                <button onClick={() => setShowDetail(false)} className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-ink-muted hover:text-ink transition-colors text-lg"></button>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {[
                   { label: 'Customer', val: selectedOrder.user?.name },
-                  { label: 'Total', val: `৳${selectedOrder.totalAmount}` },
+                  { label: 'Total', val: `${selectedOrder.totalAmount}` },
                   { label: 'Payment', val: selectedOrder.paymentMethod },
                   { label: 'Status', val: <Badge label={selectedOrder.status} colorMap={orderStatusColors} /> },
                   { label: 'Payment Status', val: <Badge label={selectedOrder.paymentStatus} colorMap={paymentStatusColors} /> },
@@ -125,8 +125,8 @@ export default function OrdersPage() {
                 <div className="space-y-2">
                   {selectedOrder.items?.map((item) => (
                     <div key={item.id} className="flex justify-between items-center bg-surface rounded-xl p-3">
-                      <span className="text-sm text-ink">{item.productName} <span className="text-ink-muted">× {item.quantity}</span></span>
-                      <span className="text-sm font-semibold text-ink">৳{item.subtotal}</span>
+                      <span className="text-sm text-ink">{item.productName} <span className="text-ink-muted"> {item.quantity}</span></span>
+                      <span className="text-sm font-semibold text-ink">{item.subtotal}</span>
                     </div>
                   ))}
                 </div>
@@ -140,7 +140,7 @@ export default function OrdersPage() {
                     onChange={(e) => setNewStatus(e.target.value)}
                     className="flex-1 px-3 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
                   >
-                    <option value="">Select new status…</option>
+                    <option value="">Select new status</option>
                     {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                   <button
@@ -181,8 +181,8 @@ export default function OrdersPage() {
               ) : orders.map((order) => (
                 <tr key={order.id} className={tableRow}>
                   <td className={`${tableCell} font-semibold text-ink`}>{order.orderNumber}</td>
-                  <td className={tableCell}>{order.user?.name || '—'}</td>
-                  <td className={`${tableCell} font-semibold`}>৳{order.totalAmount}</td>
+                  <td className={tableCell}>{order.user?.name || ''}</td>
+                  <td className={`${tableCell} font-semibold`}>{order.totalAmount}</td>
                   <td className={tableCell}><Badge label={order.paymentStatus} colorMap={paymentStatusColors} /></td>
                   <td className={tableCell}><Badge label={order.status} colorMap={orderStatusColors} /></td>
                   <td className={`${tableCell} text-ink-muted`}>{new Date(order.createdAt).toLocaleDateString()}</td>
@@ -191,7 +191,7 @@ export default function OrdersPage() {
                       onClick={() => { setSelectedOrder(order); setShowDetail(true); setNewStatus(''); }}
                       className={btn.ghost}
                     >
-                      View →
+                      View
                     </button>
                   </td>
                 </tr>

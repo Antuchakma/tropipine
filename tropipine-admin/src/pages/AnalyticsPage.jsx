@@ -67,16 +67,16 @@ export default function AnalyticsPage() {
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-24 text-ink-muted">Loading analytics…</div>
+          <div className="flex items-center justify-center py-24 text-ink-muted">Loading analytics</div>
         ) : (
           <>
             {/* Overview cards */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {[
-                { label: 'Period Revenue', value: `৳${totalRevenue.toLocaleString()}`, icon: '💰', bg: '#FFF3EE', color: '#FF5C2E' },
-                { label: 'Total Orders', value: overview.totalOrders || 0, icon: '🧾', bg: '#EEF2FF', color: '#6366F1' },
-                { label: 'Pending Payments', value: overview.pendingPayments || 0, icon: '💳', bg: '#FEF2F2', color: '#DC2626' },
-                { label: 'Low Stock Items', value: overview.lowStockProducts || 0, icon: '📦', bg: '#FFFBEB', color: '#D97706' },
+                { label: 'Period Revenue', value: `৳${totalRevenue.toLocaleString()}`, icon: '$', bg: '#FFF3EE', color: '#FF5C2E' },
+                { label: 'Total Orders', value: overview.totalOrders || 0, icon: '#', bg: '#EEF2FF', color: '#6366F1' },
+                { label: 'Pending Payments', value: overview.pendingPayments || 0, icon: 'C', bg: '#FEF2F2', color: '#DC2626' },
+                { label: 'Low Stock Items', value: overview.lowStockProducts || 0, icon: 'S', bg: '#FFFBEB', color: '#D97706' },
               ].map((s) => (
                 <div key={s.label} className={`${card} p-6`}>
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4" style={{ background: s.bg }}>{s.icon}</div>
@@ -90,7 +90,7 @@ export default function AnalyticsPage() {
             <div className="grid lg:grid-cols-5 gap-5">
               <div className={`${card} p-6 lg:col-span-3`}>
                 <h3 className="font-bold text-ink mb-1" style={{ fontFamily: 'var(--font-display)' }}>Revenue Trend</h3>
-                <p className="text-xs text-ink-muted mb-5">Paid orders — {period === 'day' ? 'today' : period === 'week' ? 'last 7 days' : 'this month'}</p>
+                <p className="text-xs text-ink-muted mb-5">Paid orders  {period === 'day' ? 'today' : period === 'week' ? 'last 7 days' : 'this month'}</p>
                 {revenueData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={240}>
                     <LineChart data={revenueData}>
@@ -102,8 +102,8 @@ export default function AnalyticsPage() {
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F5" vertical={false} />
                       <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `৳${v}`} />
-                      <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #E8E8F0' }} formatter={(v) => [`৳${v.toLocaleString()}`, 'Revenue']} />
+                      <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
+                      <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #E8E8F0' }} formatter={(v) => [`${v.toLocaleString()}`, 'Revenue']} />
                       <Line type="monotone" dataKey="revenue" stroke="url(#aRevGrad)" strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: '#FF5C2E' }} />
                     </LineChart>
                   </ResponsiveContainer>
@@ -164,7 +164,7 @@ export default function AnalyticsPage() {
                 <p className="text-xs text-ink-muted mb-4">Products below their threshold</p>
                 {lowStockProducts.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-44 gap-2">
-                    <span className="text-4xl">✅</span>
+                    <span className="text-4xl"></span>
                     <p className="text-sm font-medium text-emerald-600">All products are well stocked!</p>
                   </div>
                 ) : (

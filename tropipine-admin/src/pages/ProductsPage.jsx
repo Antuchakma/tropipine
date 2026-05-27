@@ -141,12 +141,12 @@ export default function ProductsPage() {
               <h3 className="text-lg font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>
                 {editingId ? 'Edit Product' : 'New Product'}
               </h3>
-              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted hover:text-ink flex items-center justify-center text-lg">✕</button>
+              <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted hover:text-ink flex items-center justify-center text-lg"></button>
             </div>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { name: 'name', label: 'Product Name *', placeholder: 'e.g. Haribhanga Mango', required: true },
-                { name: 'basePrice', label: 'Base Price (৳) *', placeholder: '0.00', type: 'number', required: true },
+                { name: 'basePrice', label: 'Base Price () *', placeholder: '0.00', type: 'number', required: true },
                 { name: 'stockQty', label: 'Stock Quantity *', placeholder: '0', type: 'number', required: true },
               ].map(({ name, label, placeholder, type = 'text', required }) => (
                 <div key={name}>
@@ -215,7 +215,7 @@ export default function ProductsPage() {
                 <label className="block text-xs font-semibold text-ink-muted mb-1.5">Description</label>
                 <textarea
                   name="description"
-                  placeholder="Product description…"
+                  placeholder="Product description"
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={3}
@@ -293,12 +293,12 @@ export default function ProductsPage() {
                 <tr key={p.id} className={tableRow}>
                   <td className={`${tableCell} font-semibold text-ink max-w-[200px] truncate`}>{p.name}</td>
                   <td className={`${tableCell} text-ink-muted text-xs`}>
-                    {p.fruitType || '—'}{p.variant ? ` · ${p.variant}` : ''}
+                    {p.fruitType || ''}{p.variant ? `  ${p.variant}` : ''}
                   </td>
                   <td className={tableCell}>
-                    <span className="font-semibold text-ink">৳{p.finalPrice || p.basePrice}</span>
+                    <span className="font-semibold text-ink">{p.finalPrice || p.basePrice}</span>
                     {p.discountPercent > 0 && (
-                      <span className="ml-2 text-xs text-ink-faint line-through">৳{p.basePrice}</span>
+                      <span className="ml-2 text-xs text-ink-faint line-through">{p.basePrice}</span>
                     )}
                   </td>
                   <td className={tableCell}>
@@ -310,7 +310,7 @@ export default function ProductsPage() {
                     <div className="flex flex-wrap gap-1.5">
                       {p.isFeatured && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600 border border-indigo-200">Featured</span>}
                       {p.isBestSeller && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Best Seller</span>}
-                      {p.isExclusive && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">✦ Exclusive</span>}
+                      {p.isExclusive && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200"> Exclusive</span>}
                     </div>
                   </td>
                   <td className={`${tableCell} text-right`}>

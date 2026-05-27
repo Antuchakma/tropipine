@@ -135,7 +135,7 @@ export default function AdminLayout({ children }) {
                       {notifications.map((o) => (
                         <li key={o.id} className="px-4 py-3 border-b border-[#F4F4F7] text-sm hover:bg-[#FAFAFA]">
                           <p className="font-medium text-[#18181B]">{o.orderNumber}</p>
-                          <p className="text-[#71717A] text-xs">{o.user?.name} · ৳{o.totalAmount}</p>
+                          <p className="text-[#71717A] text-xs">{o.user?.name}  {o.totalAmount}</p>
                         </li>
                       ))}
                     </ul>

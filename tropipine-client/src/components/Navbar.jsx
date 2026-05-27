@@ -63,10 +63,7 @@ export default function Navbar() {
         <div className="h-[68px] flex items-center justify-between gap-6">
 
           {/* LOGO */}
-          <Link to="/" className="flex items-center gap-3 shrink-0">
-            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center text-white text-lg font-bold shadow-brand">
-              🍍
-            </div>
+          <Link to="/" className="flex items-center shrink-0">
             <div className="leading-none">
               <span className="block text-[17px] font-bold font-display text-ink tracking-tight">
                 TropiPine
@@ -77,7 +74,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* NAV LINKS – desktop */}
+          {/* NAV LINKS  desktop */}
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
@@ -100,7 +97,7 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* RIGHT – desktop */}
+          {/* RIGHT  desktop */}
           <div className="hidden md:flex items-center gap-3">
             {/* Wishlist */}
             <Link
@@ -154,7 +151,7 @@ export default function Navbar() {
                         <FaUser size={12} /> My Profile
                       </Link>
                       <Link to="/orders" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-muted hover:text-ink hover:bg-surface transition-colors">
-                        📦 My Orders
+                         My Orders
                       </Link>
                       <Link to="/wishlist" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-muted hover:text-ink hover:bg-surface transition-colors">
                         <FaHeart size={12} /> Wishlist
@@ -164,7 +161,7 @@ export default function Navbar() {
                         onClick={handleLogout}
                         className="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
                       >
-                        🚪 Sign Out
+                         Sign Out
                       </button>
                     </motion.div>
                   )}
@@ -234,9 +231,9 @@ export default function Navbar() {
               <div className="pt-3 border-t border-edge mt-2">
                 {user ? (
                   <div className="space-y-1">
-                    <Link to="/profile" className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface">👤 {user.name}</Link>
-                    <Link to="/wishlist" className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface">❤️ Wishlist ({wishlist.length})</Link>
-                    <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50">🚪 Sign Out</button>
+                    <Link to="/profile" className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface"> {user.name}</Link>
+                    <Link to="/wishlist" className="block px-4 py-3 rounded-xl text-sm font-medium text-ink-muted hover:bg-surface"> Wishlist ({wishlist.length})</Link>
+                    <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50"> Sign Out</button>
                   </div>
                 ) : (
                   <div className="flex gap-3 pt-1">

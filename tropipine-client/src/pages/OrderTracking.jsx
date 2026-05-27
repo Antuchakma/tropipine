@@ -48,7 +48,7 @@ export default function OrderTracking() {
       <div className="bg-white border-b border-edge">
         <div className="max-w-5xl mx-auto px-6 py-8">
           <button type="button" onClick={() => navigate('/orders')} className="text-brand-600 text-sm font-medium hover:underline mb-4">
-            ← Back to Orders
+             Back to Orders
           </button>
           <h1 className="font-display text-3xl font-black text-ink">
             Order <span className="text-brand-600">{order.orderNumber || order.id}</span>
@@ -80,8 +80,8 @@ export default function OrderTracking() {
           <div className="space-y-3">
             {order.items?.map((item) => (
               <div key={item.id} className="flex justify-between text-sm text-ink-muted">
-                <span>{item.productName} × {item.quantity}</span>
-                <span className="font-medium text-ink">৳{item.subtotal?.toFixed(2)}</span>
+                <span>{item.productName}  {item.quantity}</span>
+                <span className="font-medium text-ink">{item.subtotal?.toFixed(2)}</span>
               </div>
             ))}
           </div>
@@ -98,7 +98,7 @@ export default function OrderTracking() {
         <div className="bg-white border border-edge rounded-3xl p-8">
           <div className="flex justify-between text-lg font-bold text-ink border-t border-edge pt-4">
             <span>Total</span>
-            <span>৳{order.totalAmount?.toFixed(2)}</span>
+            <span>{order.totalAmount?.toFixed(2)}</span>
           </div>
           <p className="text-sm text-ink-muted mt-2">Payment: {order.paymentStatus}</p>
         </div>

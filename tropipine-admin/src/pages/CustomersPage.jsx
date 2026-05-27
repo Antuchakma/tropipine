@@ -64,7 +64,7 @@ export default function CustomersPage() {
           <form onSubmit={(e) => { e.preventDefault(); fetchCustomers(search); }} className="flex gap-2">
             <input
               type="text"
-              placeholder="Search name or email…"
+              placeholder="Search name or email"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 w-64 transition"
@@ -90,12 +90,12 @@ export default function CustomersPage() {
                     <p className="text-xs text-ink-muted">{selectedCustomer.email}</p>
                   </div>
                 </div>
-                <button onClick={() => setSelectedCustomer(null)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted flex items-center justify-center text-lg">✕</button>
+                <button onClick={() => setSelectedCustomer(null)} className="w-8 h-8 rounded-lg bg-surface text-ink-muted flex items-center justify-center text-lg"></button>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mb-6">
                 {[
-                  { label: 'Phone', val: selectedCustomer.phone || '—' },
+                  { label: 'Phone', val: selectedCustomer.phone || '' },
                   { label: 'Joined', val: new Date(selectedCustomer.createdAt).toLocaleDateString() },
                   { label: 'Total Orders', val: selectedCustomer.orders?.length || 0 },
                   { label: 'Status', val: (
@@ -118,7 +118,7 @@ export default function CustomersPage() {
                     {selectedCustomer.orders.map((o) => (
                       <div key={o.id} className="flex justify-between items-center bg-surface rounded-xl px-3 py-2.5">
                         <span className="text-sm font-medium text-ink">{o.orderNumber}</span>
-                        <span className="text-sm font-semibold text-ink">৳{o.totalAmount}</span>
+                        <span className="text-sm font-semibold text-ink">{o.totalAmount}</span>
                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                           o.status === 'DELIVERED' ? 'bg-emerald-50 text-emerald-700' :
                           o.status === 'CANCELLED' ? 'bg-red-50 text-red-600' :

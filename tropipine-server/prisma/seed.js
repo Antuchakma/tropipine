@@ -16,8 +16,8 @@ async function main() {
         role: 'SUPER_ADMIN',
       },
     });
-    
-    console.log('✅ Admin user created/updated with password: admin123');
+
+    console.log(' Admin user created/updated with password: admin123');
 
     const products = [
       {
@@ -25,7 +25,7 @@ async function main() {
         slug: 'haribhanga-mango',
         fruitType: 'Mango',
         variant: 'Haribhanga',
-        description: 'Premium Haribhanga mango — sweet and aromatic.',
+        description: 'Premium Haribhanga mango  sweet and aromatic.',
         basePrice: 250,
         finalPrice: 250,
         stockQty: 100,
@@ -39,7 +39,7 @@ async function main() {
         slug: 'gopalbhog-mango',
         fruitType: 'Mango',
         variant: 'Gopalbhog',
-        description: 'Gopalbhog mango — rich flavor, limited season.',
+        description: 'Gopalbhog mango  rich flavor, limited season.',
         basePrice: 220,
         finalPrice: 220,
         stockQty: 80,
@@ -80,7 +80,23 @@ async function main() {
       await prisma.siteSettings.create({ data: { key: 'rocket_number', value: '01XXXXXXXXX' } });
     } catch (e) {}
 
-    console.log('✅ Seed data created');
+    // Create WELCOME20 coupon
+    try {
+      await prisma.coupon.create({
+        data: {
+          code: 'WELCOME20',
+          type: 'PERCENTAGE',
+          value: 20,
+          minOrderAmount: 0,
+          isActive: true,
+        },
+      });
+      console.log('WELCOME20 coupon created');
+    } catch (e) {
+      console.log('WELCOME20 coupon already exists');
+    }
+
+    console.log(' Seed data created');
   } catch (err) {
     console.error('Seed error:', err);
     process.exit(1);

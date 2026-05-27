@@ -272,8 +272,8 @@ async function deleteProduct(req, res) {
     // Check if product is referenced in any orders
     const orderItemCount = await prisma.orderItem.count({ where: { productId: id } });
     if (orderItemCount > 0) {
-      return res.status(409).json({ 
-        message: 'Cannot delete product that has been ordered. This product is referenced in active orders.' 
+      return res.status(409).json({
+        message: 'Cannot delete product that has been ordered. This product is referenced in active orders.'
       });
     }
 
