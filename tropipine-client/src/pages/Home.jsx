@@ -66,7 +66,7 @@ export default function Home() {
             </motion.div>
 
             <motion.h1 {...fade(0.12)} className="font-display text-5xl sm:text-6xl xl:text-7xl font-black leading-[1.04] tracking-tight text-balance">
-              Farm Fresh,<br />
+              From The Hills,<br />
               <span className="text-orange-500 bg-clip-text ">Straight to</span><br />
               Your Door.
             </motion.h1>

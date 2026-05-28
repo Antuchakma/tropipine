@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 export default function Gallery() {
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedImage, setSelectedImage] = useState(null)
   const [activeCategory, setActiveCategory] = useState('ALL')
 
   const API_URL = import.meta.env.VITE_API_URL
@@ -68,22 +67,7 @@ export default function Gallery() {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 py-16">
-        <div className="flex flex-wrap gap-3 mb-10">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
-                activeCategory === cat
-                  ? 'gradient-brand text-white border-transparent shadow-brand'
-                  : 'bg-white text-ink-muted border-edge hover:border-brand-300'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        
 
         {/* ================= STATES ================= */}
         {loading ? (
@@ -97,105 +81,39 @@ export default function Gallery() {
             </p>
           </div>
         ) : (
-          /* ================= GRID ================= */
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredImages.map((image) => (
-              <div
-                key={image.id}
-                onClick={() => setSelectedImage(image)}
-                className="
-                  group cursor-pointer
-                  bg-white border border-edge
-                  rounded-3xl overflow-hidden shadow-card hover:shadow-card-hover
-                  transition-all duration-300
-                "
-              >
-                <div className="relative overflow-hidden h-64 bg-surface">
+          /* ================= MASONRY BENTO ================= */
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4 [column-fill:_balance]">
+            {filteredImages.map((image, index) => {
+              const heightClass =
+                index % 6 === 0
+                  ? 'h-[260px] md:h-[320px]'
+                  : index % 5 === 0
+                  ? 'h-[200px] md:h-[240px]'
+                  : index % 4 === 0
+                  ? 'h-[170px] md:h-[210px]'
+                  : 'h-[220px] md:h-[270px]'
+
+              return (
+                <div
+                  key={image.id}
+                  className="mb-3 md:mb-4 break-inside-avoid overflow-hidden rounded-xl border border-edge bg-white shadow-card"
+                >
                   <img
                     src={image.url || image.imageUrl}
-                    alt={image.caption}
-                    className="
-                      w-full h-full object-cover
-                      group-hover:scale-105
-                      transition duration-500
-                    "
+                    alt={image.caption || 'Gallery image'}
+                    className={`w-full ${heightClass} object-cover`}
+                    loading="lazy"
                   />
-
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
                 </div>
-
-                <div className="p-4">
-                  <p className="text-sm text-ink-muted line-clamp-2">
-                    {image.caption || 'No caption'}
-                  </p>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
         {/* ================= INFO SECTION ================= */}
-        <div className="grid md:grid-cols-3 gap-6 mt-16">
-          {[
-            {
-              icon: '',
-              title: 'Farm Fresh',
-              desc: 'Directly sourced from trusted farms',
-            },
-            {
-              icon: '',
-              title: 'Quality Control',
-              desc: 'Strict inspection for every batch',
-            },
-            {
-              icon: '',
-              title: 'Safe Packaging',
-              desc: 'Eco-friendly and freshness-safe packaging',
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-white border border-edge rounded-3xl p-6 text-center shadow-card"
-            >
-              <div className="text-4xl mb-3">{item.icon}</div>
-              <h3 className="font-semibold text-ink mb-1">{item.title}</h3>
-              <p className="text-sm text-ink-muted">{item.desc}</p>
-            </div>
-          ))}
-        </div>
+        
+       
       </div>
-
-      {/* ================= MODAL ================= */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/70 flex items-center justify-center p-6 z-50"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div
-            className="max-w-3xl w-full bg-white rounded-3xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={selectedImage.url || selectedImage.imageUrl}
-              alt={selectedImage.caption}
-              className="w-full max-h-[70vh] object-cover"
-            />
-
-            <div className="p-5 flex justify-between items-center">
-              <p className="text-ink-muted text-sm">
-                {selectedImage.caption || 'No caption'}
-              </p>
-
-              <button
-                onClick={() => setSelectedImage(null)}
-                className="text-brand-600 font-bold text-lg"
-              >
-
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

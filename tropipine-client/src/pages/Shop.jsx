@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 import ProductCard from '../components/ProductCard'
-import { FaSearch, FaTimes, FaFilter } from 'react-icons/fa'
+import { FaSearch, FaTimes } from 'react-icons/fa'
 
 const SORT_OPTIONS = [
   { value: '', label: 'Most Relevant' },
@@ -196,7 +196,7 @@ export default function Shop() {
               key={`${page}-${activeFilter}-${debouncedSearch}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"
             >
               {products.map((product, i) => (
                 <motion.div
