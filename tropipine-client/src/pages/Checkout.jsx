@@ -140,14 +140,14 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen bg-surface py-12">
-      <div className="max-w-7xl mx-auto px-6">
-        <h1 className="font-display text-4xl font-black mb-10 text-ink">Checkout</h1>
+    <div className="min-h-screen bg-surface py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <h1 className="font-display text-3xl sm:text-4xl font-black mb-8 sm:mb-10 text-ink">Checkout</h1>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
           <div className="md:col-span-2">
             {step === 1 && (
-              <div className="bg-white border border-edge rounded-3xl shadow-card p-8 space-y-5">
+              <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 space-y-5">
                 <h2 className="text-2xl font-black text-ink">Delivery Address</h2>
 
                 {error && (
@@ -159,7 +159,7 @@ export default function Checkout() {
                   <textarea name="address" value={formData.address} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" rows="3" placeholder="Enter your full address" />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-ink-muted mb-2">City</label>
                     <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" placeholder="Dhaka" />
@@ -208,7 +208,7 @@ export default function Checkout() {
             )}
 
             {step === 2 && orderCreated && (
-              <div className="bg-white border border-edge rounded-3xl shadow-card p-8 space-y-5">
+              <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 space-y-5">
                 <h2 className="text-2xl font-black text-ink">Complete Payment</h2>
                 <p className="text-brand-600 font-semibold">Order {orderCreated.orderNumber} created  pay {(orderCreated.totalAmount ?? total).toFixed(2)}</p>
 
@@ -239,7 +239,7 @@ export default function Checkout() {
             )}
           </div>
 
-          <div className="bg-white border border-edge rounded-3xl shadow-card p-8 h-fit">
+          <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 h-fit">
             <h2 className="text-2xl font-black mb-6 text-ink">Order Total</h2>
             <div className="space-y-3 mb-6 text-ink-muted">
               <div className="flex justify-between"><span>Subtotal:</span><span className="font-semibold text-ink">{subtotal.toFixed(2)}</span></div>

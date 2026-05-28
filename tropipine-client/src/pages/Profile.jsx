@@ -42,24 +42,24 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F6F1E8] py-12">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-8">
+    <div className="min-h-screen bg-surface py-8 sm:py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
           {/* Sidebar */}
-          <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
+          <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 h-fit">
             <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-[#8B5E3C] text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+              <div className="w-20 h-20 gradient-brand text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
-              <h2 className="text-xl font-black text-[#1E1E1E]">{user.name}</h2>
-              <p className="text-[#6A625B] text-sm mt-1">{user.email}</p>
-              {user.phone && <p className="text-[#6A625B] text-sm">{user.phone}</p>}
+              <h2 className="text-xl font-black text-ink">{user.name}</h2>
+              <p className="text-ink-muted text-sm mt-1">{user.email}</p>
+              {user.phone && <p className="text-ink-muted text-sm">{user.phone}</p>}
             </div>
 
-            <nav className="space-y-2 border-t border-[#E7DBCF] pt-6">
+            <nav className="space-y-2 border-t border-edge pt-6">
               <button
                 onClick={() => navigate('/orders')}
-                className="w-full text-left px-4 py-3 rounded-2xl transition font-medium text-[#5A5149] hover:bg-[#F6F1E8]"
+                className="w-full text-left px-4 py-3 rounded-2xl transition font-medium text-ink-muted hover:bg-surface"
               >
                 My Orders
               </button>
@@ -68,7 +68,7 @@ export default function Profile() {
                 className={`w-full text-left px-4 py-3 rounded-2xl transition font-medium ${
                   activeTab === 'account'
                     ? 'bg-[#8B5E3C] text-white'
-                    : 'text-[#5A5149] hover:bg-[#F6F1E8]'
+                    : 'text-ink-muted hover:bg-surface'
                 }`}
               >
                 Account Settings
@@ -77,7 +77,7 @@ export default function Profile() {
 
             <button
               onClick={handleLogout}
-              className="w-full mt-8 bg-[#8B5E3C] text-white py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold transition"
+              className="w-full mt-8 gradient-brand text-white py-3 rounded-2xl hover:opacity-90 font-semibold transition"
             >
               Logout
             </button>
@@ -143,39 +143,39 @@ export default function Profile() {
             {/* Account Settings Tab */}
             {activeTab === 'account' && (
               <div>
-                <h1 className="text-4xl font-black mb-8 text-[#1E1E1E]">Account Settings</h1>
+                <h1 className="text-3xl sm:text-4xl font-black mb-8 text-ink">Account Settings</h1>
 
-                <div className="bg-white rounded-lg shadow p-6 space-y-4">
+                <div className="bg-white rounded-3xl border border-edge shadow-card p-5 sm:p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    <label className="block text-sm font-semibold text-ink-muted mb-1">
                       Name
                     </label>
-                    <p className="text-gray-900">{user.name}</p>
+                    <p className="text-ink">{user.name}</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    <label className="block text-sm font-semibold text-ink-muted mb-1">
                       Email
                     </label>
-                    <p className="text-gray-900">{user.email}</p>
+                    <p className="text-ink">{user.email}</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    <label className="block text-sm font-semibold text-ink-muted mb-1">
                       Phone
                     </label>
-                    <p className="text-gray-900">{user.phone || 'Not set'}</p>
+                    <p className="text-ink">{user.phone || 'Not set'}</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    <label className="block text-sm font-semibold text-ink-muted mb-1">
                       Role
                     </label>
-                    <p className="text-gray-900">{user.role}</p>
+                    <p className="text-ink">{user.role}</p>
                   </div>
 
-                  <div className="bg-blue-50 p-4 rounded mt-6">
-                    <p className="text-sm text-blue-700">
+                  <div className="bg-brand-50 p-4 rounded-2xl mt-6 border border-brand-100">
+                    <p className="text-sm text-brand-700">
                        Contact support to update your profile information
                     </p>
                   </div>

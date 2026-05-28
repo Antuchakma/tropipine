@@ -106,94 +106,95 @@ export default function Cart() {
         </div>
       </section>
 
-      <div className="bg-surface py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-surface py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
             {/* Cart Items */}
             <div className="md:col-span-2">
-              <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm overflow-hidden">
+              <div className="bg-white border border-edge rounded-3xl shadow-card overflow-hidden">
                 {cart.map((item) => (
                   <div
                     key={item.productId}
-                    className="p-6 border-b border-[#E7DBCF] flex items-center gap-4 hover:bg-[#F6F1E8]/50 transition"
+                    className="p-4 sm:p-6 border-b border-edge hover:bg-surface/70 transition"
                   >
-                    <img
-                      src={item.image || 'https://via.placeholder.com/100'}
-                      alt={item.name}
-                      className="w-24 h-24 object-cover rounded-2xl"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-[#1E1E1E]">{item.name}</h3>
-                      <p className="text-[#8B5E3C] font-bold">{item.price}</p>
-                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
+                      <img
+                        src={item.image || 'https://via.placeholder.com/100'}
+                        alt={item.name}
+                        className="w-full sm:w-24 h-40 sm:h-24 object-cover rounded-2xl"
+                      />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-ink">{item.name}</h3>
+                        <p className="text-brand-600 font-bold">{item.price}</p>
+                        <p className="text-xs text-ink-faint mt-1">Subtotal: {(item.price * item.quantity).toFixed(2)}</p>
+                      </div>
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 bg-[#F6F1E8] rounded-2xl">
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              productId: item.productId,
-                              quantity: Math.max(1, item.quantity - 1),
-                            })
-                          )
-                        }
-                        className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
-                      >
-                        <FaMinus size={14} />
-                      </button>
-                      <span className="px-4 font-medium text-[#5A5149]">{item.quantity}</span>
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              productId: item.productId,
-                              quantity: item.quantity + 1,
-                            })
-                          )
-                        }
-                        className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
-                      >
-                        <FaPlus size={14} />
-                      </button>
-                    </div>
+                      <div className="flex items-center justify-between sm:justify-end gap-3">
+                        {/* Quantity Controls */}
+                        <div className="flex items-center gap-1 bg-surface border border-edge rounded-2xl">
+                          <button
+                            onClick={() =>
+                              dispatch(
+                                updateQuantity({
+                                  productId: item.productId,
+                                  quantity: Math.max(1, item.quantity - 1),
+                                })
+                              )
+                            }
+                            className="px-3 py-2 hover:bg-brand-50 text-brand-600 rounded-l-2xl"
+                          >
+                            <FaMinus size={14} />
+                          </button>
+                          <span className="px-3 sm:px-4 font-medium text-ink">{item.quantity}</span>
+                          <button
+                            onClick={() =>
+                              dispatch(
+                                updateQuantity({
+                                  productId: item.productId,
+                                  quantity: item.quantity + 1,
+                                })
+                              )
+                            }
+                            className="px-3 py-2 hover:bg-brand-50 text-brand-600 rounded-r-2xl"
+                          >
+                            <FaPlus size={14} />
+                          </button>
+                        </div>
 
-                    {/* Subtotal */}
-                    <div className="w-28 text-right">
-                      <p className="font-bold text-[#1E1E1E]">{(item.price * item.quantity).toFixed(2)}</p>
+                        {/* Remove */}
+                        <button
+                          onClick={() => dispatch(removeFromCart(item.productId))}
+                          className="text-brand-600 hover:bg-brand-50 p-3 rounded-full transition"
+                          aria-label={`Remove ${item.name}`}
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
                     </div>
-
-                    {/* Remove */}
-                    <button
-                      onClick={() => dispatch(removeFromCart(item.productId))}
-                      className="text-[#8B5E3C] hover:bg-[#F6F1E8] p-3 rounded-full transition"
-                    >
-                      <FaTrash />
-                    </button>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
-            <h2 className="text-2xl font-black mb-6 text-[#1E1E1E]">Order Summary</h2>
+            <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 h-fit">
+            <h2 className="text-2xl font-black mb-6 text-ink">Order Summary</h2>
 
             {/* Coupon */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-[#5A5149] mb-2">Promo Code</label>
+              <label className="block text-sm font-medium text-ink-muted mb-2">Promo Code</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   placeholder="Enter code"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="flex-1 px-4 py-2 border border-[#E7DBCF] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
+                  className="flex-1 px-4 py-2 border border-edge rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
                 <button
                   onClick={handleApplyCoupon}
                   disabled={loading}
-                  className="px-4 py-2 bg-[#8B5E3C] text-white rounded-2xl hover:bg-[#7a4e2f] disabled:opacity-50 transition font-medium"
+                  className="px-4 py-2 gradient-brand text-white rounded-2xl hover:opacity-90 disabled:opacity-50 transition font-medium"
                 >
                   Apply
                 </button>
@@ -208,8 +209,8 @@ export default function Cart() {
             </div>
 
             {/* Totals */}
-            <div className="space-y-3 border-t border-[#E7DBCF] pt-4 mb-6">
-              <div className="flex justify-between text-[#5A5149]">
+            <div className="space-y-3 border-t border-edge pt-4 mb-6">
+              <div className="flex justify-between text-ink-muted">
                 <span>Subtotal:</span>
                 <span>{subtotal.toFixed(2)}</span>
               </div>
@@ -219,7 +220,7 @@ export default function Cart() {
                   <span>-{discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-lg font-black border-t border-[#E7DBCF] pt-3 text-[#1E1E1E]">
+              <div className="flex justify-between text-lg font-black border-t border-edge pt-3 text-ink">
                 <span>Total:</span>
                 <span>{total.toFixed(2)}</span>
               </div>
@@ -228,13 +229,13 @@ export default function Cart() {
             {/* Buttons */}
             <button
               onClick={() => navigate('/checkout')}
-              className="w-full bg-[#8B5E3C] text-white py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold mb-3 transition"
+              className="w-full gradient-brand text-white py-3 rounded-2xl hover:opacity-90 font-semibold mb-3 transition"
             >
               Proceed to Checkout
             </button>
             <Link
               to="/shop"
-              className="block w-full text-center bg-[#F6F1E8] border border-[#E7DBCF] text-[#8B5E3C] py-3 rounded-2xl hover:bg-[#E7DBCF] font-semibold transition"
+              className="block w-full text-center bg-surface border border-edge text-brand-600 py-3 rounded-2xl hover:bg-brand-50 font-semibold transition"
             >
               Continue Shopping
             </Link>
