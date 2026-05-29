@@ -16,24 +16,15 @@ export default function Cart() {
   const [error, setError] = useState('')
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const discount = couponDiscount  // absolute dollar amount from backend
+  const discount = couponDiscount
   const total = subtotal - discount
 
   const handleApplyCoupon = async () => {
-    if (!couponInput.trim()) {
-      setError('Please enter a coupon code')
-      return
-    }
-
+    if (!couponInput.trim()) { setError('Please enter a coupon code'); return }
     setLoading(true)
     setError('')
-
     try {
-      const response = await api.post('/coupons/validate', {
-        code: couponInput,
-        cartTotal: subtotal,
-      })
-
+      const response = await api.post('/coupons/validate', { code: couponInput, cartTotal: subtotal })
       if (response.data.valid) {
         dispatch(setCoupon({
           code: couponInput.trim().toUpperCase(),
@@ -54,195 +45,150 @@ export default function Cart() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-surface">
-        <section
-          className="relative text-white overflow-hidden"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
+      <div className="min-h-screen bg-surface flex items-center justify-center px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-sm"
         >
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-screen">
-            <div className="max-w-2xl space-y-8 text-center">
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-                <h1 className="font-display text-4xl font-black text-white mb-4">Your Cart is Empty</h1>
-                <p className="text-white/80 mb-8 text-lg">Add some delicious fruits to your cart!</p>
-                <Link
-                  to="/shop"
-                  className="inline-block bg-brand-600 text-white px-8 py-4 rounded-2xl hover:bg-brand-700 font-semibold transition"
-                >
-                  Continue Shopping
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </section>
+          <div className="w-20 h-20 rounded-3xl bg-white border border-edge shadow-card flex items-center justify-center text-4xl mx-auto mb-6">🛒</div>
+          <h1 className="font-display text-3xl font-black text-ink mb-3">Your Cart is Empty</h1>
+          <p className="text-ink-muted mb-8">Add some delicious fruits to get started.</p>
+          <Link to="/shop" className="inline-block gradient-brand text-white px-8 py-3.5 rounded-2xl font-semibold shadow-brand hover:opacity-90 transition">
+            Browse Products
+          </Link>
+        </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-surface">
-      <section
-        className="relative text-white overflow-hidden"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-20 flex items-center justify-center">
-          <div className="max-w-2xl space-y-4 text-center">
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Shopping</p>
-              <h1 className="font-display text-4xl font-black text-white">Shopping Cart</h1>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-surface py-10">
+      {/* Page header */}
+      <div className="max-w-7xl mx-auto px-6 mb-8">
+        <p className="text-[11px] uppercase tracking-widest text-brand-500 font-semibold mb-1">Order</p>
+        <h1 className="font-display text-4xl font-black text-ink">Shopping Cart</h1>
+        <p className="text-ink-muted text-sm mt-1">{cart.length} item{cart.length !== 1 ? 's' : ''}</p>
+      </div>
 
-      <div className="bg-surface py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
-            {/* Cart Items */}
-            <div className="md:col-span-2">
-              <div className="bg-white border border-warm-border rounded-3xl shadow-sm overflow-hidden">
-                {cart.map((item) => (
-                  <div
-                    key={item.productId}
-                    className="p-6 border-b border-warm-border flex items-center gap-4 hover:bg-warm/50 transition"
-                  >
-                    <img
-                      src={item.image || 'https://via.placeholder.com/100'}
-                      alt={item.name}
-                      className="w-24 h-24 object-cover rounded-2xl"
-                    />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-ink">{item.name}</h3>
-                      <p className="text-accent font-bold">{item.price}</p>
-                    </div>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid md:grid-cols-3 gap-6">
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 bg-warm rounded-2xl">
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              productId: item.productId,
-                              quantity: Math.max(1, item.quantity - 1),
-                            })
-                          )
-                        }
-                        className="px-3 py-2 hover:bg-warm-border text-accent"
-                      >
-                        <FaMinus size={14} />
-                      </button>
-                      <span className="px-4 font-medium text-ink-muted">{item.quantity}</span>
-                      <button
-                        onClick={() =>
-                          dispatch(
-                            updateQuantity({
-                              productId: item.productId,
-                              quantity: item.quantity + 1,
-                            })
-                          )
-                        }
-                        className="px-3 py-2 hover:bg-warm-border text-accent"
-                      >
-                        <FaPlus size={14} />
-                      </button>
-                    </div>
+          {/* Cart Items */}
+          <div className="md:col-span-2">
+            <div className="bg-white border border-edge rounded-3xl shadow-card overflow-hidden">
+              {cart.map((item, idx) => (
+                <div
+                  key={item.productId}
+                  className={`p-5 flex items-center gap-4 transition hover:bg-surface/60 ${idx < cart.length - 1 ? 'border-b border-edge' : ''}`}
+                >
+                  <img
+                    src={item.image || 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=200&q=80'}
+                    alt={item.name}
+                    className="w-20 h-20 object-cover rounded-2xl flex-shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-ink text-sm truncate">{item.name}</h3>
+                    <p className="text-accent font-bold text-sm mt-0.5">৳{item.price}</p>
+                  </div>
 
-                    {/* Subtotal */}
-                    <div className="w-28 text-right">
-                      <p className="font-bold text-ink">{(item.price * item.quantity).toFixed(2)}</p>
-                    </div>
-
-                    {/* Remove */}
+                  {/* Quantity */}
+                  <div className="flex items-center gap-1 bg-surface rounded-xl border border-edge">
                     <button
-                      onClick={() => dispatch(removeFromCart(item.productId))}
-                      className="text-accent hover:bg-warm p-3 rounded-full transition"
+                      onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: Math.max(1, item.quantity - 1) }))}
+                      className="px-3 py-2 hover:bg-warm text-ink-muted rounded-l-xl transition"
                     >
-                      <FaTrash />
+                      <FaMinus size={11} />
+                    </button>
+                    <span className="px-3 font-semibold text-ink text-sm min-w-[2rem] text-center">{item.quantity}</span>
+                    <button
+                      onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: item.quantity + 1 }))}
+                      className="px-3 py-2 hover:bg-warm text-ink-muted rounded-r-xl transition"
+                    >
+                      <FaPlus size={11} />
                     </button>
                   </div>
-                ))}
-              </div>
+
+                  {/* Line total */}
+                  <div className="w-20 text-right flex-shrink-0">
+                    <p className="font-bold text-ink text-sm">৳{(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+
+                  <button
+                    onClick={() => dispatch(removeFromCart(item.productId))}
+                    className="text-ink-faint hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition flex-shrink-0"
+                  >
+                    <FaTrash size={13} />
+                  </button>
+                </div>
+              ))}
             </div>
 
-            {/* Order Summary */}
-            <div className="bg-white border border-warm-border rounded-3xl shadow-sm p-8 h-fit">
-            <h2 className="text-2xl font-black mb-6 text-ink">Order Summary</h2>
+            <Link to="/shop" className="inline-flex items-center gap-2 mt-4 text-sm font-medium text-ink-muted hover:text-ink transition-colors">
+              ← Continue Shopping
+            </Link>
+          </div>
+
+          {/* Order Summary */}
+          <div className="bg-white border border-edge rounded-3xl shadow-card p-6 h-fit">
+            <h2 className="font-display text-xl font-black text-ink mb-5">Order Summary</h2>
 
             {/* Coupon */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-ink-muted mb-2">Promo Code</label>
+            <div className="mb-5">
+              <label className="block text-xs font-semibold text-ink-muted uppercase tracking-wider mb-2">Promo Code</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   placeholder="Enter code"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="flex-1 px-4 py-2 border border-warm-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-accent"
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                  className="flex-1 px-3 py-2 border border-edge rounded-xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400 text-sm text-ink placeholder-ink-faint"
                 />
                 <button
                   onClick={handleApplyCoupon}
                   disabled={loading}
-                  className="px-4 py-2 bg-accent text-white rounded-2xl hover:bg-accent-dark disabled:opacity-50 transition font-medium"
+                  className="px-4 py-2 gradient-brand text-white rounded-xl disabled:opacity-50 transition font-semibold text-sm shadow-brand"
                 >
-                  Apply
+                  {loading ? '...' : 'Apply'}
                 </button>
               </div>
               {couponCode && discount > 0 && (
                 <div className="mt-2 flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                  <p className="text-green-700 text-sm font-medium">✓ {couponCode} — saving {discount.toFixed(2)}</p>
-                  <button onClick={() => dispatch(clearCoupon())} className="text-green-600 hover:text-green-800 text-xs ml-2">✕</button>
+                  <p className="text-green-700 text-xs font-semibold">✓ {couponCode} — saving ৳{discount.toFixed(2)}</p>
+                  <button onClick={() => dispatch(clearCoupon())} className="text-green-500 hover:text-green-800 text-xs ml-2 font-bold">✕</button>
                 </div>
               )}
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+              {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
             </div>
 
             {/* Totals */}
-            <div className="space-y-3 border-t border-warm-border pt-4 mb-6">
-              <div className="flex justify-between text-ink-muted">
-                <span>Subtotal:</span>
-                <span>{subtotal.toFixed(2)}</span>
+            <div className="space-y-3 border-t border-edge pt-4 mb-5">
+              <div className="flex justify-between text-sm text-ink-muted">
+                <span>Subtotal</span>
+                <span className="text-ink font-medium">৳{subtotal.toFixed(2)}</span>
               </div>
               {discount > 0 && (
-                <div className="flex justify-between text-green-600 font-medium">
-                  <span>Coupon ({couponCode}):</span>
-                  <span>-{discount.toFixed(2)}</span>
+                <div className="flex justify-between text-sm text-green-600 font-medium">
+                  <span>Coupon ({couponCode})</span>
+                  <span>-৳{discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-lg font-black border-t border-warm-border pt-3 text-ink">
-                <span>Total:</span>
-                <span>{total.toFixed(2)}</span>
+              <div className="flex justify-between font-display font-black text-lg border-t border-edge pt-3 text-ink">
+                <span>Total</span>
+                <span className="text-brand-500">৳{total.toFixed(2)}</span>
               </div>
             </div>
 
-            {/* Buttons */}
             <button
               onClick={() => navigate('/checkout')}
-              className="w-full bg-accent text-white py-3 rounded-2xl hover:bg-accent-dark font-semibold mb-3 transition"
+              className="w-full gradient-brand text-white py-3.5 rounded-2xl font-bold text-sm shadow-brand hover:opacity-90 transition"
             >
-              Proceed to Checkout
+              Proceed to Checkout →
             </button>
-            <Link
-              to="/shop"
-              className="block w-full text-center bg-warm border border-warm-border text-accent py-3 rounded-2xl hover:bg-warm-border font-semibold transition"
-            >
-              Continue Shopping
-            </Link>
           </div>
         </div>
-      </div>
       </div>
     </div>
   )
 }
-

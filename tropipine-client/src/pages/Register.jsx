@@ -135,7 +135,7 @@ export default function Register() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="w-full"
           >
-            <div className="bg-[#1b1714] rounded-2xl shadow-2xl p-8 space-y-5 border border-white/10">
+            <div className="bg-dark-card rounded-2xl shadow-2xl p-8 space-y-5 border border-white/10">
 
               {/* Header */}
               <div className="space-y-2">
@@ -167,7 +167,7 @@ export default function Register() {
                         setFormData({...formData, name: e.target.value + (nameParts[1] ? ' ' + nameParts[1] : '')})
                       }}
                       placeholder="John"
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                   <div>
@@ -180,7 +180,7 @@ export default function Register() {
                         setFormData({...formData, name: (nameParts[0] || '') + ' ' + e.target.value})
                       }}
                       placeholder="Doe"
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                 </div>
@@ -194,7 +194,7 @@ export default function Register() {
                     onChange={handleChange}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                   />
                 </div>
 
@@ -207,7 +207,7 @@ export default function Register() {
                     onChange={handleChange}
                     required
                     placeholder="+880 1234567890"
-                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                   />
                 </div>
 
@@ -221,7 +221,7 @@ export default function Register() {
                       onChange={handleChange}
                       required
                       placeholder=""
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                   <div>
@@ -233,13 +233,13 @@ export default function Register() {
                       onChange={handleChange}
                       required
                       placeholder=""
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                 </div>
 
                 <label className="flex items-start gap-2 cursor-pointer group pt-2">
-                  <div className="w-5 h-5 rounded border border-white/20 group-hover:border-brand-500 transition-colors bg-[#26211d] mt-0.5 flex-shrink-0"></div>
+                  <div className="w-5 h-5 rounded border border-white/20 group-hover:border-brand-500 transition-colors bg-dark-input mt-0.5 flex-shrink-0"></div>
                   <span className="text-xs text-white/65 leading-tight">I agree to TropiPine's terms and privacy policy</span>
                 </label>
 

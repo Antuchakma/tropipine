@@ -55,8 +55,8 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-lg shadow-nav'
-          : 'bg-white border-b border-edge'
+          ? 'bg-surface/95 backdrop-blur-lg shadow-nav border-b border-edge/60'
+          : 'bg-surface border-b border-edge/60'
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
@@ -145,7 +145,7 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-card-hover border border-edge py-1.5 overflow-hidden"
+                      className="absolute right-0 top-full mt-2 w-48 bg-surface rounded-2xl shadow-card-hover border border-edge py-1.5 overflow-hidden"
                     >
                       <Link to="/profile" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-ink-muted hover:text-ink hover:bg-surface transition-colors">
                         <FaUser size={12} /> My Profile
@@ -212,7 +212,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-edge overflow-hidden bg-white"
+            className="md:hidden border-t border-edge overflow-hidden bg-surface"
           >
             <div className="max-w-7xl mx-auto px-5 py-5 space-y-1">
               {navLinks.map((link) => (

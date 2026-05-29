@@ -161,7 +161,7 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-warm flex items-center justify-center">
+      <div className="min-h-screen bg-surface flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
       </div>
     )
@@ -174,7 +174,7 @@ export default function ProductDetail() {
     : 0
 
   return (
-    <div className="min-h-screen bg-warm py-12">
+    <div className="min-h-screen bg-surface py-12">
       <div className="max-w-7xl mx-auto px-6 space-y-10">
         {/* Product Card */}
         <div className="grid md:grid-cols-2 gap-12 bg-white border border-warm-border p-10 rounded-3xl shadow-sm">

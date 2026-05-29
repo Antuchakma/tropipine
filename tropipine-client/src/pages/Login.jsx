@@ -120,7 +120,7 @@ export default function Login() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="w-full"
           >
-            <div className="bg-[#1b1714] rounded-2xl shadow-2xl p-8 space-y-6 border border-white/10">
+            <div className="bg-dark-card rounded-2xl shadow-2xl p-8 space-y-6 border border-white/10">
 
               {/* Error */}
               {error && (
@@ -143,7 +143,7 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
 
@@ -163,7 +163,7 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     placeholder=""
-                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-dark-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
 

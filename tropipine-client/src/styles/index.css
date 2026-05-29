@@ -14,6 +14,7 @@
     background-color: theme('colors.surface');
     color: theme('colors.ink.DEFAULT');
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5 {
@@ -21,28 +22,34 @@
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
+  /* Warm-sand scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: theme('colors.surface'); }
+  ::-webkit-scrollbar-thumb { background: theme('colors.edge'); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: theme('colors.warm-border'); }
 }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
 
-  /* Semi-transparent glass card — white with opacity, not a named brand color */
+  /* Glassmorphism — semi-transparent white, not a brand color */
   .glass {
-    background: rgb(255 255 255 / 0.72);
+    background: rgb(255 255 255 / 0.78);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
-  /* Brand gradient: coral → light coral */
+  /* Brand gradient: coral/orange sweep */
   .gradient-brand {
     background: linear-gradient(
       135deg,
       theme('colors.brand.500') 0%,
-      theme('colors.brand.300') 100%
+      theme('colors.brand.400') 100%
     );
   }
 
-  /* Dark gradient: near-black ink tones */
+  /* Dark gradient: near-black warm tones */
   .gradient-dark {
     background: linear-gradient(
       135deg,
@@ -51,7 +58,7 @@
     );
   }
 
-  /* Form submit button gradient: coral → gold */
+  /* Form submit button — vivid orange to amber */
   .gradient-btn {
     background: linear-gradient(
       135deg,
@@ -65,5 +72,13 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Card on warm-sand background */
+  .card {
+    background-color: theme('colors.white');
+    border: 1px solid theme('colors.edge');
+    border-radius: theme('borderRadius.3xl');
+    box-shadow: theme('boxShadow.card');
   }
 }

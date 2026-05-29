@@ -42,7 +42,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-warm py-12">
+    <div className="min-h-screen bg-surface py-12">
       <div className="max-w-4xl mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Sidebar */}
