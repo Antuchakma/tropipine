@@ -145,7 +145,7 @@ export default function Profile() {
               <div>
                 <h1 className="text-4xl font-black mb-8 text-ink">Account Settings</h1>
 
-                <div className="bg-white rounded-lg shadow p-6 space-y-4">
+                <div className="bg-white rounded-3xl border border-edge shadow-card p-5 sm:p-6 space-y-4">
                   <div>
                     <label className="block text-sm font-semibold text-ink-muted mb-1">
                       Name

@@ -106,9 +106,9 @@ export default function Cart() {
         </div>
       </section>
 
-      <div className="bg-surface py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-surface py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
             {/* Cart Items */}
             <div className="md:col-span-2">
               <div className="bg-white border border-warm-border rounded-3xl shadow-sm overflow-hidden">

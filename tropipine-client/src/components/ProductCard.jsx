@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../store/slices/cartSlice'
 import { addToWishlist, removeFromWishlist } from '../store/slices/wishlistSlice'
@@ -9,6 +10,7 @@ export default function ProductCard({ product }) {
   const dispatch = useDispatch()
   const wishlist = useSelector((s) => s.wishlist.items)
   const isInWishlist = wishlist.some((i) => i.productId === product.id)
+  const [justAdded, setJustAdded] = useState(false)
 
   const primaryImage = product.images?.find((i) => i.isPrimary)?.url
     || product.images?.[0]?.url
@@ -23,6 +25,8 @@ export default function ProductCard({ product }) {
       unit: product.unit || 'kg',
       image: primaryImage,
     }))
+    setJustAdded(true)
+    window.setTimeout(() => setJustAdded(false), 900)
   }
 
   const handleWishlist = () => {
@@ -52,7 +56,7 @@ export default function ProductCard({ product }) {
       className="group bg-white rounded-3xl overflow-hidden border border-edge shadow-card hover:shadow-card-hover transition-shadow duration-300 flex flex-col h-full"
     >
       {/* IMAGE */}
-      <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-surface h-56 flex-shrink-0">
+      <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-surface h-40 sm:h-56 flex-shrink-0">
         <img
           src={primaryImage || 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&q=80'}
           alt={product.name}
@@ -96,10 +100,15 @@ export default function ProductCard({ product }) {
             <span className="px-3 py-1.5 rounded-full bg-ink text-white text-xs font-semibold">Out of Stock</span>
           </div>
         )}
+        {justAdded && (
+          <span className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-semibold bg-emerald-500 text-white shadow-lg animate-pulse z-10">
+            Added to cart
+          </span>
+        )}
       </Link>
 
       {/* CONTENT */}
-      <div className="p-5 flex flex-col flex-1 h-full">
+      <div className="p-3 sm:p-5 flex flex-col flex-1 h-full">
         {/* Category */}
         {product.category && (
           <span className="text-[11px] uppercase tracking-wider text-brand-500 font-semibold mb-2">
@@ -109,7 +118,7 @@ export default function ProductCard({ product }) {
 
         {/* Title */}
         <Link to={`/product/${product.id}`}>
-          <h3 className="font-display text-base font-bold text-ink leading-tight mb-1 line-clamp-2 h-10 hover:text-brand-600 transition-colors">
+          <h3 className="font-display text-sm sm:text-base font-bold text-ink leading-tight mb-1 line-clamp-2 h-10 hover:text-brand-600 transition-colors">
             {product.name}
           </h3>
         </Link>
@@ -139,7 +148,7 @@ export default function ProductCard({ product }) {
             {discount > 0 && (
               <p className="text-xs text-ink-faint line-through leading-none mb-1">{product.basePrice}/{product.unit}</p>
             )}
-            <p className="text-xl font-display font-bold text-ink leading-none">
+            <p className="text-base sm:text-xl font-display font-bold text-ink leading-none">
               {product.finalPrice || product.basePrice}
               <span className="text-xs font-normal text-ink-muted ml-1">/{product.unit || 'kg'}</span>
             </p>
@@ -157,14 +166,14 @@ export default function ProductCard({ product }) {
         <button
           onClick={handleAddToCart}
           disabled={isOutOfStock}
-          className={`w-full py-3 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 flex-shrink-0 ${
+          className={`w-full py-2.5 sm:py-3 rounded-2xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 flex-shrink-0 ${
             isOutOfStock
               ? 'bg-surface text-ink-faint cursor-not-allowed border border-edge'
-              : 'gradient-brand text-white shadow-brand hover:shadow-lg hover:opacity-90'
+              : `${justAdded ? 'bg-emerald-600' : 'gradient-brand'} text-white shadow-brand hover:shadow-lg hover:opacity-90`
           }`}
         >
           <FaShoppingCart size={13} />
-          {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+          {isOutOfStock ? 'Out of Stock' : justAdded ? 'Added' : 'Add to Cart'}
         </button>
       </div>
     </motion.div>

@@ -135,12 +135,12 @@ export default function Register() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="w-full"
           >
-            <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl p-8 space-y-5 border border-white/20">
+            <div className="bg-[#1b1714] rounded-2xl shadow-2xl p-8 space-y-5 border border-white/10">
 
               {/* Header */}
               <div className="space-y-2">
-                <h2 className="text-2xl font-black text-ink">Create Account</h2>
-                <p className="text-sm text-ink-muted">Join TropiPine and start shopping</p>
+                <h2 className="text-2xl font-black text-white">Create Account</h2>
+                <p className="text-sm text-white/65">Join TropiPine and start shopping</p>
               </div>
 
               {/* Error */}
@@ -148,9 +148,9 @@ export default function Register() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-50 border-l-4 border-red-500 p-4 rounded"
+                  className="bg-red-500/10 border-l-4 border-red-500 p-4 rounded"
                 >
-                  <p className="text-red-700 font-medium text-sm">{error}</p>
+                  <p className="text-red-300 font-medium text-sm">{error}</p>
                 </motion.div>
               )}
 
@@ -158,7 +158,7 @@ export default function Register() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-ink mb-1.5">First Name</label>
+                    <label className="block text-sm font-semibold text-white/90 mb-1.5">First Name</label>
                     <input
                       type="text"
                       value={formData.name.split(' ')[0] || ''}
@@ -167,11 +167,11 @@ export default function Register() {
                         setFormData({...formData, name: e.target.value + (nameParts[1] ? ' ' + nameParts[1] : '')})
                       }}
                       placeholder="John"
-                      className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-ink mb-1.5">Last Name</label>
+                    <label className="block text-sm font-semibold text-white/90 mb-1.5">Last Name</label>
                     <input
                       type="text"
                       value={formData.name.split(' ')[1] || ''}
@@ -180,13 +180,13 @@ export default function Register() {
                         setFormData({...formData, name: (nameParts[0] || '') + ' ' + e.target.value})
                       }}
                       placeholder="Doe"
-                      className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink mb-1.5">Email</label>
+                  <label className="block text-sm font-semibold text-white/90 mb-1.5">Email</label>
                   <input
                     type="email"
                     name="email"
@@ -194,12 +194,12 @@ export default function Register() {
                     onChange={handleChange}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ink mb-1.5">Phone</label>
+                  <label className="block text-sm font-semibold text-white/90 mb-1.5">Phone</label>
                   <input
                     type="tel"
                     name="phone"
@@ -207,13 +207,13 @@ export default function Register() {
                     onChange={handleChange}
                     required
                     placeholder="+880 1234567890"
-                    className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 pt-2">
                   <div>
-                    <label className="block text-sm font-semibold text-ink mb-1.5">Password</label>
+                    <label className="block text-sm font-semibold text-white/90 mb-1.5">Password</label>
                     <input
                       type="password"
                       name="password"
@@ -221,11 +221,11 @@ export default function Register() {
                       onChange={handleChange}
                       required
                       placeholder=""
-                      className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-ink mb-1.5">Confirm</label>
+                    <label className="block text-sm font-semibold text-white/90 mb-1.5">Confirm</label>
                     <input
                       type="password"
                       name="confirmPassword"
@@ -233,14 +233,14 @@ export default function Register() {
                       onChange={handleChange}
                       required
                       placeholder=""
-                      className="w-full px-4 py-2.5 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                 </div>
 
                 <label className="flex items-start gap-2 cursor-pointer group pt-2">
-                  <div className="w-5 h-5 rounded border-2 border-edge group-hover:border-brand-500 transition-colors bg-white mt-0.5 flex-shrink-0"></div>
-                  <span className="text-xs text-ink-muted leading-tight">I agree to TropiPine's terms and privacy policy</span>
+                  <div className="w-5 h-5 rounded border border-white/20 group-hover:border-brand-500 transition-colors bg-[#26211d] mt-0.5 flex-shrink-0"></div>
+                  <span className="text-xs text-white/65 leading-tight">I agree to TropiPine's terms and privacy policy</span>
                 </label>
 
                 <motion.button
@@ -258,20 +258,20 @@ export default function Register() {
 
               {/* Divider */}
               <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-edge"></div>
-                <span className="text-xs text-ink-muted font-semibold">OR</span>
-                <div className="flex-1 h-px bg-edge"></div>
+                <div className="flex-1 h-px bg-white/15"></div>
+                <span className="text-xs text-white/50 font-semibold">OR</span>
+                <div className="flex-1 h-px bg-white/15"></div>
               </div>
 
               {/* Google Sign Up */}
               <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
 
               {/* Sign In */}
-              <p className="text-center text-ink-muted text-sm">
+              <p className="text-center text-white/70 text-sm">
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-bold text-brand-600 hover:text-brand-700"
+                  className="font-bold text-brand-400 hover:text-brand-300"
                 >
                   Sign in
                 </Link>

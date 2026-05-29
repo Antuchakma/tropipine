@@ -84,7 +84,7 @@ export default function Login() {
               <h1 className="text-5xl font-black leading-tight">
                 Sign In to <span className="text-white">TropiPine</span>
               </h1>
-              <p className="text-lg text-white/70">Continue your fresh fruit journey. Access your orders, wishlist, and exclusive deals.</p>
+              <p className="text-lg text-white/65">Continue your fresh fruit journey. Access your orders, wishlist, and exclusive deals.</p>
             </div>
 
             {/* Benefits list */}
@@ -120,39 +120,39 @@ export default function Login() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="w-full"
           >
-            <div className="bg-white/95 backdrop-blur-2xl rounded-2xl shadow-2xl p-8 space-y-6 border border-white/20">
+            <div className="bg-[#1b1714] rounded-2xl shadow-2xl p-8 space-y-6 border border-white/10">
 
               {/* Error */}
               {error && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-50 border-l-4 border-red-500 p-4 rounded"
+                  className="bg-red-500/10 border-l-4 border-red-500 p-4 rounded"
                 >
-                  <p className="text-red-700 font-medium text-sm">{error}</p>
+                  <p className="text-red-300 font-medium text-sm">{error}</p>
                 </motion.div>
               )}
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-ink mb-2">Email</label>
+                  <label className="block text-sm font-semibold text-white/90 mb-2">Email</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-3 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-semibold text-ink">Password</label>
+                    <label className="block text-sm font-semibold text-white/90">Password</label>
                     <Link
                       to="/forgot-password"
-                      className="text-xs text-brand-600 hover:text-brand-700 font-semibold"
+                      className="text-xs text-brand-400 hover:text-brand-300 font-semibold"
                     >
                       Forgot?
                     </Link>
@@ -163,7 +163,7 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     placeholder=""
-                    className="w-full px-4 py-3 rounded-lg border-2 border-edge bg-white text-ink placeholder-ink-faint outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
 
@@ -182,20 +182,20 @@ export default function Login() {
 
               {/* Divider */}
               <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-edge"></div>
-                <span className="text-xs text-ink-muted font-semibold">OR</span>
-                <div className="flex-1 h-px bg-edge"></div>
+                <div className="flex-1 h-px bg-white/15"></div>
+                <span className="text-xs text-white/50 font-semibold">OR</span>
+                <div className="flex-1 h-px bg-white/15"></div>
               </div>
 
               {/* Google Sign In */}
               <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
 
               {/* Sign Up */}
-              <p className="text-center text-ink-muted text-sm">
+              <p className="text-center text-white/70 text-sm">
                 Don't have an account?{' '}
                 <Link
                   to="/register"
-                  className="font-bold text-brand-600 hover:text-brand-700"
+                  className="font-bold text-brand-400 hover:text-brand-300"
                 >
                   Sign up
                 </Link>
