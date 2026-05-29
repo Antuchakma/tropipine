@@ -111,11 +111,11 @@ export default function Cart() {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Cart Items */}
             <div className="md:col-span-2">
-              <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm overflow-hidden">
+              <div className="bg-white border border-warm-border rounded-3xl shadow-sm overflow-hidden">
                 {cart.map((item) => (
                   <div
                     key={item.productId}
-                    className="p-6 border-b border-[#E7DBCF] flex items-center gap-4 hover:bg-[#F6F1E8]/50 transition"
+                    className="p-6 border-b border-warm-border flex items-center gap-4 hover:bg-warm/50 transition"
                   >
                     <img
                       src={item.image || 'https://via.placeholder.com/100'}
@@ -123,12 +123,12 @@ export default function Cart() {
                       className="w-24 h-24 object-cover rounded-2xl"
                     />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-[#1E1E1E]">{item.name}</h3>
-                      <p className="text-[#8B5E3C] font-bold">{item.price}</p>
+                      <h3 className="font-semibold text-ink">{item.name}</h3>
+                      <p className="text-accent font-bold">{item.price}</p>
                     </div>
 
                     {/* Quantity Controls */}
-                    <div className="flex items-center gap-2 bg-[#F6F1E8] rounded-2xl">
+                    <div className="flex items-center gap-2 bg-warm rounded-2xl">
                       <button
                         onClick={() =>
                           dispatch(
@@ -138,11 +138,11 @@ export default function Cart() {
                             })
                           )
                         }
-                        className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
+                        className="px-3 py-2 hover:bg-warm-border text-accent"
                       >
                         <FaMinus size={14} />
                       </button>
-                      <span className="px-4 font-medium text-[#5A5149]">{item.quantity}</span>
+                      <span className="px-4 font-medium text-ink-muted">{item.quantity}</span>
                       <button
                         onClick={() =>
                           dispatch(
@@ -152,7 +152,7 @@ export default function Cart() {
                             })
                           )
                         }
-                        className="px-3 py-2 hover:bg-[#E7DBCF] text-[#8B5E3C]"
+                        className="px-3 py-2 hover:bg-warm-border text-accent"
                       >
                         <FaPlus size={14} />
                       </button>
@@ -160,13 +160,13 @@ export default function Cart() {
 
                     {/* Subtotal */}
                     <div className="w-28 text-right">
-                      <p className="font-bold text-[#1E1E1E]">{(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-bold text-ink">{(item.price * item.quantity).toFixed(2)}</p>
                     </div>
 
                     {/* Remove */}
                     <button
                       onClick={() => dispatch(removeFromCart(item.productId))}
-                      className="text-[#8B5E3C] hover:bg-[#F6F1E8] p-3 rounded-full transition"
+                      className="text-accent hover:bg-warm p-3 rounded-full transition"
                     >
                       <FaTrash />
                     </button>
@@ -176,24 +176,24 @@ export default function Cart() {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-8 h-fit">
-            <h2 className="text-2xl font-black mb-6 text-[#1E1E1E]">Order Summary</h2>
+            <div className="bg-white border border-warm-border rounded-3xl shadow-sm p-8 h-fit">
+            <h2 className="text-2xl font-black mb-6 text-ink">Order Summary</h2>
 
             {/* Coupon */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-[#5A5149] mb-2">Promo Code</label>
+              <label className="block text-sm font-medium text-ink-muted mb-2">Promo Code</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   placeholder="Enter code"
                   value={couponInput}
                   onChange={(e) => setCouponInput(e.target.value)}
-                  className="flex-1 px-4 py-2 border border-[#E7DBCF] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#8B5E3C]"
+                  className="flex-1 px-4 py-2 border border-warm-border rounded-2xl focus:outline-none focus:ring-2 focus:ring-accent"
                 />
                 <button
                   onClick={handleApplyCoupon}
                   disabled={loading}
-                  className="px-4 py-2 bg-[#8B5E3C] text-white rounded-2xl hover:bg-[#7a4e2f] disabled:opacity-50 transition font-medium"
+                  className="px-4 py-2 bg-accent text-white rounded-2xl hover:bg-accent-dark disabled:opacity-50 transition font-medium"
                 >
                   Apply
                 </button>
@@ -208,8 +208,8 @@ export default function Cart() {
             </div>
 
             {/* Totals */}
-            <div className="space-y-3 border-t border-[#E7DBCF] pt-4 mb-6">
-              <div className="flex justify-between text-[#5A5149]">
+            <div className="space-y-3 border-t border-warm-border pt-4 mb-6">
+              <div className="flex justify-between text-ink-muted">
                 <span>Subtotal:</span>
                 <span>{subtotal.toFixed(2)}</span>
               </div>
@@ -219,7 +219,7 @@ export default function Cart() {
                   <span>-{discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-lg font-black border-t border-[#E7DBCF] pt-3 text-[#1E1E1E]">
+              <div className="flex justify-between text-lg font-black border-t border-warm-border pt-3 text-ink">
                 <span>Total:</span>
                 <span>{total.toFixed(2)}</span>
               </div>
@@ -228,13 +228,13 @@ export default function Cart() {
             {/* Buttons */}
             <button
               onClick={() => navigate('/checkout')}
-              className="w-full bg-[#8B5E3C] text-white py-3 rounded-2xl hover:bg-[#7a4e2f] font-semibold mb-3 transition"
+              className="w-full bg-accent text-white py-3 rounded-2xl hover:bg-accent-dark font-semibold mb-3 transition"
             >
               Proceed to Checkout
             </button>
             <Link
               to="/shop"
-              className="block w-full text-center bg-[#F6F1E8] border border-[#E7DBCF] text-[#8B5E3C] py-3 rounded-2xl hover:bg-[#E7DBCF] font-semibold transition"
+              className="block w-full text-center bg-warm border border-warm-border text-accent py-3 rounded-2xl hover:bg-warm-border font-semibold transition"
             >
               Continue Shopping
             </Link>

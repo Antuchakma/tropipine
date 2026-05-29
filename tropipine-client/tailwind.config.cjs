@@ -15,16 +15,33 @@ module.exports = {
           800: '#9C260E',
           900: '#7A1F0D',
         },
-        surface: '#FAFAF8',
+        // Page backgrounds
+        surface: '#FAFAF8',    // main page background
+        warm: '#F6F1E8',       // warm cream surface (cards, alt sections)
+        dark: '#100C08',       // deep dark (hero overlays, footer)
+
+        // Text
         ink: {
-          DEFAULT: '#18100A',
-          muted: '#6B5E57',
-          faint: '#A89890',
+          DEFAULT: '#18100A',  // primary text
+          muted:   '#6B5E57',  // secondary / muted text
+          faint:   '#A89890',  // placeholder / very muted
         },
-        edge: '#EDE8E3',
+
+        // Borders
+        edge: '#EDE8E3',           // default border
+        'warm-border': '#E7DBCF',  // warm-toned border for cards
+
+        // Accent (warm brown — secondary action color)
+        accent: {
+          DEFAULT: '#8B5E3C',
+          dark:    '#7A4E2F',
+        },
+
+        // Special
+        gold: '#D4A017',  // exclusive / premium badge color
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans:    ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
@@ -32,9 +49,10 @@ module.exports = {
         '5xl': '2.5rem',
       },
       boxShadow: {
-        card:    '0 2px 12px rgba(24,16,10,0.06)',
-        'card-hover': '0 16px 40px rgba(24,16,10,0.12)',
-        brand:   '0 8px 24px rgba(255,92,46,0.30)',
+        card:        '0 2px 12px rgba(24,16,10,0.06)',
+        'card-hover':'0 16px 40px rgba(24,16,10,0.12)',
+        brand:       '0 8px 24px rgba(255,92,46,0.30)',
+        nav:         '0 1px 24px rgba(24,16,10,0.08)',
       },
     },
   },
