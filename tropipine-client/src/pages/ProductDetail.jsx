@@ -161,8 +161,8 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
+      <div className="min-h-screen bg-warm flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
       </div>
     )
   }
@@ -174,10 +174,10 @@ export default function ProductDetail() {
     : 0
 
   return (
-    <div className="min-h-screen bg-surface py-8 sm:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-10">
+    <div className="min-h-screen bg-warm py-12">
+      <div className="max-w-7xl mx-auto px-6 space-y-10">
         {/* Product Card */}
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-12 bg-white border border-edge p-5 sm:p-10 rounded-3xl shadow-card">
+        <div className="grid md:grid-cols-2 gap-12 bg-white border border-warm-border p-10 rounded-3xl shadow-sm">
           {/* Image */}
           <div>
             <img
@@ -192,7 +192,7 @@ export default function ProductDetail() {
                     key={img.id}
                     src={img.url}
                     alt={img.altText || product.name}
-                    className="w-16 h-16 rounded-xl object-cover border-2 border-edge cursor-pointer hover:border-brand-400 transition"
+                    className="w-16 h-16 rounded-xl object-cover border-2 border-warm-border cursor-pointer hover:border-accent transition"
                   />
                 ))}
               </div>
@@ -202,11 +202,11 @@ export default function ProductDetail() {
           {/* Details */}
           <div>
             {product.category && (
-              <span className="text-xs uppercase tracking-widest text-brand-600 font-semibold">
+              <span className="text-xs uppercase tracking-widest text-accent font-semibold">
                 {product.category.name}
               </span>
             )}
-            <h1 className="text-3xl sm:text-4xl font-black mt-1 mb-3 text-ink">{product.name}</h1>
+            <h1 className="text-4xl font-black mt-1 mb-3 text-ink">{product.name}</h1>
 
             {/* Average rating badge */}
             {avgRating > 0 && (
@@ -218,21 +218,21 @@ export default function ProductDetail() {
               </div>
             )}
 
-            <p className="text-ink-muted mb-5 text-base sm:text-lg leading-relaxed">{product.description}</p>
+            <p className="text-ink-muted mb-5 text-lg leading-relaxed">{product.description}</p>
 
             {product.origin && (
-              <p className="text-sm text-brand-600 mb-6 font-medium">Origin: {product.origin}</p>
+              <p className="text-sm text-accent mb-6 font-medium">Origin: {product.origin}</p>
             )}
 
             {/* Pricing */}
-            <div className="mb-8 pb-8 border-b border-edge">
+            <div className="mb-8 pb-8 border-b border-warm-border">
               {discount > 0 && (
-                <span className="text-ink-faint line-through block mb-2">{product.basePrice}</span>
+                <span className="text-ink-muted line-through block mb-2">{product.basePrice}</span>
               )}
               <div className="flex items-center gap-4">
-                <span className="text-4xl sm:text-5xl font-black text-brand-600">{product.finalPrice}</span>
+                <span className="text-5xl font-black text-accent">{product.finalPrice}</span>
                 {discount > 0 && (
-                  <span className="gradient-brand text-white px-4 py-2 rounded-full text-sm font-bold">
+                  <span className="bg-accent text-white px-4 py-2 rounded-full text-sm font-bold">
                     -{discount}%
                   </span>
                 )}
@@ -241,7 +241,7 @@ export default function ProductDetail() {
 
             {/* Stock */}
             <div className="mb-6">
-              <p className={`text-sm font-semibold ${product.stockQty > 0 ? 'text-brand-600' : 'text-ink-muted'}`}>
+              <p className={`text-sm font-semibold ${product.stockQty > 0 ? 'text-accent' : 'text-ink-muted'}`}>
                 {product.stockQty > 0 ? `In Stock (${product.stockQty} ${product.unit})` : 'Out of Stock'}
               </p>
             </div>
@@ -249,10 +249,10 @@ export default function ProductDetail() {
             {/* Quantity */}
             <div className="mb-8 flex items-center gap-4">
               <label className="font-medium text-ink-muted">Quantity:</label>
-              <div className="flex items-center gap-2 border border-edge rounded-2xl bg-surface">
+              <div className="flex items-center gap-2 border border-warm-border rounded-2xl bg-warm">
                 <button
                   onClick={() => setQuantity(Math.max(product.minOrderQty || 1, quantity - 1))}
-                  className="px-4 py-2 text-brand-600 hover:bg-brand-50 rounded-l-2xl transition"
+                  className="px-4 py-2 text-accent hover:bg-warm-border rounded-l-2xl transition"
                 >
                   −
                 </button>
@@ -260,7 +260,7 @@ export default function ProductDetail() {
                 <button
                   onClick={() => setQuantity(quantity + 1)}
                   disabled={quantity >= product.stockQty}
-                  className="px-4 py-2 text-brand-600 hover:bg-brand-50 rounded-r-2xl transition disabled:opacity-50"
+                  className="px-4 py-2 text-accent hover:bg-warm-border rounded-r-2xl transition disabled:opacity-50"
                 >
                   +
                 </button>
@@ -272,7 +272,7 @@ export default function ProductDetail() {
               <button
                 onClick={handleAddToCart}
                 disabled={product.stockQty === 0}
-                className="w-full gradient-brand text-white py-4 rounded-2xl hover:opacity-90 disabled:opacity-50 font-semibold transition"
+                className="w-full bg-accent text-white py-4 rounded-2xl hover:bg-accent-dark disabled:opacity-50 font-semibold transition"
               >
                 Add to Cart
               </button>
@@ -280,8 +280,8 @@ export default function ProductDetail() {
                 onClick={handleWishlist}
                 className={`w-full flex items-center justify-center gap-2 border-2 py-4 rounded-2xl font-semibold transition ${
                   isInWishlist
-                    ? 'gradient-brand text-white border-transparent'
-                    : 'border-edge text-brand-600 bg-white hover:border-brand-400'
+                    ? 'bg-accent text-white border-accent'
+                    : 'border-warm-border text-accent bg-white hover:border-accent'
                 }`}
               >
                 {isInWishlist ? <FaHeart /> : <FaRegHeart />}
@@ -293,7 +293,7 @@ export default function ProductDetail() {
             {product.tags?.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-6">
                 {product.tags.map((tag) => (
-                  <span key={tag} className="px-3 py-1 bg-surface border border-edge rounded-full text-xs text-ink-muted">
+                  <span key={tag} className="px-3 py-1 bg-warm border border-warm-border rounded-full text-xs text-ink-muted">
                     {tag}
                   </span>
                 ))}
@@ -303,13 +303,13 @@ export default function ProductDetail() {
         </div>
 
         {/* Reviews Section */}
-        <div className="bg-white border border-edge rounded-3xl p-5 sm:p-10 shadow-card">
+        <div className="bg-white border border-warm-border rounded-3xl p-10 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-black text-ink">Customer Reviews</h2>
               {avgRating > 0 && (
                 <div className="flex items-center gap-3 mt-2">
-                  <span className="text-4xl font-black text-brand-600">{avgRating}</span>
+                  <span className="text-4xl font-black text-accent">{avgRating}</span>
                   <div>
                     <StarDisplay rating={Math.round(avgRating)} size="lg" />
                     <p className="text-sm text-ink-muted mt-1">{reviews.length} verified review{reviews.length !== 1 ? 's' : ''}</p>
@@ -325,7 +325,7 @@ export default function ProductDetail() {
               {reviewsLoading ? (
                 <div className="space-y-4">
                   {[1, 2].map((i) => (
-                    <div key={i} className="animate-pulse bg-surface rounded-2xl h-24" />
+                    <div key={i} className="animate-pulse bg-warm rounded-2xl h-24" />
                   ))}
                 </div>
               ) : reviews.length === 0 ? (
@@ -336,10 +336,10 @@ export default function ProductDetail() {
               ) : (
                 <div className="space-y-5">
                   {reviews.map((review) => (
-                    <div key={review.id} className="border border-edge rounded-2xl p-5">
+                    <div key={review.id} className="border border-warm-border rounded-2xl p-5">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full gradient-brand text-white flex items-center justify-center text-sm font-bold">
+                          <div className="w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold">
                             {review.user?.name?.[0]?.toUpperCase() || '?'}
                           </div>
                           <div>
@@ -361,7 +361,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Submit Review Form */}
-            <div className="border border-edge rounded-2xl p-6 bg-surface">
+            <div className="border border-warm-border rounded-2xl p-6 bg-warm/50">
               <h3 className="text-lg font-black text-ink mb-4">Write a Review</h3>
 
               {!user ? (
@@ -369,7 +369,7 @@ export default function ProductDetail() {
                   <p className="text-ink-muted mb-4">Sign in to leave a review</p>
                   <button
                     onClick={() => navigate('/login')}
-                    className="gradient-brand text-white px-6 py-2 rounded-2xl font-semibold hover:opacity-90 transition"
+                    className="bg-accent text-white px-6 py-2 rounded-2xl font-semibold hover:bg-accent-dark transition"
                   >
                     Sign In
                   </button>
@@ -401,7 +401,7 @@ export default function ProductDetail() {
                       onChange={(e) => setReviewComment(e.target.value)}
                       rows={4}
                       placeholder="Share your experience with this product..."
-                      className="w-full px-4 py-3 border border-edge rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 text-ink resize-none"
+                      className="w-full px-4 py-3 border border-warm-border rounded-2xl bg-white focus:outline-none focus:ring-2 focus:ring-accent text-ink resize-none"
                     />
                   </div>
                   {reviewError && (
@@ -410,7 +410,7 @@ export default function ProductDetail() {
                   <button
                     type="submit"
                     disabled={reviewSubmitting || !reviewRating}
-                    className="w-full gradient-brand text-white py-3 rounded-2xl hover:opacity-90 disabled:opacity-50 font-semibold transition"
+                    className="w-full bg-accent text-white py-3 rounded-2xl hover:bg-accent-dark disabled:opacity-50 font-semibold transition"
                   >
                     {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
                   </button>

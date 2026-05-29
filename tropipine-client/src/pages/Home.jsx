@@ -117,12 +117,12 @@ export default function Home() {
       {/*  EXCLUSIVE  */}
       {exclusive.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 sm:px-8 pb-20">
-          <div className="bg-[#100C08] rounded-[40px] px-8 py-14 overflow-hidden relative">
+          <div className="bg-dark rounded-[40px] px-8 py-14 overflow-hidden relative">
             <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-brand-500/15 blur-[80px] pointer-events-none" />
             <div className="relative">
               <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
                 <div>
-                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D4A017]/20 border border-[#D4A017]/40 text-[#D4A017] text-xs font-semibold mb-3">
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs font-semibold mb-3">
                      Premium Collection
                   </span>
                   <h2 className="font-display text-3xl sm:text-4xl font-black text-white">Exclusive Varieties</h2>
@@ -218,7 +218,7 @@ export default function Home() {
               >
                 <div className="flex">
                   {[...Array(t.rating)].map((_, j) => (
-                    <FaStar key={j} size={13} className="text-[#F59E0B]" />
+                    <FaStar key={j} size={13} className="text-amber-400" />
                   ))}
                 </div>
                 <p className="text-sm text-ink-muted leading-relaxed">"{t.text}"</p>

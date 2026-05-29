@@ -83,7 +83,7 @@ export default function ProductCard({ product }) {
             </span>
           )}
           {product.isExclusive && (
-            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#D4A017] text-white">
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-gold text-white">
                Exclusive
             </span>
           )}
@@ -133,7 +133,7 @@ export default function ProductCard({ product }) {
           <div className="flex items-center gap-1.5 mb-2 h-5">
             <div className="flex">
               {[1,2,3,4,5].map((i) => (
-                <FaStar key={i} size={11} className={i <= Math.round(product.avgRating) ? 'text-[#F59E0B]' : 'text-edge'} />
+                <FaStar key={i} size={11} className={i <= Math.round(product.avgRating) ? 'text-amber-400' : 'text-edge'} />
               ))}
             </div>
             <span className="text-[11px] text-ink-faint">({product.avgRating})</span>

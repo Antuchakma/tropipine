@@ -78,7 +78,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-[#120f0d]">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden gradient-brand">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -248,10 +248,7 @@ export default function Register() {
                   disabled={loading}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 rounded-lg font-bold text-white text-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden group pt-4"
-                  style={{
-                    background: 'linear-gradient(135deg, rgb(255, 107, 53) 0%, rgb(255, 152, 0) 100%)',
-                  }}
+                  className="w-full py-3 rounded-lg font-bold text-white text-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden group pt-4 gradient-btn"
                 >
                   <span className="relative">
                     {loading ? 'Creating account...' : 'Create Account'}

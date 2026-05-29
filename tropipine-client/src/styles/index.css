@@ -11,8 +11,8 @@
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: #FAFAF8;
-    color: #18100A;
+    background-color: theme('colors.surface');
+    color: theme('colors.ink.DEFAULT');
     -webkit-font-smoothing: antialiased;
   }
 
@@ -26,18 +26,38 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 
+  /* Semi-transparent glass card — white with opacity, not a named brand color */
   .glass {
-    background: rgba(255,255,255,0.72);
+    background: rgb(255 255 255 / 0.72);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
+  /* Brand gradient: coral → light coral */
   .gradient-brand {
-    background: linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%);
+    background: linear-gradient(
+      135deg,
+      theme('colors.brand.500') 0%,
+      theme('colors.brand.300') 100%
+    );
   }
 
+  /* Dark gradient: near-black ink tones */
   .gradient-dark {
-    background: linear-gradient(135deg, #18100A 0%, #2D1A0F 100%);
+    background: linear-gradient(
+      135deg,
+      theme('colors.dark') 0%,
+      theme('colors.ink.DEFAULT') 100%
+    );
+  }
+
+  /* Form submit button gradient: coral → gold */
+  .gradient-btn {
+    background: linear-gradient(
+      135deg,
+      theme('colors.brand.500') 0%,
+      theme('colors.gold') 100%
+    );
   }
 
   .line-clamp-2 {
