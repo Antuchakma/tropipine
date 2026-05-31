@@ -30,7 +30,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-cream">
       <section
         className="relative text-white overflow-hidden"
         style={{
@@ -44,7 +44,7 @@ export default function Contact() {
         <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-screen">
           <div className="max-w-2xl space-y-8 text-center">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Connect With Us</p>
+              <p className="text-xs uppercase tracking-widest text-grove font-semibold mb-3">Connect With Us</p>
               <h1 className="font-display text-4xl sm:text-5xl font-black text-white mb-3">We&apos;d Love to Hear From You</h1>
               <p className="text-white/80 max-w-xl">Questions about orders, wholesale, or partnerships  send us a message.</p>
             </motion.div>
@@ -55,52 +55,52 @@ export default function Contact() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 py-14 grid lg:grid-cols-3 gap-10">
         <div className="space-y-4">
           {[
-            { icon: <FaPhone className="text-brand-500" />, title: 'Phone', val: '+880 1234-567890' },
-            { icon: <FaEnvelope className="text-brand-500" />, title: 'Email', val: 'info@tropipine.com' },
-            { icon: <FaMapMarkerAlt className="text-brand-500" />, title: 'Location', val: 'Dhaka, Bangladesh' },
+            { icon: <FaPhone className="text-grove" />, title: 'Phone', val: '+880 1234-567890' },
+            { icon: <FaEnvelope className="text-grove" />, title: 'Email', val: 'info@tropipine.com' },
+            { icon: <FaMapMarkerAlt className="text-grove" />, title: 'Location', val: 'Dhaka, Bangladesh' },
           ].map((item) => (
-            <div key={item.title} className="bg-white border border-edge rounded-3xl p-6 flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center shrink-0">{item.icon}</div>
+            <div key={item.title} className="bg-white border border-stone rounded-3xl p-6 flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-mist flex items-center justify-center shrink-0">{item.icon}</div>
               <div>
-                <p className="text-sm font-semibold text-ink">{item.title}</p>
-                <p className="text-sm text-ink-muted mt-0.5">{item.val}</p>
+                <p className="text-sm font-semibold text-bark">{item.title}</p>
+                <p className="text-sm text-clay mt-0.5">{item.val}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white border border-edge rounded-3xl p-8 space-y-5 shadow-card">
+        <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white border border-stone rounded-3xl p-8 space-y-5 shadow-card">
           {success && <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-2xl text-sm">{success}</div>}
           {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-sm">{error}</div>}
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-ink-muted mb-2">Name *</label>
-              <input name="name" value={form.name} onChange={handleChange} required className="w-full px-4 py-3 rounded-2xl border border-edge focus:outline-none focus:ring-2 focus:ring-brand-400" />
+              <label className="block text-sm font-medium text-clay mb-2">Name *</label>
+              <input name="name" value={form.name} onChange={handleChange} required className="w-full px-4 py-3 rounded-2xl border border-stone focus:outline-none focus:ring-2 focus:ring-brand-400" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-ink-muted mb-2">Email *</label>
-              <input type="email" name="email" value={form.email} onChange={handleChange} required className="w-full px-4 py-3 rounded-2xl border border-edge focus:outline-none focus:ring-2 focus:ring-brand-400" />
+              <label className="block text-sm font-medium text-clay mb-2">Email *</label>
+              <input type="email" name="email" value={form.email} onChange={handleChange} required className="w-full px-4 py-3 rounded-2xl border border-stone focus:outline-none focus:ring-2 focus:ring-brand-400" />
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-ink-muted mb-2">Phone</label>
-              <input name="phone" value={form.phone} onChange={handleChange} className="w-full px-4 py-3 rounded-2xl border border-edge focus:outline-none focus:ring-2 focus:ring-brand-400" />
+              <label className="block text-sm font-medium text-clay mb-2">Phone</label>
+              <input name="phone" value={form.phone} onChange={handleChange} className="w-full px-4 py-3 rounded-2xl border border-stone focus:outline-none focus:ring-2 focus:ring-brand-400" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-ink-muted mb-2">Subject</label>
-              <input name="subject" value={form.subject} onChange={handleChange} className="w-full px-4 py-3 rounded-2xl border border-edge focus:outline-none focus:ring-2 focus:ring-brand-400" />
+              <label className="block text-sm font-medium text-clay mb-2">Subject</label>
+              <input name="subject" value={form.subject} onChange={handleChange} className="w-full px-4 py-3 rounded-2xl border border-stone focus:outline-none focus:ring-2 focus:ring-brand-400" />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-ink-muted mb-2">Message *</label>
-            <textarea name="message" value={form.message} onChange={handleChange} required rows={5} className="w-full px-4 py-3 rounded-2xl border border-edge focus:outline-none focus:ring-2 focus:ring-brand-400 resize-none" />
+            <label className="block text-sm font-medium text-clay mb-2">Message *</label>
+            <textarea name="message" value={form.message} onChange={handleChange} required rows={5} className="w-full px-4 py-3 rounded-2xl border border-stone focus:outline-none focus:ring-2 focus:ring-brand-400 resize-none" />
           </div>
 
-          <button type="submit" disabled={loading} className="w-full py-4 rounded-2xl gradient-brand text-white font-semibold shadow-brand hover:opacity-90 disabled:opacity-50 transition">
+          <button type="submit" disabled={loading} className="w-full py-4 rounded-2xl bg-grove text-white font-semibold  hover:opacity-90 disabled:opacity-50 transition">
             {loading ? 'Sending...' : 'Send Message'}
           </button>
         </form>

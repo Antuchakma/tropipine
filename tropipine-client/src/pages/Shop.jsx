@@ -3,29 +3,28 @@ import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 import ProductCard from '../components/ProductCard'
-import { FaSearch, FaTimes } from 'react-icons/fa'
 
 const SORT_OPTIONS = [
-  { value: '', label: 'Most Relevant' },
-  { value: 'newest', label: 'Newest First' },
-  { value: 'price_asc', label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
+  { value: '', label: 'Recommended' },
+  { value: 'newest', label: 'Newest' },
+  { value: 'price_asc', label: 'Price ↑' },
+  { value: 'price_desc', label: 'Price ↓' },
   { value: 'popular', label: 'Best Sellers' },
 ]
 
 const QUICK_FILTERS = [
   { label: 'All', key: null },
-  { label: ' Exclusive', key: 'isExclusive' },
-  { label: ' Best Sellers', key: 'isBestSeller' },
-  { label: ' Featured', key: 'isFeatured' },
-  { label: ' Seasonal', key: 'isSeasonal' },
-  { label: ' In Stock', key: 'inStock' },
+  { label: 'Exclusive', key: 'isExclusive' },
+  { label: 'Best Sellers', key: 'isBestSeller' },
+  { label: 'Featured', key: 'isFeatured' },
+  { label: 'Seasonal', key: 'isSeasonal' },
+  { label: 'In Stock', key: 'inStock' },
 ]
 
 const LIMIT = 12
 
 export default function Shop() {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -39,13 +38,11 @@ export default function Shop() {
   const [fruitTypes, setFruitTypes] = useState([])
   const [selectedFruitType, setSelectedFruitType] = useState('')
 
-  // Debounce search
   useEffect(() => {
     const t = setTimeout(() => { setDebouncedSearch(search); setPage(1) }, 350)
     return () => clearTimeout(t)
   }, [search])
 
-  // Read URL params
   useEffect(() => {
     if (searchParams.get('isExclusive')) setActiveFilter('isExclusive')
   }, [])
@@ -63,7 +60,6 @@ export default function Shop() {
     if (activeFilter) params.set(activeFilter, 'true')
     if (selectedCategory) params.set('category', selectedCategory)
     if (selectedFruitType) params.set('fruitType', selectedFruitType)
-
     api.get(`/products?${params}`)
       .then((r) => { setProducts(r.data.items || []); setTotal(r.data.total || 0) })
       .catch(() => {})
@@ -71,123 +67,137 @@ export default function Shop() {
   }, [page, debouncedSearch, sortBy, activeFilter, selectedCategory, selectedFruitType])
 
   const totalPages = Math.ceil(total / LIMIT)
+  const hasFilters = activeFilter || selectedCategory || selectedFruitType || debouncedSearch
 
   return (
-    <div className="min-h-screen bg-surface">
-      {/* Hero Section */}
-      <section
-        className="relative text-white overflow-hidden"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 pt-20 pb-28 flex items-center justify-center min-h-[400px]">
-          <div className="max-w-2xl space-y-4 text-center">
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-              <p className="text-xs uppercase tracking-widest text-orange-400 font-semibold mb-3">Our Collection</p>
-              <h1 className="font-display text-4xl sm:text-5xl font-black text-white mb-3">Fresh Tropical Fruits</h1>
-              <p className="text-white/80">
-                {total > 0 ? `${total} premium fruits available` : 'Browse our curated selection of premium fruits'}
+    <div className="min-h-screen bg-cream">
+
+      {/* Page header */}
+      <div className="pt-28 pb-0 border-b border-stone">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="grid lg:grid-cols-2 gap-8 items-end pb-14"
+          >
+            <div>
+              <p className="label text-clay/60 mb-3">TropiPine / Shop</p>
+              <h1 className="font-display text-5xl sm:text-6xl font-normal text-bark leading-none">
+                {activeFilter === 'isExclusive'
+                  ? <>Exclusive<br /><em>Varieties</em></>
+                  : activeFilter === 'isBestSeller'
+                  ? <>Best<br /><em>Sellers</em></>
+                  : <>Fresh<br /><em>Tropical Fruits</em></>
+                }
+              </h1>
+            </div>
+            <div className="lg:pb-1">
+              <p className="text-clay text-sm leading-relaxed max-w-sm">
+                {activeFilter === 'isExclusive'
+                  ? 'Limited-quantity varieties sourced from the finest orchards in Rajshahi. Available while stocks last.'
+                  : 'Handpicked mangoes, lychees, pineapples and seasonal fruits — delivered fresh within 24 hours of harvest.'}
               </p>
-            </motion.div>
-          </div>
+              {total > 0 && (
+                <p className="label text-clay/50 text-[10px] mt-4">{total} products available</p>
+              )}
+            </div>
+          </motion.div>
         </div>
-      </section>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10">
-
-        {/* Search + Sort Bar */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-8">
-          <div className="flex-1 relative">
-            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-faint text-sm" />
+      <div className="max-w-7xl mx-auto px-8 sm:px-10 py-12">
+        {/* Toolbar */}
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-8">
+          <div className="relative w-full sm:w-80">
+            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 text-clay/50" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
             <input
               type="text"
-              placeholder="Search by name, variety, origin"
+              placeholder="Search by name or variety"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-11 pr-10 py-3 rounded-2xl border border-edge bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"
+              className="w-full pl-10 pr-8 py-2.5 bg-white border border-stone text-sm text-bark placeholder-clay/40 focus:outline-none focus:border-bark transition-colors"
             />
             {search && (
-              <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-faint hover:text-ink">
-                <FaTimes size={13} />
+              <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-clay/50 hover:text-bark">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             )}
           </div>
           <select
             value={sortBy}
             onChange={(e) => { setSortBy(e.target.value); setPage(1) }}
-            className="px-4 py-3 rounded-2xl border border-edge bg-white text-sm text-ink-muted focus:outline-none focus:ring-2 focus:ring-brand-400 cursor-pointer"
+            className="px-4 py-2.5 bg-white border border-stone text-sm text-clay focus:outline-none focus:border-bark transition-colors cursor-pointer"
           >
-            {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
+            {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
         </div>
 
-        {/* Quick Filters */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        {/* Filters */}
+        <div className="flex flex-wrap gap-1.5 mb-10">
           {QUICK_FILTERS.map((f) => (
             <button
               key={f.label}
               onClick={() => { setActiveFilter(f.key); setPage(1) }}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+              className={`px-4 py-1.5 text-xs tracking-wide border transition-colors ${
                 activeFilter === f.key
-                  ? 'gradient-brand text-white border-transparent shadow-brand'
-                  : 'bg-white text-ink-muted border-edge hover:border-brand-300 hover:text-ink'
+                  ? 'bg-bark text-white border-bark'
+                  : 'bg-transparent text-clay border-stone hover:border-bark hover:text-bark'
               }`}
             >
               {f.label}
             </button>
           ))}
           {fruitTypes.map((item) => {
-            const typeValue = typeof item === 'string' ? item : item.type;
-            const count = typeof item === 'string' ? null : item.count;
+            const typeValue = typeof item === 'string' ? item : item.type
             return (
               <button
                 key={typeValue}
                 onClick={() => { setSelectedFruitType(selectedFruitType === typeValue ? '' : typeValue); setPage(1) }}
-                className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+                className={`px-4 py-1.5 text-xs tracking-wide border transition-colors ${
                   selectedFruitType === typeValue
-                    ? 'bg-ink text-white border-transparent'
-                    : 'bg-white text-ink-muted border-edge hover:border-brand-300 hover:text-ink'
+                    ? 'bg-grove text-white border-grove'
+                    : 'bg-transparent text-clay border-stone hover:border-bark hover:text-bark'
                 }`}
               >
-                {typeValue}{count ? ` (${count})` : ''}
+                {typeValue}
               </button>
-            );
+            )
           })}
           {categories.slice(0, 5).map((cat) => (
             <button
               key={cat.id}
               onClick={() => { setSelectedCategory(selectedCategory === cat.slug ? '' : cat.slug); setPage(1) }}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 ${
+              className={`px-4 py-1.5 text-xs tracking-wide border transition-colors ${
                 selectedCategory === cat.slug
-                  ? 'bg-ink text-white border-transparent'
-                  : 'bg-white text-ink-muted border-edge hover:border-ink-muted hover:text-ink'
+                  ? 'bg-earth text-white border-earth'
+                  : 'bg-transparent text-clay border-stone hover:border-bark hover:text-bark'
               }`}
             >
               {cat.name}
             </button>
           ))}
+          {hasFilters && (
+            <button
+              onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSelectedFruitType(''); setSortBy('') }}
+              className="px-4 py-1.5 text-xs text-clay/60 hover:text-bark underline underline-offset-2 transition-colors"
+            >
+              Clear all
+            </button>
+          )}
         </div>
 
         {/* Grid */}
         <AnimatePresence mode="wait">
           {loading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-white rounded-3xl border border-edge overflow-hidden animate-pulse">
-                  <div className="h-56 bg-edge" />
-                  <div className="p-5 space-y-3">
-                    <div className="h-3 bg-edge rounded-full w-1/4" />
-                    <div className="h-5 bg-edge rounded-full w-3/5" />
-                    <div className="h-3 bg-edge rounded-full w-2/5" />
-                    <div className="h-10 bg-edge rounded-2xl mt-4" />
-                  </div>
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-[4/5] bg-bone mb-3" />
+                  <div className="h-3 bg-stone rounded w-1/3 mb-2" />
+                  <div className="h-4 bg-stone rounded w-2/3" />
                 </div>
               ))}
             </div>
@@ -196,12 +206,12 @@ export default function Shop() {
               key={`${page}-${activeFilter}-${debouncedSearch}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8"
             >
               {products.map((product, i) => (
                 <motion.div
                   key={product.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
                 >
@@ -214,14 +224,13 @@ export default function Shop() {
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-24 bg-white rounded-3xl border border-edge"
+              className="text-center py-24 border border-stone"
             >
-              <p className="text-5xl mb-4"></p>
-              <h3 className="font-display text-xl font-bold text-ink mb-2">No products found</h3>
-              <p className="text-ink-muted text-sm mb-6">Try clearing your filters or searching for something else.</p>
+              <h3 className="font-display text-2xl font-normal text-bark mb-2">No products found</h3>
+              <p className="text-clay text-sm mb-6">Try adjusting your filters.</p>
               <button
                 onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSelectedFruitType(''); setSortBy('') }}
-                className="px-6 py-3 rounded-2xl gradient-brand text-white text-sm font-semibold shadow-brand hover:opacity-90 transition"
+                className="label text-bark border-b border-bark pb-0.5 hover:text-grove hover:border-grove transition-colors"
               >
                 Clear All Filters
               </button>
@@ -231,41 +240,52 @@ export default function Shop() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-14">
+          <div className="flex items-center justify-center gap-1.5 mt-16">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-5 py-2.5 rounded-xl border border-edge bg-white text-sm font-medium text-ink-muted hover:text-ink hover:border-brand-300 disabled:opacity-40 transition"
+              className="w-9 h-9 border border-stone text-clay text-sm hover:border-bark hover:text-bark disabled:opacity-30 transition-colors"
             >
-               Previous
+              ←
             </button>
-            <div className="flex gap-1.5">
-              {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                const p = i + 1
-                return (
-                  <button
-                    key={p}
-                    onClick={() => setPage(p)}
-                    className={`w-10 h-10 rounded-xl text-sm font-medium transition-all ${
-                      page === p
-                        ? 'gradient-brand text-white shadow-brand'
-                        : 'bg-white border border-edge text-ink-muted hover:border-brand-300'
-                    }`}
-                  >
-                    {p}
-                  </button>
-                )
-              })}
-            </div>
+            {[...Array(Math.min(5, totalPages))].map((_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i + 1)}
+                className={`w-9 h-9 text-sm font-medium transition-colors border ${
+                  page === i + 1
+                    ? 'bg-bark text-white border-bark'
+                    : 'border-stone text-clay hover:border-bark hover:text-bark'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page >= totalPages}
-              className="px-5 py-2.5 rounded-xl border border-edge bg-white text-sm font-medium text-ink-muted hover:text-ink hover:border-brand-300 disabled:opacity-40 transition"
+              className="w-9 h-9 border border-stone text-clay text-sm hover:border-bark hover:text-bark disabled:opacity-30 transition-colors"
             >
-              Next
+              →
             </button>
           </div>
         )}
+      </div>
+
+      {/* ─── BOTTOM PROMISE STRIP ─── */}
+      <div className="border-t border-stone bg-white">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-10 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+          {[
+            { title: 'Farm to Door', sub: 'Harvested within 24 hrs of your order' },
+            { title: 'Free Delivery', sub: 'On all orders over ৳2,000 in Dhaka' },
+            { title: 'Easy Returns', sub: 'Not satisfied? Full refund, no questions' },
+          ].map((item) => (
+            <div key={item.title} className="space-y-1">
+              <p className="text-sm font-medium text-bark">{item.title}</p>
+              <p className="text-xs text-clay/60">{item.sub}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

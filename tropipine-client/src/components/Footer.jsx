@@ -1,73 +1,107 @@
 import { Link } from 'react-router-dom'
-import { FaFacebook, FaTwitter, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa'
+
+const SocialIcon = ({ href, label, children }) => (
+  <a
+    href={href}
+    aria-label={label}
+    className="w-9 h-9 border border-white/15 flex items-center justify-center text-white/45 hover:text-white hover:border-white/50 transition-all duration-200"
+  >
+    {children}
+  </a>
+)
 
 export default function Footer() {
   return (
-    <footer className="bg-dark text-white mt-24">
-      {/* Top strip */}
-      <div className="border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-8 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+    <footer className="bg-bark text-white">
+
+      {/* Top promise strip */}
+      <div className="border-b border-white/8">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { label: 'Farm Direct', sub: 'No cold storage. No middlemen.' },
+            { label: 'Same-Day Dhaka', sub: 'Order before noon for today.' },
+            { label: 'Verified Quality', sub: 'Every batch graded by hand.' },
+            { label: 'Secure Checkout', sub: 'bKash · Nagad · Rocket · COD' },
+          ].map((item) => (
+            <div key={item.label} className="flex items-start gap-3">
+              <div className="w-px h-8 bg-grove mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-medium text-white/80">{item.label}</p>
+                <p className="text-[11px] text-white/35 mt-0.5">{item.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Newsletter strip */}
+      <div className="border-b border-white/8">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
-            <h3 className="font-display text-2xl font-bold mb-2">Stay fresh with TropiPine</h3>
-            <p className="text-white/50 text-sm">Seasonal deals and harvest updates, straight to your inbox.</p>
+            <p className="label text-white/35 mb-2">Newsletter</p>
+            <p className="font-display text-xl font-normal text-white">Harvest updates, seasonal drops & offers</p>
           </div>
-          <form className="flex w-full max-w-sm gap-2" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex w-full max-w-sm" onSubmit={(e) => e.preventDefault()}>
             <input
               type="email"
-              placeholder="you@email.com"
-              className="flex-1 px-4 py-2.5 rounded-xl bg-white/10 border border-white/15 text-sm placeholder-white/40 focus:outline-none focus:border-brand-400 transition"
+              placeholder="your@email.com"
+              className="flex-1 px-4 py-2.5 bg-white/6 border border-white/12 text-sm text-white placeholder-white/25 focus:outline-none focus:border-white/35 transition-colors"
             />
             <button
               type="submit"
-              className="px-4 py-2.5 rounded-xl gradient-brand text-white text-sm font-semibold shadow-brand hover:opacity-90 transition flex items-center gap-1.5"
+              className="px-6 py-2.5 bg-white text-bark text-xs font-medium tracking-widest uppercase hover:bg-cream transition-colors flex-shrink-0"
             >
-              Subscribe <FaArrowRight size={11} />
+              Subscribe
             </button>
           </form>
         </div>
       </div>
 
       {/* Main grid */}
-      <div className="max-w-7xl mx-auto px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="max-w-7xl mx-auto px-8 sm:px-10 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-12">
+
         {/* Brand */}
         <div>
-          <div className="mb-5">
-            <span className="font-display text-lg font-bold">TropiPine</span>
-          </div>
-          <p className="text-white/50 text-sm leading-relaxed mb-6">
-            Premium tropical fruits delivered farm-fresh to your door. Handpicked. Always fresh.
+          <p className="font-display text-2xl font-normal italic text-white mb-4">TropiPine</p>
+          <p className="text-[11px] text-white/35 tracking-widest uppercase mb-5">Est. 2019 · Dhaka, Bangladesh</p>
+          <p className="text-sm leading-relaxed text-white/40 mb-7">
+            Premium tropical fruits, sourced directly from Bangladeshi farms and delivered to your door.
           </p>
-          <div className="flex gap-3">
-            {[
-              { icon: <FaFacebook size={15} />, href: '#' },
-              { icon: <FaTwitter size={15} />, href: '#' },
-              { icon: <FaInstagram size={15} />, href: '#' },
-            ].map((s, i) => (
-              <a
-                key={i}
-                href={s.href}
-                className="w-9 h-9 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:border-brand-400 hover:bg-brand-500/20 transition-all duration-200"
-              >
-                {s.icon}
-              </a>
-            ))}
+          <div className="flex gap-2">
+            <SocialIcon href="#" label="Facebook">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </SocialIcon>
+            <SocialIcon href="#" label="Instagram">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+              </svg>
+            </SocialIcon>
+            <SocialIcon href="#" label="Twitter / X">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </SocialIcon>
           </div>
         </div>
 
-        {/* Quick Links */}
+        {/* Explore */}
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Explore</h4>
-          <ul className="space-y-3">
+          <p className="label text-white/30 mb-6">Explore</p>
+          <ul className="space-y-3.5">
             {[
-              { name: 'Home', to: '/' },
-              { name: 'Shop All Fruits', to: '/shop' },
+              { name: 'All Fruits', to: '/shop' },
+              { name: 'Exclusive Varieties', to: '/shop?isExclusive=true' },
+              { name: 'Best Sellers', to: '/shop?isBestSeller=true' },
               { name: 'Gallery', to: '/gallery' },
               { name: 'About Us', to: '/about' },
               { name: 'Contact', to: '/contact' },
-              { name: 'Track Order', to: '/track-order' },
             ].map((l) => (
               <li key={l.name}>
-                <Link to={l.to} className="text-sm text-white/55 hover:text-white transition-colors duration-200">
+                <Link to={l.to} className="text-sm text-white/40 hover:text-white/80 transition-colors">
                   {l.name}
                 </Link>
               </li>
@@ -77,16 +111,17 @@ export default function Footer() {
 
         {/* Account */}
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Account</h4>
-          <ul className="space-y-3">
+          <p className="label text-white/30 mb-6">Account</p>
+          <ul className="space-y-3.5">
             {[
               { name: 'My Profile', to: '/profile' },
               { name: 'My Orders', to: '/orders' },
+              { name: 'Track Order', to: '/track-order' },
               { name: 'Wishlist', to: '/wishlist' },
               { name: 'Cart', to: '/cart' },
             ].map((l) => (
               <li key={l.name}>
-                <Link to={l.to} className="text-sm text-white/55 hover:text-white transition-colors duration-200">
+                <Link to={l.to} className="text-sm text-white/40 hover:text-white/80 transition-colors">
                   {l.name}
                 </Link>
               </li>
@@ -96,34 +131,44 @@ export default function Footer() {
 
         {/* Contact */}
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-white/40 font-semibold mb-5">Contact</h4>
-          <ul className="space-y-4">
-            <li className="flex items-start gap-3 text-sm text-white/55">
-              <FaPhone className="mt-0.5 shrink-0 text-brand-400" size={13} />
-              <span>+880 1234-567890</span>
+          <p className="label text-white/30 mb-6">Contact</p>
+          <ul className="space-y-5 text-sm">
+            <li>
+              <p className="label text-white/20 text-[10px] mb-1">Phone</p>
+              <p className="text-white/45">+880 1234-567890</p>
             </li>
-            <li className="flex items-start gap-3 text-sm text-white/55">
-              <FaEnvelope className="mt-0.5 shrink-0 text-brand-400" size={13} />
-              <span>info@tropipine.com</span>
+            <li>
+              <p className="label text-white/20 text-[10px] mb-1">Email</p>
+              <p className="text-white/45">info@tropipine.com</p>
             </li>
-            <li className="flex items-start gap-3 text-sm text-white/55">
-              <FaMapMarkerAlt className="mt-0.5 shrink-0 text-brand-400" size={13} />
-              <span>Dhaka, Bangladesh</span>
+            <li>
+              <p className="label text-white/20 text-[10px] mb-1">Location</p>
+              <p className="text-white/45">Dhaka, Bangladesh</p>
+            </li>
+            <li className="pt-2">
+              <Link
+                to="/contact"
+                className="label text-[10px] text-white/40 border-b border-white/20 hover:text-white/70 hover:border-white/50 transition-colors pb-0.5"
+              >
+                Send a message →
+              </Link>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/35">
-          <span> {new Date().getFullYear()} TropiPine. All rights reserved.</span>
-          <div className="flex gap-5">
-            <a href="#" className="hover:text-white/70 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white/70 transition-colors">Terms of Service</a>
+      {/* Bottom */}
+      <div className="border-t border-white/8">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/22">
+          <span>© {new Date().getFullYear()} TropiPine. All rights reserved.</span>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-white/45 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white/45 transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-white/45 transition-colors">Refund Policy</a>
           </div>
         </div>
       </div>
+
     </footer>
   )
 }

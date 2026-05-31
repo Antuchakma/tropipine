@@ -4,6 +4,16 @@ import { useNavigate } from 'react-router-dom'
 import { logout } from '../store/slices/authSlice'
 import api from '../services/api'
 
+const STATUS_STYLE = {
+  CONFIRMED:  'bg-mist text-grove border-sage/30',
+  DELIVERED:  'bg-mist text-grove border-sage/30',
+  PENDING:    'bg-bone text-clay border-stone',
+  PROCESSING: 'bg-bone text-earth border-stone',
+  SHIPPED:    'bg-bone text-earth border-stone',
+  CANCELLED:  'bg-white text-clay/60 border-stone',
+  REFUNDED:   'bg-white text-clay/60 border-stone',
+}
+
 export default function Profile() {
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
@@ -13,171 +23,160 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState('orders')
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login')
-      return
-    }
-
-    const fetchOrders = async () => {
-      try {
-        const response = await api.get('/orders/my-orders')
-        setOrders(response.data.orders || response.data.items || [])
-      } catch (error) {
-        console.error('Failed to fetch orders:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchOrders()
+    if (!user) { navigate('/login'); return }
+    api.get('/orders/my-orders')
+      .then((r) => setOrders(r.data.orders || r.data.items || []))
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [user, navigate])
 
-  const handleLogout = () => {
-    dispatch(logout())
-    navigate('/')
-  }
+  const handleLogout = () => { dispatch(logout()); navigate('/') }
 
-  if (!user) {
-    return null
-  }
+  if (!user) return null
 
   return (
-    <div className="min-h-screen bg-surface py-8 sm:py-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
+    <div className="min-h-screen bg-cream pt-20">
+      <div className="max-w-6xl mx-auto px-8 sm:px-10 py-14">
+        <div className="grid lg:grid-cols-4 gap-10">
+
           {/* Sidebar */}
-          <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 h-fit">
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 gradient-brand text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+          <aside className="lg:col-span-1 space-y-4">
+            <div className="bg-white border border-stone p-8">
+              {/* Avatar */}
+              <div className="w-12 h-12 bg-bark flex items-center justify-center text-white font-display text-2xl font-normal mb-5">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
-              <h2 className="text-xl font-black text-ink">{user.name}</h2>
-              <p className="text-ink-muted text-sm mt-1">{user.email}</p>
-              {user.phone && <p className="text-ink-muted text-sm">{user.phone}</p>}
+              <h2 className="font-display text-2xl font-normal text-bark leading-none">{user.name}</h2>
+              <p className="text-clay text-xs mt-1">{user.email}</p>
+              {user.phone && <p className="text-clay/60 text-xs mt-0.5">{user.phone}</p>}
+
+              <nav className="space-y-0 border-t border-stone pt-5 mt-6">
+                {[
+                  { key: 'orders', label: 'My Orders' },
+                  { key: 'account', label: 'Account Settings' },
+                ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setActiveTab(tab.key)}
+                    className={`w-full text-left py-3 border-b border-stone last:border-b-0 text-sm transition-colors flex items-center justify-between ${
+                      activeTab === tab.key ? 'text-bark font-medium' : 'text-clay hover:text-bark'
+                    }`}
+                  >
+                    {tab.label}
+                    {activeTab === tab.key && <span className="w-1 h-1 rounded-full bg-grove" />}
+                  </button>
+                ))}
+              </nav>
             </div>
 
-            <nav className="space-y-2 border-t border-edge pt-6">
-              <button
-                onClick={() => navigate('/orders')}
-                className="w-full text-left px-4 py-3 rounded-2xl transition font-medium text-ink-muted hover:bg-surface"
-              >
-                My Orders
-              </button>
-              <button
-                onClick={() => setActiveTab('account')}
-                className={`w-full text-left px-4 py-3 rounded-2xl transition font-medium ${
-                  activeTab === 'account'
-                    ? 'bg-warm text-white'
-                    : 'text-ink-muted hover:bg-surface'
-                }`}
-              >
-                Account Settings
-              </button>
-            </nav>
+            {/* Order summary stats */}
+            <div className="bg-white border border-stone p-6 space-y-0 divide-y divide-stone">
+              <div className="pb-4">
+                <p className="label text-clay/50 text-[10px] mb-1">Total Orders</p>
+                <p className="font-display text-2xl font-normal text-bark">{orders.length}</p>
+              </div>
+              <div className="pt-4 pb-4">
+                <p className="label text-clay/50 text-[10px] mb-1">Total Spent</p>
+                <p className="font-display text-2xl font-normal text-bark">
+                  ৳{orders.reduce((s, o) => s + (o.totalAmount || 0), 0).toFixed(0)}
+                </p>
+              </div>
+              <div className="pt-4">
+                <p className="label text-clay/50 text-[10px] mb-1">Member Since</p>
+                <p className="text-sm text-bark">
+                  {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Active'}
+                </p>
+              </div>
+            </div>
 
             <button
               onClick={handleLogout}
-              className="w-full mt-8 gradient-brand text-white py-3 rounded-2xl hover:opacity-90 font-semibold transition"
+              className="w-full py-3 border border-stone text-clay text-sm hover:border-bark hover:text-bark transition-colors"
             >
-              Logout
+              Sign Out
             </button>
-          </div>
+          </aside>
 
-          {/* Main Content */}
-          <div className="md:col-span-2">
-            {/* Orders Tab */}
+          {/* Main */}
+          <div className="lg:col-span-3">
             {activeTab === 'orders' && (
               <div>
-                <h1 className="text-4xl font-black mb-8 text-ink">My Orders</h1>
+                <h1 className="font-display text-3xl font-normal text-bark mb-8">My Orders</h1>
 
                 {loading ? (
-                  <div className="text-center py-12">Loading...</div>
+                  <div className="space-y-3">
+                    {[...Array(3)].map((_, i) => (
+                      <div key={i} className="h-24 bg-white border border-stone animate-pulse" />
+                    ))}
+                  </div>
                 ) : orders.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     {orders.map((order) => (
-                      <div key={order.id} className="bg-white border border-warm-border rounded-3xl shadow-sm p-6 hover:shadow-md transition">
-                        <div className="flex justify-between items-start mb-4">
+                      <div
+                        key={order.id}
+                        className="bg-white border border-stone p-6 hover:border-clay transition-colors cursor-pointer group"
+                        onClick={() => navigate(`/orders/${order.id}`)}
+                      >
+                        <div className="flex items-start justify-between">
                           <div>
-                            <p className="text-sm text-warm font-medium">{order.orderNumber || `Order #${order.id.slice(0, 8)}`}</p>
-                            <p className="font-black text-2xl text-ink">
-                              {order.totalAmount?.toFixed(2)}
+                            <p className="label text-clay/60 mb-1">
+                              {order.orderNumber || `#${order.id.slice(0, 8)}`}
+                            </p>
+                            <p className="font-display text-xl font-normal text-bark">
+                              ৳{order.totalAmount?.toFixed(2)}
+                            </p>
+                            <p className="text-xs text-clay mt-1">
+                              {order.address?.street || order.address}
+                              {order.address?.city ? `, ${order.address.city}` : ''}
+                            </p>
+                            <p className="text-xs text-clay/60 mt-0.5">
+                              {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                             </p>
                           </div>
-                          <span
-                            className={`px-4 py-2 rounded-full text-sm font-bold transition ${
-                              order.status === 'CONFIRMED'
-                                ? 'bg-warm text-white'
-                                : order.status === 'PENDING'
-                                ? 'bg-warm-surface text-warm border border-warm-border'
-                                : 'bg-warm-surface text-warm border border-warm-border'
-                            }`}
-                          >
-                            {order.status}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className={`label px-3 py-1 border text-[10px] ${STATUS_STYLE[order.status] || STATUS_STYLE.PENDING}`}>
+                              {order.status}
+                            </span>
+                            <svg className="text-clay/30 group-hover:text-clay transition-colors" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                          </div>
                         </div>
-
-                            <p className="text-sm text-warm-muted mb-2">
-                           {order.address?.street || order.address}{order.address?.city ? `, ${order.address.city}` : ''}
-                        </p>
-                        <p className="text-sm text-warm-muted mb-4">
-                          {new Date(order.createdAt).toLocaleDateString()}
-                        </p>
-
-                        <button
-                          onClick={() => navigate(`/orders/${order.id}`)}
-                          className="text-warm hover:text-warm-dark font-bold text-sm"
-                        >
-                          View Details
-                        </button>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 bg-white border border-warm-border rounded-3xl">
-                    <p className="text-warm-muted">No orders yet</p>
+                  <div className="bg-white border border-stone p-12 text-center">
+                    <p className="font-display text-2xl font-normal text-bark mb-2">No orders yet</p>
+                    <p className="text-clay text-sm mb-6">Your order history will appear here.</p>
+                    <button
+                      onClick={() => navigate('/shop')}
+                      className="px-8 py-3 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors"
+                    >
+                      Start Shopping
+                    </button>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Account Settings Tab */}
             {activeTab === 'account' && (
               <div>
-                <h1 className="text-3xl sm:text-4xl font-black mb-8 text-ink">Account Settings</h1>
-
-                <div className="bg-white rounded-3xl border border-edge shadow-card p-5 sm:p-6 space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-ink-muted mb-1">
-                      Name
-                    </label>
-                    <p className="text-ink">{user.name}</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-ink-muted mb-1">
-                      Email
-                    </label>
-                    <p className="text-ink">{user.email}</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-ink-muted mb-1">
-                      Phone
-                    </label>
-                    <p className="text-ink">{user.phone || 'Not set'}</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-ink-muted mb-1">
-                      Role
-                    </label>
-                    <p className="text-ink">{user.role}</p>
-                  </div>
-
-                  <div className="bg-brand-50 p-4 rounded-2xl mt-6 border border-brand-100">
-                    <p className="text-sm text-brand-700">
-                       Contact support to update your profile information
-                    </p>
+                <h1 className="font-display text-3xl font-normal text-bark mb-8">Account Details</h1>
+                <div className="bg-white border border-stone p-8 space-y-5">
+                  {[
+                    { label: 'Full Name', value: user.name },
+                    { label: 'Email', value: user.email },
+                    { label: 'Phone', value: user.phone || 'Not set' },
+                    { label: 'Role', value: user.role },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="grid sm:grid-cols-3 gap-2 py-3 border-b border-stone last:border-b-0">
+                      <p className="label text-clay/60">{label}</p>
+                      <p className="sm:col-span-2 text-sm text-bark">{value}</p>
+                    </div>
+                  ))}
+                  <div className="bg-mist border border-sage/20 px-5 py-4 mt-4">
+                    <p className="text-sm text-grove">To update your profile information, please contact our support team.</p>
                   </div>
                 </div>
               </div>

@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from '../store/slices/cartSlice'
 import api from '../services/api'
 
+const steps = ['Delivery', 'Payment']
+
 export default function Checkout() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -13,9 +15,7 @@ export default function Checkout() {
 
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
-    address: '',
-    city: '',
-    postalCode: '',
+    address: '', city: '', postalCode: '',
     phone: user?.phone || '',
     specialNote: '',
     paymentMethod: 'bkash',
@@ -31,7 +31,7 @@ export default function Checkout() {
   const [orderItemsSnapshot, setOrderItemsSnapshot] = useState([])
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const discount = couponDiscount  // absolute dollar amount from backend
+  const discount = couponDiscount
   const selectedZone = deliveryZones.find((z) => z.id === formData.deliveryZoneId)
   const deliveryCharge = selectedZone ? parseFloat(selectedZone.charge) : 0
   const total = subtotal - discount + deliveryCharge
@@ -44,42 +44,25 @@ export default function Checkout() {
       setPaymentConfig(paymentRes.data.data || {})
       const zones = deliveryRes.data.data || []
       setDeliveryZones(zones)
-      if (zones.length > 0 && !formData.deliveryZoneId) {
-        setFormData((prev) => ({ ...prev, deliveryZoneId: zones[0].id }))
-      }
+      if (zones.length > 0) setFormData((p) => ({ ...p, deliveryZoneId: zones[0].id }))
     })
   }, [])
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const handleCreateOrder = async () => {
-    if (!formData.address || !formData.city) {
-      setError('Please fill in all address fields')
-      return
-    }
-
+    if (!formData.address || !formData.city) { setError('Please fill in all address fields'); return }
     setLoading(true)
     setError('')
-
     try {
       const response = await api.post('/orders', {
-        items: cart.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-        couponCode,
-        deliveryZoneId: formData.deliveryZoneId,
-        deliveryCharge,
+        items: cart.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+        couponCode, deliveryZoneId: formData.deliveryZoneId, deliveryCharge,
         paymentMethod: formData.paymentMethod,
         specialNote: formData.specialNote,
-        address: formData.address,
-        city: formData.city,
-        postalCode: formData.postalCode,
-        phone: formData.phone,
+        address: formData.address, city: formData.city,
+        postalCode: formData.postalCode, phone: formData.phone,
       })
-
       const order = response.data.order
       setOrderCreated(order)
       setOrderItemsSnapshot([...cart])
@@ -94,15 +77,12 @@ export default function Checkout() {
 
   const handleSubmitPayment = async () => {
     if (!orderCreated) return
-
     if (!formData.senderNumber || !formData.transactionId) {
       setError('Please enter your mobile wallet number and transaction ID')
       return
     }
-
     setLoading(true)
     setError('')
-
     try {
       await api.post('/payments/submit', {
         orderId: orderCreated.id,
@@ -111,7 +91,6 @@ export default function Checkout() {
         transactionId: formData.transactionId,
         amount: orderCreated.totalAmount ?? total,
       })
-
       navigate(`/orders/${orderCreated.id}`)
     } catch (err) {
       setError(err.response?.data?.message || 'Payment submission failed')
@@ -121,146 +100,191 @@ export default function Checkout() {
   }
 
   const displayItems = orderCreated ? orderItemsSnapshot : cart
-  const merchantNumber =
-    paymentConfig[`${formData.paymentMethod}_number`] ||
-    paymentConfig.bkash_number ||
-    '01XXXXXXXXX'
+  const merchantNumber = paymentConfig[`${formData.paymentMethod}_number`] || paymentConfig.bkash_number || '01XXXXXXXXX'
 
   if (cart.length === 0 && !orderCreated) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
+      <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-display text-4xl font-black mb-4 text-ink">Your cart is empty</h1>
-          <button onClick={() => navigate('/shop')} className="gradient-brand text-white px-8 py-3 rounded-2xl font-semibold shadow-brand">
-            Continue Shopping
+          <h1 className="font-display text-3xl font-normal text-bark mb-4">Your cart is empty</h1>
+          <button onClick={() => navigate('/shop')} className="px-8 py-3 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors">
+            Browse Shop
           </button>
         </div>
       </div>
     )
   }
 
+  const inputClass = "w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
+  const labelClass = "label text-clay/70 block mb-2"
+
   return (
-    <div className="min-h-screen bg-surface py-8 sm:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <h1 className="font-display text-3xl sm:text-4xl font-black mb-8 sm:mb-10 text-ink">Checkout</h1>
+    <div className="min-h-screen bg-cream pt-20">
+      <div className="max-w-7xl mx-auto px-8 sm:px-10 py-14">
 
-        <div className="grid md:grid-cols-3 gap-5 sm:gap-8">
-          <div className="md:col-span-2">
+        {/* Header + Step indicator */}
+        <div className="mb-10">
+          <p className="label text-clay/60 mb-2">Checkout</p>
+          <h1 className="font-display text-4xl font-normal text-bark mb-6">Complete Your Order</h1>
+          <div className="flex items-center gap-3">
+            {steps.map((s, i) => (
+              <div key={s} className="flex items-center gap-3">
+                <div className={`w-6 h-6 flex items-center justify-center text-xs font-medium transition-colors ${
+                  i + 1 === step ? 'bg-bark text-white' : i + 1 < step ? 'bg-grove text-white' : 'bg-stone text-clay'
+                }`}>
+                  {i + 1 < step ? '✓' : i + 1}
+                </div>
+                <span className={`text-xs tracking-wide ${i + 1 === step ? 'text-bark' : 'text-clay/60'}`}>{s}</span>
+                {i < steps.length - 1 && <div className="w-12 h-px bg-stone" />}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2">
+            {error && (
+              <div className="border border-stone bg-white px-4 py-3 mb-5">
+                <p className="text-sm text-earth">{error}</p>
+              </div>
+            )}
+
             {step === 1 && (
-              <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 space-y-5">
-                <h2 className="text-2xl font-black text-ink">Delivery Address</h2>
-
-                {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl text-sm">{error}</div>
-                )}
+              <div className="bg-white border border-stone p-8 space-y-5">
+                <h2 className="font-display text-2xl font-normal text-bark mb-1">Delivery Details</h2>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-muted mb-2">Full Address</label>
-                  <textarea name="address" value={formData.address} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" rows="3" placeholder="Enter your full address" />
+                  <label className={labelClass}>Full Address</label>
+                  <textarea name="address" value={formData.address} onChange={handleChange} className={inputClass} rows="3" placeholder="House, road, area" />
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-ink-muted mb-2">City</label>
-                    <input type="text" name="city" value={formData.city} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" placeholder="Dhaka" />
+                    <label className={labelClass}>City</label>
+                    <input type="text" name="city" value={formData.city} onChange={handleChange} className={inputClass} placeholder="Dhaka" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-ink-muted mb-2">Postal Code</label>
-                    <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" placeholder="1000" />
+                    <label className={labelClass}>Postal Code</label>
+                    <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} className={inputClass} placeholder="1000" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-muted mb-2">Phone</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" placeholder="+880 1234-567890" />
+                  <label className={labelClass}>Phone</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={inputClass} placeholder="+880 1234-567890" />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-muted mb-2">Delivery Zone</label>
-                  <select name="deliveryZoneId" value={formData.deliveryZoneId} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400">
+                  <label className={labelClass}>Delivery Zone</label>
+                  <select name="deliveryZoneId" value={formData.deliveryZoneId} onChange={handleChange} className={inputClass}>
                     {deliveryZones.map((zone) => (
-                      <option key={zone.id} value={zone.id}>
-                        {zone.name} ({zone.charge} - {zone.estimatedDays} days)
-                      </option>
+                      <option key={zone.id} value={zone.id}>{zone.name} — ৳{zone.charge} · {zone.estimatedDays}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-muted mb-2">Special Notes</label>
-                  <textarea name="specialNote" value={formData.specialNote} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl bg-surface focus:outline-none focus:ring-2 focus:ring-brand-400" rows="2" />
+                  <label className={labelClass}>Special Notes</label>
+                  <textarea name="specialNote" value={formData.specialNote} onChange={handleChange} className={inputClass} rows="2" placeholder="Optional" />
                 </div>
 
-                <h2 className="text-lg font-bold text-ink mt-4">Payment Method</h2>
-                <div className="space-y-3 bg-surface border border-edge rounded-2xl p-4">
-                  {['bkash', 'nagad', 'rocket'].map((method) => (
-                    <label key={method} className="flex items-center gap-3 cursor-pointer">
-                      <input type="radio" name="paymentMethod" value={method} checked={formData.paymentMethod === method} onChange={handleChange} className="w-4 h-4 accent-brand-500" />
-                      <span className="text-sm font-medium text-ink-muted uppercase">{method}</span>
-                    </label>
-                  ))}
+                <div>
+                  <label className={labelClass}>Payment Method</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['bkash', 'nagad', 'rocket'].map((method) => (
+                      <label
+                        key={method}
+                        className={`flex items-center justify-center py-3 border cursor-pointer transition-colors ${
+                          formData.paymentMethod === method ? 'border-bark bg-cream' : 'border-stone hover:border-clay'
+                        }`}
+                      >
+                        <input type="radio" name="paymentMethod" value={method} checked={formData.paymentMethod === method} onChange={handleChange} className="sr-only" />
+                        <span className="text-xs font-medium text-bark uppercase tracking-widest">{method}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
-                <button onClick={handleCreateOrder} disabled={loading} className="w-full gradient-brand text-white py-4 rounded-2xl font-semibold mt-4 disabled:opacity-50 shadow-brand">
-                  {loading ? 'Creating Order...' : 'Continue to Payment'}
+                <button
+                  onClick={handleCreateOrder}
+                  disabled={loading}
+                  className="w-full py-3.5 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors disabled:opacity-50"
+                >
+                  {loading ? 'Creating Order…' : 'Continue to Payment'}
                 </button>
               </div>
             )}
 
             {step === 2 && orderCreated && (
-              <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 space-y-5">
-                <h2 className="text-2xl font-black text-ink">Complete Payment</h2>
-                <p className="text-brand-600 font-semibold">Order {orderCreated.orderNumber} created  pay {(orderCreated.totalAmount ?? total).toFixed(2)}</p>
-
-                {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl text-sm">{error}</div>
-                )}
-
-                <div className="bg-surface border border-edge rounded-2xl p-5 text-sm space-y-2">
-                  <p className="font-bold text-ink">Send payment to ({formData.paymentMethod})</p>
-                  <p className="text-ink-muted">Merchant number: <span className="font-mono font-bold text-ink">{merchantNumber}</span></p>
-                  <p className="text-ink-muted">Amount: <span className="font-bold text-ink">{(orderCreated.totalAmount ?? total).toFixed(2)}</span></p>
+              <div className="bg-white border border-stone p-8 space-y-5">
+                <h2 className="font-display text-2xl font-normal text-bark">Complete Payment</h2>
+                <div className="bg-mist border border-sage/20 px-5 py-4 text-sm">
+                  <p className="font-medium text-grove mb-1">Order {orderCreated.orderNumber} confirmed</p>
+                  <p className="text-clay">Send <span className="font-medium text-bark font-display">৳{(orderCreated.totalAmount ?? total).toFixed(2)}</span> via {formData.paymentMethod}</p>
+                  <p className="text-clay mt-1">Merchant number: <span className="font-mono font-medium text-bark tracking-widest">{merchantNumber}</span></p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-muted mb-2">Your {formData.paymentMethod} number *</label>
-                  <input type="tel" name="senderNumber" value={formData.senderNumber} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-400" placeholder="01XXXXXXXXX" />
+                  <label className={labelClass}>Your {formData.paymentMethod} Number</label>
+                  <input type="tel" name="senderNumber" value={formData.senderNumber} onChange={handleChange} className={inputClass} placeholder="01XXXXXXXXX" />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-muted mb-2">Transaction ID *</label>
-                  <input type="text" name="transactionId" value={formData.transactionId} onChange={handleChange} className="w-full px-4 py-3 border border-edge rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-400" placeholder="From your payment app" />
+                  <label className={labelClass}>Transaction ID</label>
+                  <input type="text" name="transactionId" value={formData.transactionId} onChange={handleChange} className={inputClass} placeholder="From your payment app" />
                 </div>
 
-                <button onClick={handleSubmitPayment} disabled={loading} className="w-full gradient-brand text-white py-4 rounded-2xl font-semibold disabled:opacity-50 shadow-brand">
-                  {loading ? 'Submitting...' : 'Complete Payment'}
+                <button
+                  onClick={handleSubmitPayment}
+                  disabled={loading}
+                  className="w-full py-3.5 bg-grove text-white text-sm font-medium tracking-wide hover:bg-sage transition-colors disabled:opacity-50"
+                >
+                  {loading ? 'Submitting…' : 'Confirm Payment'}
                 </button>
               </div>
             )}
           </div>
 
-          <div className="bg-white border border-edge rounded-3xl shadow-card p-5 sm:p-8 h-fit">
-            <h2 className="text-2xl font-black mb-6 text-ink">Order Total</h2>
-            <div className="space-y-3 mb-6 text-ink-muted">
-              <div className="flex justify-between"><span>Subtotal:</span><span className="font-semibold text-ink">{subtotal.toFixed(2)}</span></div>
-              {couponCode && discount > 0 && (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-                  <p className="text-xs text-green-700 font-semibold mb-2">Coupon Applied: {couponCode}</p>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-green-700">Discount:</span>
-                    <span className="font-bold text-green-600 text-lg">-{discount.toFixed(2)}</span>
-                  </div>
+          {/* Summary */}
+          <div className="bg-white border border-stone p-8 h-fit">
+            <h2 className="font-display text-xl font-normal text-bark mb-6">Order Summary</h2>
+            <div className="space-y-2 mb-5">
+              {displayItems.map((item) => (
+                <div key={item.productId} className="flex justify-between text-sm">
+                  <span className="text-clay">{item.name} × {item.quantity}</span>
+                  <span className="text-bark">৳{(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+            <div className="border-t border-stone pt-4 space-y-2">
+              <div className="flex justify-between text-sm text-clay">
+                <span>Subtotal</span><span>৳{subtotal.toFixed(2)}</span>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-sm text-grove">
+                  <span>Coupon ({couponCode})</span><span>−৳{discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between"><span>Delivery Charge:</span><span className="font-semibold text-ink">{deliveryCharge.toFixed(2)}</span></div>
-              <div className="flex justify-between text-lg font-black border-t border-edge pt-3 text-ink">
-                <span>Total Amount:</span><span className="text-brand-600">{(orderCreated?.totalAmount ?? total).toFixed(2)}</span>
+              <div className="flex justify-between text-sm text-clay">
+                <span>Delivery</span><span>৳{deliveryCharge.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between items-baseline border-t border-stone pt-3">
+                <span className="text-sm font-medium text-bark">Total</span>
+                <span className="font-display text-xl text-bark">৳{(orderCreated?.totalAmount ?? total).toFixed(2)}</span>
               </div>
             </div>
-            <div className="bg-surface border border-edge p-5 rounded-2xl text-sm space-y-2">
-              <p className="font-bold text-ink">Order Items ({displayItems.length})</p>
-              {displayItems.map((item) => (
-                <p key={item.productId} className="text-ink-muted">{item.name} x {item.quantity}</p>
+
+            {/* Trust */}
+            <div className="border-t border-stone pt-5 mt-4 space-y-2.5">
+              {[
+                'Your order is placed only after payment verification',
+                'Freshness guaranteed on all produce',
+                'Need help? Contact us at info@tropipine.com',
+              ].map((t) => (
+                <div key={t} className="flex items-start gap-2">
+                  <div className="w-1 h-1 rounded-full bg-grove mt-1.5 flex-shrink-0" />
+                  <p className="text-[11px] text-clay/60 leading-relaxed">{t}</p>
+                </div>
               ))}
             </div>
           </div>
