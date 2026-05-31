@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card, tableHead, tableCell, tableRow } from '../utils/ui';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow, toastStyle, tableHeadStyle } from '../utils/ui';
 
 const FRUIT_TYPES = ['Mango', 'Pineapple', 'Lychee', 'Jackfruit', 'Papaya', 'Banana', 'Seasonal', 'Other'];
 
@@ -119,7 +119,7 @@ export default function ProductsPage() {
 
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
-            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}
@@ -271,7 +271,7 @@ export default function ProductsPage() {
         {/* Table */}
         <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead style={{ background: '#FAFAF8' }}>
+            <thead style={tableHeadStyle}>
               <tr>
                 {['Product', 'Type / Variant', 'Price', 'Stock', 'Flags', ''].map((h) => (
                   <th key={h} className={tableHead}>{h}</th>

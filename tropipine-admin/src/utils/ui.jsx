@@ -1,3 +1,5 @@
+import { colors, gradients, shadows } from '../theme.js';
+
 export const btn = {
   primary:
     'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-150 hover:opacity-90 active:scale-95',
@@ -10,35 +12,44 @@ export const btn = {
 };
 
 export const brandGrad = {
-  background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)',
-  boxShadow: '0 4px 14px rgba(255,92,46,0.35)',
+  background: gradients.brand,
+  boxShadow:  shadows.brand,
 };
 
 export const card = 'bg-white rounded-2xl border border-edge';
 
-export const orderStatusColors = {
-  PENDING:    { bg: '#FFFBEB', text: '#B45309', border: '#FDE68A' },
-  CONFIRMED:  { bg: '#EEF2FF', text: '#4338CA', border: '#C7D2FE' },
-  PROCESSING: { bg: '#F5F3FF', text: '#7C3AED', border: '#DDD6FE' },
-  SHIPPED:    { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE' },
-  DELIVERED:  { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
-  CANCELLED:  { bg: '#FEF2F2', text: '#B91C1C', border: '#FEE2E2' },
-  REFUNDED:   { bg: '#F8FAFC', text: '#475569', border: '#E2E8F0' },
+export const orderStatusColors = colors.status;
+export const paymentStatusColors = colors.payment;
+
+export const toastStyle = (type) =>
+  type === 'error' ? { background: colors.error.DEFAULT } : brandGrad;
+
+export const activeTabStyle = {
+  background:  gradients.brand,
+  boxShadow:   shadows.brand,
+  color:       colors.white,
+  borderColor: 'transparent',
 };
 
-export const paymentStatusColors = {
-  UNPAID:               { bg: '#FEF2F2', text: '#B91C1C', border: '#FEE2E2' },
-  PENDING_VERIFICATION: { bg: '#FFFBEB', text: '#B45309', border: '#FDE68A' },
-  PAID:                 { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
-  FAILED:               { bg: '#FEF2F2', text: '#B91C1C', border: '#FEE2E2' },
-  REFUNDED:             { bg: '#F8FAFC', text: '#475569', border: '#E2E8F0' },
+export const inactiveTabStyle = {
+  background:  colors.white,
+  color:       colors.ink.muted,
+  borderColor: colors.edge,
 };
 
-export function StatusBadge({ label, colors }) {
+export const disabledBtnStyle = {
+  background: colors.edge,
+  color:      colors.ink.faint,
+  boxShadow:  'none',
+};
+
+export const tableHeadStyle = { background: colors.surfaceAlt };
+
+export function StatusBadge({ label, colors: c }) {
   return (
     <span
       className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border"
-      style={{ background: colors.bg, color: colors.text, borderColor: colors.border }}
+      style={{ background: c.bg, color: c.text, borderColor: c.border }}
     >
       {label}
     </span>

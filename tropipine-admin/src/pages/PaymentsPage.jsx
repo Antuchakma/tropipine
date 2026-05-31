@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card, tableHead, tableCell, tableRow, paymentStatusColors } from '../utils/ui';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow, paymentStatusColors, toastStyle, activeTabStyle, inactiveTabStyle, tableHeadStyle } from '../utils/ui';
 
 const STATUS_TABS = [
   { value: 'PENDING_VERIFICATION', label: 'Pending' },
@@ -11,7 +11,7 @@ const STATUS_TABS = [
 ];
 
 function Badge({ label }) {
-  const c = paymentStatusColors[label] || { bg: '#F8FAFC', text: '#475569', border: '#E2E8F0' };
+  const c = paymentStatusColors[label] || paymentStatusColors.REFUNDED;
   return (
     <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border" style={{ background: c.bg, color: c.text, borderColor: c.border }}>
       {label}
@@ -72,7 +72,7 @@ export default function PaymentsPage() {
 
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
-            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}
@@ -91,7 +91,7 @@ export default function PaymentsPage() {
                 key={t.value}
                 onClick={() => setStatusFilter(t.value)}
                 className="px-4 py-2 rounded-xl text-xs font-semibold border transition-all"
-                style={statusFilter === t.value ? { ...brandGrad, color: '#fff', borderColor: 'transparent' } : { background: '#fff', color: '#6B7280', borderColor: '#E8E8F0' }}
+                style={statusFilter === t.value ? activeTabStyle : inactiveTabStyle}
               >
                 {t.label}
               </button>
@@ -159,7 +159,7 @@ export default function PaymentsPage() {
         {/* Table */}
         <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead style={{ background: '#FAFAF8' }}>
+            <thead style={tableHeadStyle}>
               <tr>
                 {['Order #', 'Customer', 'Method', 'Amount', 'Transaction ID', 'Status', 'Date', ''].map((h) => (
                   <th key={h} className={tableHead}>{h}</th>

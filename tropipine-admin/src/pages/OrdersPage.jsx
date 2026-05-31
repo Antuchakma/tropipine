@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card, tableHead, tableCell, tableRow, orderStatusColors, paymentStatusColors } from '../utils/ui';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow, orderStatusColors, paymentStatusColors, toastStyle, activeTabStyle, inactiveTabStyle, disabledBtnStyle, tableHeadStyle } from '../utils/ui';
 
 const STATUSES = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 
 function Badge({ label, colorMap }) {
-  const c = colorMap[label] || { bg: '#F8FAFC', text: '#475569', border: '#E2E8F0' };
+  const c = colorMap[label] || colorMap.REFUNDED;
   return (
     <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border" style={{ background: c.bg, color: c.text, borderColor: c.border }}>
       {label}
@@ -57,8 +57,8 @@ export default function OrdersPage() {
 
         {/* Toast */}
         {toast && (
-          <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl transition-all ${toast.type === 'error' ? 'bg-red-600' : ''}`}
-            style={toast.type !== 'error' ? brandGrad : {}}>
+          <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}
@@ -74,7 +74,7 @@ export default function OrdersPage() {
             <button
               onClick={() => setStatusFilter('')}
               className="px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all"
-              style={statusFilter === '' ? { ...brandGrad, color: '#fff', borderColor: 'transparent' } : { background: '#fff', color: '#6B7280', borderColor: '#E8E8F0' }}
+              style={statusFilter === '' ? activeTabStyle : inactiveTabStyle}
             >
               All
             </button>
@@ -83,7 +83,7 @@ export default function OrdersPage() {
                 key={s}
                 onClick={() => setStatusFilter(s)}
                 className="px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all"
-                style={statusFilter === s ? { ...brandGrad, color: '#fff', borderColor: 'transparent' } : { background: '#fff', color: '#6B7280', borderColor: '#E8E8F0' }}
+                style={statusFilter === s ? activeTabStyle : inactiveTabStyle}
               >
                 {s}
               </button>
@@ -147,7 +147,7 @@ export default function OrdersPage() {
                     onClick={handleStatusUpdate}
                     disabled={!newStatus}
                     className={btn.primary}
-                    style={newStatus ? brandGrad : { background: '#E8E8F0', color: '#9CA3AF', boxShadow: 'none' }}
+                    style={newStatus ? brandGrad : disabledBtnStyle}
                   >
                     Update
                   </button>
@@ -160,7 +160,7 @@ export default function OrdersPage() {
         {/* Table */}
         <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead style={{ background: '#FAFAF8' }}>
+            <thead style={tableHeadStyle}>
               <tr>
                 {['Order #', 'Customer', 'Total', 'Payment', 'Status', 'Date', ''].map((h) => (
                   <th key={h} className={tableHead}>{h}</th>

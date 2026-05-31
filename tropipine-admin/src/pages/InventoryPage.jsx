@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card, tableHead, tableCell, tableRow } from '../utils/ui';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow, toastStyle, activeTabStyle, inactiveTabStyle, tableHeadStyle } from '../utils/ui';
+import { colors } from '../theme.js';
 
 export default function InventoryPage() {
   const [products, setProducts] = useState([]);
@@ -57,7 +58,7 @@ export default function InventoryPage() {
 
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
-            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}
@@ -70,9 +71,9 @@ export default function InventoryPage() {
         {/* Summary */}
         <div className="grid sm:grid-cols-3 gap-5">
           {[
-            { label: 'Total Products', val: products.length, icon: 'P', bg: '#F0F5FF', color: '#4F46E5' },
-            { label: 'Low Stock', val: lowCount, icon: 'L', bg: '#FFFBEB', color: '#D97706' },
-            { label: 'Out of Stock', val: outCount, icon: 'X', bg: '#FEF2F2', color: '#DC2626' },
+            { label: 'Total Products', val: products.length, icon: 'P', ...colors.stat.total   },
+            { label: 'Low Stock',      val: lowCount,        icon: 'L', ...colors.stat.warning },
+            { label: 'Out of Stock',   val: outCount,        icon: 'X', ...colors.stat.error   },
           ].map((s) => (
             <div key={s.label} className={`${card} p-6 flex items-center gap-4`}>
               <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl" style={{ background: s.bg }}>
@@ -93,7 +94,7 @@ export default function InventoryPage() {
               key={t.key}
               onClick={() => setFilter(t.key)}
               className="px-4 py-2 rounded-xl text-sm font-semibold border transition-all"
-              style={filter === t.key ? { ...brandGrad, color: '#fff', borderColor: 'transparent' } : { background: '#fff', color: '#6B7280', borderColor: '#E8E8F0' }}
+              style={filter === t.key ? activeTabStyle : inactiveTabStyle}
             >
               {t.label} ({t.count})
             </button>
@@ -102,7 +103,7 @@ export default function InventoryPage() {
 
         <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead style={{ background: '#FAFAF8' }}>
+            <thead style={tableHeadStyle}>
               <tr>
                 {['Product', 'Category', 'Unit', 'Stock', 'Threshold', 'Status', 'Update'].map((h) => (
                   <th key={h} className={tableHead}>{h}</th>
@@ -124,7 +125,7 @@ export default function InventoryPage() {
                 const isOut = p.stockQty <= 0;
                 const isLow = !isOut && p.stockQty <= p.lowStockThreshold;
                 return (
-                  <tr key={p.id} className={tableRow} style={isOut ? { background: '#FEF2F2' } : isLow ? { background: '#FFFDF0' } : {}}>
+                  <tr key={p.id} className={tableRow} style={isOut ? { background: colors.stat.error.bg } : isLow ? { background: colors.stat.lowRow } : {}}>
                     <td className={`${tableCell} font-semibold text-ink`}>{p.name}</td>
                     <td className={`${tableCell} text-ink-muted`}>{p.category?.name || ''}</td>
                     <td className={tableCell}>{p.unit}</td>

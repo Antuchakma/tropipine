@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
 import { Link } from 'react-router-dom';
+import { colors, gradients, shadows } from '../theme.js';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
-
-const CHART_COLORS = ['#FF5C2E', '#6366F1', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6'];
 
 const statCards = (s) => [
   {
@@ -15,24 +14,22 @@ const statCards = (s) => [
     value: `৳${(s.todayRevenue || 0).toLocaleString()}`,
     sub: 'Paid orders today',
     icon: '$',
-    color: '#FF5C2E',
-    bg: '#FFF3EE',
+    ...colors.stat.brand,
   },
   {
     label: 'Total Orders',
     value: s.totalOrders || 0,
     sub: 'All time',
     icon: '#',
-    color: '#6366F1',
-    bg: '#EEF2FF',
+    ...colors.stat.orders,
   },
   {
     label: 'Pending Payments',
     value: s.pendingPayments || 0,
     sub: 'Need verification',
     icon: 'C',
-    color: s.pendingPayments > 0 ? '#EF4444' : '#10B981',
-    bg: s.pendingPayments > 0 ? '#FEF2F2' : '#F0FDF4',
+    color: s.pendingPayments > 0 ? colors.stat.error.color : colors.stat.ok.color,
+    bg:    s.pendingPayments > 0 ? colors.stat.error.bg    : colors.stat.ok.bg,
     urgent: s.pendingPayments > 0,
     link: '/payments',
   },
@@ -41,11 +38,12 @@ const statCards = (s) => [
     value: s.lowStockProducts || 0,
     sub: 'Below threshold',
     icon: 'S',
-    color: '#F59E0B',
-    bg: '#FFFBEB',
+    ...colors.stat.warning,
     link: '/inventory',
   },
 ];
+
+const tooltipStyle = { borderRadius: '12px', border: `1px solid ${colors.edge}`, boxShadow: shadows.tooltip };
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({});
@@ -85,7 +83,7 @@ export default function DashboardPage() {
           <Link
             to="/orders"
             className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90"
-            style={{ background: 'linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%)', boxShadow: '0 4px 14px rgba(255,92,46,0.35)' }}
+            style={{ background: gradients.brand, boxShadow: shadows.brand }}
           >
             View All Orders
           </Link>
@@ -136,7 +134,6 @@ export default function DashboardPage() {
 
             {/* Charts Row 1 */}
             <div className="grid lg:grid-cols-5 gap-5">
-              {/* Revenue Line Chart - wide */}
               <div className="lg:col-span-3 bg-white rounded-2xl border border-edge p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -150,18 +147,15 @@ export default function DashboardPage() {
                     <LineChart data={revenueData}>
                       <defs>
                         <linearGradient id="revenueGrad" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stopColor="#FF5C2E" />
-                          <stop offset="100%" stopColor="#FF8557" />
+                          <stop offset="0%" stopColor={colors.brand[500]} />
+                          <stop offset="100%" stopColor={colors.brand[400]} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F5" vertical={false} />
-                      <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
-                      <Tooltip
-                        contentStyle={{ borderRadius: '12px', border: '1px solid #E8E8F0', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}
-                        formatter={(v) => [`${v.toLocaleString()}`, 'Revenue']}
-                      />
-                      <Line type="monotone" dataKey="revenue" stroke="url(#revenueGrad)" strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: '#FF5C2E' }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={colors.chartGrid} vertical={false} />
+                      <XAxis dataKey="date" tick={{ fontSize: 11, fill: colors.ink.faint }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 11, fill: colors.ink.faint }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
+                      <Tooltip contentStyle={tooltipStyle} formatter={(v) => [`${v.toLocaleString()}`, 'Revenue']} />
+                      <Line type="monotone" dataKey="revenue" stroke="url(#revenueGrad)" strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: colors.brand[500] }} />
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
@@ -169,7 +163,6 @@ export default function DashboardPage() {
                 )}
               </div>
 
-              {/* Order Status Pie */}
               <div className="lg:col-span-2 bg-white rounded-2xl border border-edge p-6">
                 <h3 className="font-bold text-ink mb-1" style={{ fontFamily: 'var(--font-display)' }}>Order Status</h3>
                 <p className="text-xs text-ink-muted mb-4">Distribution of all orders</p>
@@ -178,10 +171,10 @@ export default function DashboardPage() {
                     <PieChart>
                       <Pie data={orderStatusData} cx="50%" cy="45%" outerRadius={75} innerRadius={45} dataKey="count" nameKey="name" paddingAngle={3}>
                         {orderStatusData.map((_, i) => (
-                          <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+                          <Cell key={i} fill={colors.chart[i % colors.chart.length]} />
                         ))}
                       </Pie>
-                      <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #E8E8F0' }} />
+                      <Tooltip contentStyle={tooltipStyle} />
                       <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '11px' }} />
                     </PieChart>
                   </ResponsiveContainer>
@@ -204,17 +197,14 @@ export default function DashboardPage() {
                   <BarChart data={topProducts} barSize={36}>
                     <defs>
                       <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#FF5C2E" />
-                        <stop offset="100%" stopColor="#FF8557" />
+                        <stop offset="0%" stopColor={colors.brand[500]} />
+                        <stop offset="100%" stopColor={colors.brand[400]} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F5" horizontal={true} vertical={false} />
-                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
-                    <Tooltip
-                      contentStyle={{ borderRadius: '12px', border: '1px solid #E8E8F0' }}
-                      formatter={(v) => [v, 'Units Sold']}
-                    />
+                    <CartesianGrid strokeDasharray="3 3" stroke={colors.chartGrid} horizontal={true} vertical={false} />
+                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: colors.ink.faint }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 11, fill: colors.ink.faint }} axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={tooltipStyle} formatter={(v) => [v, 'Units Sold']} />
                     <Bar dataKey="sales" fill="url(#barGrad)" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -226,9 +216,9 @@ export default function DashboardPage() {
             {/* Quick Actions */}
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { to: '/products', icon: '+', label: 'Add New Product', desc: 'Create a product listing', color: '#FF5C2E', bg: '#FFF3EE' },
-                { to: '/payments', icon: 'V', label: 'Verify Payments', desc: `${stats.pendingPayments || 0} pending`, color: '#6366F1', bg: '#EEF2FF' },
-                { to: '/inventory', icon: 'I', label: 'Manage Inventory', desc: `${stats.lowStockProducts || 0} low stock`, color: '#10B981', bg: '#F0FDF4' },
+                { to: '/products', icon: '+', label: 'Add New Product',   desc: 'Create a product listing',             ...colors.stat.brand  },
+                { to: '/payments', icon: 'V', label: 'Verify Payments',   desc: `${stats.pendingPayments || 0} pending`, ...colors.stat.orders },
+                { to: '/inventory', icon: 'I', label: 'Manage Inventory', desc: `${stats.lowStockProducts || 0} low stock`, bg: colors.stat.ok.bg, color: colors.stat.ok.color },
               ].map((a) => (
                 <Link
                   key={a.to}

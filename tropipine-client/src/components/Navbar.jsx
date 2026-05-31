@@ -55,7 +55,7 @@ export default function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-lg shadow-[0_1px_24px_rgba(24,16,10,0.08)]'
+          ? 'bg-white/95 backdrop-blur-lg shadow-navbar'
           : 'bg-white border-b border-edge'
       }`}
     >

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { loginSuccess, loginError } from '../store/slices/authSlice'
 import api from '../services/api'
 import GoogleSignIn from '../components/GoogleSignIn'
+import { gradients } from '../theme'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -63,7 +64,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-[#120f0d]">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-auth-bg">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -120,7 +121,7 @@ export default function Login() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="w-full"
           >
-            <div className="bg-[#1b1714] rounded-2xl shadow-2xl p-8 space-y-6 border border-white/10">
+            <div className="bg-auth-card rounded-2xl shadow-2xl p-8 space-y-6 border border-white/10">
 
               {/* Error */}
               {error && (
@@ -143,7 +144,7 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
 
@@ -163,7 +164,7 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     placeholder=""
-                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+                    className="w-full px-4 py-3 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
                   />
                 </div>
 
@@ -173,9 +174,7 @@ export default function Login() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-3 rounded-lg font-bold text-white text-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden group"
-                  style={{
-                    background: 'linear-gradient(135deg, rgb(255, 107, 53) 0%, rgb(255, 152, 0) 100%)',
-                  }}
+                  style={{ background: gradients.brandAlt }}
                 >
                   <span className="relative">
                     {loading ? 'Signing in...' : 'Sign In'}

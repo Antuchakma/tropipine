@@ -67,7 +67,7 @@ export default function Profile() {
                 onClick={() => setActiveTab('account')}
                 className={`w-full text-left px-4 py-3 rounded-2xl transition font-medium ${
                   activeTab === 'account'
-                    ? 'bg-[#8B5E3C] text-white'
+                    ? 'bg-warm text-white'
                     : 'text-ink-muted hover:bg-surface'
                 }`}
               >
@@ -88,44 +88,44 @@ export default function Profile() {
             {/* Orders Tab */}
             {activeTab === 'orders' && (
               <div>
-                <h1 className="text-4xl font-black mb-8 text-[#1E1E1E]">My Orders</h1>
+                <h1 className="text-4xl font-black mb-8 text-ink">My Orders</h1>
 
                 {loading ? (
                   <div className="text-center py-12">Loading...</div>
                 ) : orders.length > 0 ? (
                   <div className="space-y-4">
                     {orders.map((order) => (
-                      <div key={order.id} className="bg-white border border-[#E7DBCF] rounded-3xl shadow-sm p-6 hover:shadow-md transition">
+                      <div key={order.id} className="bg-white border border-warm-border rounded-3xl shadow-sm p-6 hover:shadow-md transition">
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <p className="text-sm text-[#8B5E3C] font-medium">{order.orderNumber || `Order #${order.id.slice(0, 8)}`}</p>
-                            <p className="font-black text-2xl text-[#1E1E1E]">
+                            <p className="text-sm text-warm font-medium">{order.orderNumber || `Order #${order.id.slice(0, 8)}`}</p>
+                            <p className="font-black text-2xl text-ink">
                               {order.totalAmount?.toFixed(2)}
                             </p>
                           </div>
                           <span
                             className={`px-4 py-2 rounded-full text-sm font-bold transition ${
                               order.status === 'CONFIRMED'
-                                ? 'bg-[#8B5E3C] text-white'
+                                ? 'bg-warm text-white'
                                 : order.status === 'PENDING'
-                                ? 'bg-[#F6F1E8] text-[#8B5E3C] border border-[#E7DBCF]'
-                                : 'bg-[#F6F1E8] text-[#8B5E3C] border border-[#E7DBCF]'
+                                ? 'bg-warm-surface text-warm border border-warm-border'
+                                : 'bg-warm-surface text-warm border border-warm-border'
                             }`}
                           >
                             {order.status}
                           </span>
                         </div>
 
-                            <p className="text-sm text-[#6A625B] mb-2">
+                            <p className="text-sm text-warm-muted mb-2">
                            {order.address?.street || order.address}{order.address?.city ? `, ${order.address.city}` : ''}
                         </p>
-                        <p className="text-sm text-[#6A625B] mb-4">
+                        <p className="text-sm text-warm-muted mb-4">
                           {new Date(order.createdAt).toLocaleDateString()}
                         </p>
 
                         <button
                           onClick={() => navigate(`/orders/${order.id}`)}
-                          className="text-[#8B5E3C] hover:text-[#7a4e2f] font-bold text-sm"
+                          className="text-warm hover:text-warm-dark font-bold text-sm"
                         >
                           View Details
                         </button>
@@ -133,8 +133,8 @@ export default function Profile() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 bg-white border border-[#E7DBCF] rounded-3xl">
-                    <p className="text-[#6A625B]">No orders yet</p>
+                  <div className="text-center py-12 bg-white border border-warm-border rounded-3xl">
+                    <p className="text-warm-muted">No orders yet</p>
                   </div>
                 )}
               </div>

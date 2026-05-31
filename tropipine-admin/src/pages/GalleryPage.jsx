@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card } from '../utils/ui';
+import { btn, brandGrad, card, toastStyle, disabledBtnStyle } from '../utils/ui';
 
 const CATEGORIES = ['FARM', 'PACKAGING', 'DELIVERY', 'STORAGE', 'TEAM'];
 
@@ -63,7 +63,7 @@ export default function GalleryPage() {
 
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
-            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}
@@ -121,7 +121,7 @@ export default function GalleryPage() {
               type="submit"
               disabled={uploading || !selectedFile}
               className={`${btn.primary} disabled:opacity-50`}
-              style={!uploading && selectedFile ? brandGrad : { background: '#E8E8F0', color: '#9CA3AF', boxShadow: 'none' }}
+              style={!uploading && selectedFile ? brandGrad : disabledBtnStyle}
             >
               {uploading ? 'Uploading...' : 'Upload Image'}
             </button>

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { loginSuccess } from '../store/slices/authSlice'
 import api from '../services/api'
 import GoogleSignIn from '../components/GoogleSignIn'
+import { gradients } from '../theme'
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -78,7 +79,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-[#120f0d]">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-auth-bg">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -135,7 +136,7 @@ export default function Register() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="w-full"
           >
-            <div className="bg-[#1b1714] rounded-2xl shadow-2xl p-8 space-y-5 border border-white/10">
+            <div className="bg-auth-card rounded-2xl shadow-2xl p-8 space-y-5 border border-white/10">
 
               {/* Header */}
               <div className="space-y-2">
@@ -167,7 +168,7 @@ export default function Register() {
                         setFormData({...formData, name: e.target.value + (nameParts[1] ? ' ' + nameParts[1] : '')})
                       }}
                       placeholder="John"
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                   <div>
@@ -180,7 +181,7 @@ export default function Register() {
                         setFormData({...formData, name: (nameParts[0] || '') + ' ' + e.target.value})
                       }}
                       placeholder="Doe"
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                 </div>
@@ -194,7 +195,7 @@ export default function Register() {
                     onChange={handleChange}
                     required
                     placeholder="you@example.com"
-                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                   />
                 </div>
 
@@ -207,7 +208,7 @@ export default function Register() {
                     onChange={handleChange}
                     required
                     placeholder="+880 1234567890"
-                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                   />
                 </div>
 
@@ -221,7 +222,7 @@ export default function Register() {
                       onChange={handleChange}
                       required
                       placeholder=""
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                   <div>
@@ -233,13 +234,13 @@ export default function Register() {
                       onChange={handleChange}
                       required
                       placeholder=""
-                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-[#26211d] text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
+                      className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-auth-input text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-sm"
                     />
                   </div>
                 </div>
 
                 <label className="flex items-start gap-2 cursor-pointer group pt-2">
-                  <div className="w-5 h-5 rounded border border-white/20 group-hover:border-brand-500 transition-colors bg-[#26211d] mt-0.5 flex-shrink-0"></div>
+                  <div className="w-5 h-5 rounded border border-white/20 group-hover:border-brand-500 transition-colors bg-auth-input mt-0.5 flex-shrink-0"></div>
                   <span className="text-xs text-white/65 leading-tight">I agree to TropiPine's terms and privacy policy</span>
                 </label>
 
@@ -249,9 +250,7 @@ export default function Register() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-3 rounded-lg font-bold text-white text-lg transition-all duration-300 disabled:opacity-50 relative overflow-hidden group pt-4"
-                  style={{
-                    background: 'linear-gradient(135deg, rgb(255, 107, 53) 0%, rgb(255, 152, 0) 100%)',
-                  }}
+                  style={{ background: gradients.brandAlt }}
                 >
                   <span className="relative">
                     {loading ? 'Creating account...' : 'Create Account'}

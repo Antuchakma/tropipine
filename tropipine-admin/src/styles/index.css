@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
+  /* Brand — mirrored from src/theme.js */
   --color-brand-50:  #FFF3EE;
   --color-brand-100: #FFE4D8;
   --color-brand-400: #FF8557;
@@ -9,14 +10,22 @@
   --color-brand-600: #E8421A;
   --color-brand-700: #C43010;
 
-  --color-sidebar:   #0D0F1C;
-  --color-surface:   #F4F5FA;
-  --color-edge:      #E8E8F0;
+  /* Layout surfaces */
+  --color-sidebar:       #121018;
+  --color-surface:       #F4F5FA;
+  --color-surface-alt:   #F4F4F7;
+  --color-surface-white: #FAFAFA;
+  --color-edge:          #E8E8F0;
 
+  /* Text / ink */
   --color-ink:       #18181B;
   --color-ink-muted: #6B7280;
   --color-ink-faint: #9CA3AF;
+  --color-ink-dim:   #52525B;
+  --color-ink-light: #71717A;
+  --color-ink-extra: #A0A0A8;
 
+  /* Fonts */
   --font-sans:    'Inter', system-ui, sans-serif;
   --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
 }

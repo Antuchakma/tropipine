@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card, tableHead, tableCell, tableRow } from '../utils/ui';
+import { btn, brandGrad, card, tableHead, tableCell, tableRow, toastStyle, tableHeadStyle } from '../utils/ui';
+import { colors } from '../theme.js';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState([]);
@@ -51,7 +52,7 @@ export default function CustomersPage() {
 
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
-            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}
@@ -133,7 +134,7 @@ export default function CustomersPage() {
               <button
                 onClick={() => handleToggleActive(selectedCustomer.id, selectedCustomer.isActive)}
                 className="w-full py-2.5 rounded-xl text-sm font-semibold border transition-all"
-                style={selectedCustomer.isActive ? { background: '#FEF2F2', color: '#DC2626', borderColor: '#FEE2E2' } : { ...brandGrad, borderColor: 'transparent', color: '#fff' }}
+                style={selectedCustomer.isActive ? { background: colors.error.bg, color: colors.error.DEFAULT, borderColor: colors.error.border } : { ...brandGrad, borderColor: 'transparent', color: colors.white }}
               >
                 {selectedCustomer.isActive ? 'Deactivate Account' : 'Activate Account'}
               </button>
@@ -143,7 +144,7 @@ export default function CustomersPage() {
 
         <div className={`${card} overflow-hidden`}>
           <table className="w-full">
-            <thead style={{ background: '#FAFAF8' }}>
+            <thead style={tableHeadStyle}>
               <tr>
                 {['Customer', 'Email', 'Orders', 'Status', 'Joined', ''].map((h) => (
                   <th key={h} className={tableHead}>{h}</th>

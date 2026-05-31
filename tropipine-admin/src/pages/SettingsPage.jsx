@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
-import { btn, brandGrad, card } from '../utils/ui';
+import { btn, brandGrad, card, toastStyle } from '../utils/ui';
+import { colors } from '../theme.js';
 
 export default function SettingsPage() {
   const [mfs, setMfs] = useState({ bkash_number: '', nagad_number: '', rocket_number: '' });
@@ -58,9 +59,9 @@ export default function SettingsPage() {
   };
 
   const mfsFields = [
-    { key: 'bkash_number', label: 'bKash Merchant Number', placeholder: '01XXXXXXXXX', color: '#E2136E' },
-    { key: 'nagad_number', label: 'Nagad Merchant Number', placeholder: '01XXXXXXXXX', color: '#F7A21B' },
-    { key: 'rocket_number', label: 'Rocket Merchant Number', placeholder: '01XXXXXXXXX', color: '#8332A4' },
+    { key: 'bkash_number',  label: 'bKash Merchant Number',   placeholder: '01XXXXXXXXX', color: colors.mfs.bkash  },
+    { key: 'nagad_number',  label: 'Nagad Merchant Number',   placeholder: '01XXXXXXXXX', color: colors.mfs.nagad  },
+    { key: 'rocket_number', label: 'Rocket Merchant Number',  placeholder: '01XXXXXXXXX', color: colors.mfs.rocket },
   ];
 
   return (
@@ -69,7 +70,7 @@ export default function SettingsPage() {
 
         {toast && (
           <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl text-sm font-semibold text-white shadow-xl"
-            style={toast.type !== 'error' ? brandGrad : { background: '#DC2626' }}>
+            style={toastStyle(toast.type)}>
             {toast.msg}
           </div>
         )}

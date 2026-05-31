@@ -94,7 +94,7 @@ export default function ReviewsPage() {
         {/* Toast */}
         {toast && (
           <div className={`fixed top-5 right-5 z-50 px-5 py-3 rounded-xl text-white text-sm font-medium shadow-lg transition-all ${
-            toast.type === 'error' ? 'bg-red-500' : 'bg-[#22c55e]'
+            toast.type === 'error' ? 'bg-red-500' : 'bg-green-500'
           }`}>
             {toast.msg}
           </div>
@@ -103,8 +103,8 @@ export default function ReviewsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-[#18181B]">Reviews</h1>
-            <p className="text-sm text-[#71717A] mt-0.5">{total} total review{total !== 1 ? 's' : ''}</p>
+            <h1 className="text-2xl font-bold text-ink">Reviews</h1>
+            <p className="text-sm text-ink-light mt-0.5">{total} total review{total !== 1 ? 's' : ''}</p>
           </div>
           {pendingCount > 0 && tab === '' && (
             <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
@@ -115,17 +115,17 @@ export default function ReviewsPage() {
         </div>
 
         {/* Table card */}
-        <div className="bg-white border border-[#E8E8F0] rounded-2xl overflow-hidden">
+        <div className="bg-white border border-edge rounded-2xl overflow-hidden">
           {/* Tabs */}
-          <div className="flex border-b border-[#E8E8F0]">
+          <div className="flex border-b border-edge">
             {TABS.map((t) => (
               <button
                 key={t.value}
                 onClick={() => handleTabChange(t.value)}
                 className={`px-6 py-3.5 text-sm font-medium transition-colors ${
                   tab === t.value
-                    ? 'text-[#FF5C2E] border-b-2 border-[#FF5C2E] -mb-px bg-orange-50/50'
-                    : 'text-[#71717A] hover:text-[#18181B] hover:bg-[#F4F4F7]'
+                    ? 'text-brand-500 border-b-2 border-brand-500 -mb-px bg-orange-50/50'
+                    : 'text-ink-light hover:text-ink hover:bg-surface-alt'
                 }`}
               >
                 {t.label}
@@ -136,21 +136,21 @@ export default function ReviewsPage() {
           {loading ? (
             <div className="p-8 space-y-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="animate-pulse h-16 bg-[#F4F4F7] rounded-xl" />
+                <div key={i} className="animate-pulse h-16 bg-surface-alt rounded-xl" />
               ))}
             </div>
           ) : reviews.length === 0 ? (
             <div className="py-16 text-center">
               <div className="text-4xl mb-3">⭐</div>
-              <p className="text-[#71717A] font-medium">No reviews found</p>
+              <p className="text-ink-light font-medium">No reviews found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-[#FAFAFA]">
+                  <tr className="bg-surface-white">
                     {['Product', 'Reviewer', 'Rating', 'Comment', 'Date', 'Status', 'Actions'].map((h) => (
-                      <th key={h} className="text-xs font-semibold text-[#71717A] uppercase tracking-wider px-5 py-3.5 text-left border-b border-[#E8E8F0]">
+                      <th key={h} className="text-xs font-semibold text-ink-light uppercase tracking-wider px-5 py-3.5 text-left border-b border-edge">
                         {h}
                       </th>
                     ))}
@@ -158,29 +158,29 @@ export default function ReviewsPage() {
                 </thead>
                 <tbody>
                   {reviews.map((review) => (
-                    <tr key={review.id} className="border-b border-[#F4F4F7] hover:bg-[#FAFAFA] transition-colors">
+                    <tr key={review.id} className="border-b border-surface-alt hover:bg-surface-white transition-colors">
                       <td className="px-5 py-4">
-                        <p className="text-sm font-semibold text-[#18181B] max-w-[140px] truncate">
+                        <p className="text-sm font-semibold text-ink max-w-[140px] truncate">
                           {review.product?.name || '—'}
                         </p>
                       </td>
                       <td className="px-5 py-4">
-                        <p className="text-sm font-medium text-[#18181B]">{review.user?.name || 'Unknown'}</p>
-                        <p className="text-xs text-[#71717A] truncate max-w-[120px]">{review.user?.email}</p>
+                        <p className="text-sm font-medium text-ink">{review.user?.name || 'Unknown'}</p>
+                        <p className="text-xs text-ink-light truncate max-w-[120px]">{review.user?.email}</p>
                       </td>
                       <td className="px-5 py-4">
                         <StarRow rating={review.rating} />
-                        <span className="text-xs text-[#71717A] mt-0.5 block">{review.rating}/5</span>
+                        <span className="text-xs text-ink-light mt-0.5 block">{review.rating}/5</span>
                       </td>
                       <td className="px-5 py-4 max-w-xs">
                         {review.comment ? (
-                          <p className="text-sm text-[#52525B] line-clamp-2">{review.comment}</p>
+                          <p className="text-sm text-ink-dim line-clamp-2">{review.comment}</p>
                         ) : (
-                          <span className="text-xs text-[#A0A0A8] italic">No comment</span>
+                          <span className="text-xs text-ink-extra italic">No comment</span>
                         )}
                       </td>
                       <td className="px-5 py-4 whitespace-nowrap">
-                        <span className="text-sm text-[#71717A]">
+                        <span className="text-sm text-ink-light">
                           {new Date(review.createdAt).toLocaleDateString('en-US', {
                             month: 'short', day: 'numeric', year: 'numeric',
                           })}
@@ -230,21 +230,21 @@ export default function ReviewsPage() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between">
-            <p className="text-sm text-[#71717A]">
+            <p className="text-sm text-ink-light">
               Showing {(page - 1) * limit + 1}–{Math.min(page * limit, total)} of {total}
             </p>
             <div className="flex gap-2">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-4 py-2 bg-white border border-[#E8E8F0] rounded-xl text-sm font-medium text-[#52525B] hover:bg-[#F4F4F7] disabled:opacity-40 transition"
+                className="px-4 py-2 bg-white border border-edge rounded-xl text-sm font-medium text-ink-dim hover:bg-surface-alt disabled:opacity-40 transition"
               >
                 Previous
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="px-4 py-2 bg-white border border-[#E8E8F0] rounded-xl text-sm font-medium text-[#52525B] hover:bg-[#F4F4F7] disabled:opacity-40 transition"
+                className="px-4 py-2 bg-white border border-edge rounded-xl text-sm font-medium text-ink-dim hover:bg-surface-alt disabled:opacity-40 transition"
               >
                 Next
               </button>

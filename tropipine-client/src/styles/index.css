@@ -5,14 +5,17 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.72);
+  }
+
   *, *::before, *::after { box-sizing: border-box; }
 
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: #FAFAF8;
-    color: #18100A;
+    @apply bg-surface text-ink;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -27,17 +30,17 @@
   .text-balance { text-wrap: balance; }
 
   .glass {
-    background: rgba(255,255,255,0.72);
+    background: var(--glass-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
   .gradient-brand {
-    background: linear-gradient(135deg, #FF5C2E 0%, #FF8557 100%);
+    background: linear-gradient(135deg, theme('colors.brand.500') 0%, theme('colors.brand.light') 100%);
   }
 
   .gradient-dark {
-    background: linear-gradient(135deg, #18100A 0%, #2D1A0F 100%);
+    background: linear-gradient(135deg, theme('colors.dark.deeper') 0%, theme('colors.dark.fade') 100%);
   }
 
   .line-clamp-2 {
