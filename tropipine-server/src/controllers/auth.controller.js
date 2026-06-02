@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { prisma } = require('../config/db');
+const { sendPasswordResetEmail } = require('../services/mailer');
 require('dotenv/config');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_in_production_to_strong_secret_32_chars';
@@ -186,8 +187,9 @@ async function forgotPassword(req, res) {
       data: { passwordResetToken: token, passwordResetExp: exp },
     });
 
-    // In production, send email here via nodemailer
-    // For dev: return token in response
+    // Send email (gracefully skips if SMTP not configured — logs link to console)
+    await sendPasswordResetEmail(user.email, token);
+
     const isDev = process.env.NODE_ENV !== 'production';
     res.json({
       message: 'If this email exists, a reset link has been sent',

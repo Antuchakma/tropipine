@@ -20,6 +20,8 @@ import MyOrders from './pages/MyOrders'
 import TrackOrder from './pages/TrackOrder'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
 import Wishlist from './pages/Wishlist'
 import Gallery from './pages/Gallery'
@@ -134,6 +136,22 @@ function App() {
             element={
               <Layout>
                 <Register />
+              </Layout>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <Layout>
+                <ForgotPassword />
+              </Layout>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <Layout>
+                <ResetPassword />
               </Layout>
             }
           />
