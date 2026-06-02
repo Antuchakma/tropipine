@@ -39,7 +39,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
             <p className="label text-white/35 mb-2">Newsletter</p>
-            <p className="font-display text-xl font-normal text-white">Harvest updates, seasonal drops & offers</p>
+            <p className="font-display text-xl font-semibold text-white">Harvest updates, seasonal drops & offers</p>
           </div>
           <form className="flex w-full max-w-sm" onSubmit={(e) => e.preventDefault()}>
             <input
@@ -62,7 +62,7 @@ export default function Footer() {
 
         {/* Brand */}
         <div>
-          <p className="font-display text-2xl font-normal italic text-white mb-4">TropiPine</p>
+          <p className="font-display text-2xl font-semibold italic text-white mb-4">TropiPine</p>
           <p className="text-[11px] text-white/35 tracking-widest uppercase mb-5">Est. 2019 · Dhaka, Bangladesh</p>
           <p className="text-sm leading-relaxed text-white/40 mb-7">
             Premium tropical fruits, sourced directly from Bangladeshi farms and delivered to your door.

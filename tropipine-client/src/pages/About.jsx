@@ -8,12 +8,6 @@ const inView = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] },
 })
 
-const stats = [
-  { value: '5+', label: 'Years of sourcing' },
-  { value: '12K+', label: 'Happy customers' },
-  { value: '30+', label: 'Partner farms' },
-  { value: '100%', label: 'Directly sourced' },
-]
 
 const values = [
   {
@@ -50,7 +44,7 @@ export default function About() {
     <div className="min-h-screen bg-cream">
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-[70vh] flex items-end pb-16 sm:pb-24 overflow-hidden">
+      <section className="relative min-h-screen flex items-center sm:items-end pb-0 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1400&auto=format&fit=crop"
@@ -59,7 +53,7 @@ export default function About() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-bark/85 via-bark/20 to-bark/10" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-8 sm:px-10 w-full">
+        <div className="relative max-w-7xl mx-auto px-8 sm:px-10 w-full pt-20 pb-12 sm:pb-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,7 +61,7 @@ export default function About() {
             className="max-w-2xl"
           >
             <p className="label text-white/65 mb-4">About TropiPine</p>
-            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-normal text-white leading-none mb-5">
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-semibold text-white leading-none mb-5">
               We take<br />
               <em>freshness</em><br />
               personally.
@@ -79,27 +73,12 @@ export default function About() {
         </div>
       </section>
 
-      {/* ─── STATS STRIP ─── */}
-      <section className="border-b border-stone bg-white">
-        <div className="max-w-7xl mx-auto px-8 sm:px-10 grid grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              {...inView(i * 0.07)}
-              className={`py-10 pr-8 ${i < stats.length - 1 ? 'border-b lg:border-b-0 lg:border-r border-stone' : ''}`}
-            >
-              <p className="font-display text-4xl font-normal text-bark mb-1">{s.value}</p>
-              <p className="label text-clay/60 text-[10px]">{s.label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
 
       {/* ─── STORY ─── */}
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24 grid lg:grid-cols-2 gap-16 items-center">
         <motion.div {...inView(0)}>
-          <p className="label text-clay/60 mb-4">Our Story</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-normal text-bark mb-6 leading-tight">
+          <p className="label text-grove mb-4">Our Story</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-semibold text-bark mb-6 leading-tight">
             Started with a<br />mango and a question.
           </h2>
           <p className="text-clay leading-relaxed mb-4">
@@ -111,7 +90,7 @@ export default function About() {
 
           {/* Pull quote */}
           <blockquote className="border-l-2 border-grove pl-6 py-2 mb-6">
-            <p className="font-display text-xl font-normal italic text-bark leading-snug">
+            <p className="font-display text-xl font-semibold italic text-bark leading-snug">
               "If we wouldn't eat it ourselves, it doesn't go out."
             </p>
             <cite className="label text-clay/50 text-[10px] not-italic mt-2 block">— Our quality standard, since day one</cite>
@@ -122,18 +101,13 @@ export default function About() {
           </Link>
         </motion.div>
 
-        <motion.div {...inView(0.15)} className="relative">
+        <motion.div {...inView(0.15)}>
           <div className="aspect-[4/5] overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1605027990121-cbae9e0642df?q=80&w=700&auto=format&fit=crop"
               alt="Mango harvest"
               className="w-full h-full object-cover"
             />
-          </div>
-          {/* Stat overlay card */}
-          <div className="absolute -bottom-6 -left-6 bg-white border border-stone p-6 hidden lg:block shadow-lift">
-            <p className="font-display text-3xl font-normal text-bark">30+</p>
-            <p className="label text-clay/60 text-[10px] mt-1">Partner farms across Bangladesh</p>
           </div>
         </motion.div>
       </section>
@@ -143,7 +117,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
           <motion.div {...inView(0)} className="mb-14">
             <p className="label text-white/35 mb-3">What we stand for</p>
-            <h2 className="font-display text-4xl sm:text-5xl font-normal text-white">Our principles</h2>
+            <h2 className="font-display text-4xl sm:text-5xl font-semibold text-white">Our principles</h2>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 gap-0 border-l border-t border-white/10">
@@ -154,7 +128,7 @@ export default function About() {
                 className="border-r border-b border-white/10 p-8 sm:p-10"
               >
                 <p className="font-mono text-xs text-white/25 mb-5">{v.number}</p>
-                <h3 className="font-display text-xl font-normal text-white mb-3">{v.title}</h3>
+                <h3 className="font-display text-xl font-semibold text-white mb-3">{v.title}</h3>
                 <p className="text-white/55 text-sm leading-relaxed">{v.desc}</p>
               </motion.div>
             ))}
@@ -165,8 +139,8 @@ export default function About() {
       {/* ─── SPECIALTY FRUITS ─── */}
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
         <motion.div {...inView(0)} className="mb-12">
-          <p className="label text-clay/60 mb-3">What we grow</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-normal text-bark">Our signature fruits</h2>
+          <p className="label text-grove mb-3">What we grow</p>
+          <h2 className="font-display text-4xl sm:text-5xl font-semibold text-bark">Our signature fruits</h2>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-0 border-l border-t border-stone">
@@ -177,7 +151,7 @@ export default function About() {
               className="border-r border-b border-stone p-7 group"
             >
               <div className="w-8 h-px bg-stone mb-5 group-hover:bg-grove group-hover:w-12 transition-all duration-300" />
-              <h3 className="font-display text-2xl font-normal text-bark mb-1">{f.name}</h3>
+              <h3 className="font-display text-2xl font-semibold text-bark mb-1">{f.name}</h3>
               <p className="label text-clay/60 text-[10px] mb-3">{f.origin}</p>
               <p className="text-sm text-clay leading-relaxed">{f.note}</p>
             </motion.div>
@@ -189,8 +163,8 @@ export default function About() {
       <section className="border-t border-b border-stone bg-white">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
           <motion.div {...inView(0)} className="text-center mb-14">
-            <p className="label text-clay/60 mb-3">How it works</p>
-            <h2 className="font-display text-4xl font-normal text-bark">From order to door</h2>
+            <p className="label text-grove mb-3">How it works</p>
+            <h2 className="font-display text-4xl font-semibold text-bark">From order to door</h2>
           </motion.div>
 
           <div className="grid sm:grid-cols-3 gap-0 border-l border-t border-stone">
@@ -204,8 +178,8 @@ export default function About() {
                 {...inView(i * 0.1)}
                 className="border-r border-b border-stone p-10"
               >
-                <p className="font-display text-4xl font-normal text-stone mb-6">{p.step}</p>
-                <h3 className="font-display text-xl font-normal text-bark mb-3">{p.title}</h3>
+                <p className="font-display text-4xl font-semibold text-stone mb-6">{p.step}</p>
+                <h3 className="font-display text-xl font-semibold text-bark mb-3">{p.title}</h3>
                 <p className="text-clay text-sm leading-relaxed">{p.desc}</p>
               </motion.div>
             ))}
@@ -220,7 +194,7 @@ export default function About() {
           className="bg-grove text-white px-12 py-20 text-center"
         >
           <p className="label text-white/40 mb-4">Ready to taste the difference?</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-normal mb-6">
+          <h2 className="font-display text-4xl sm:text-5xl font-semibold mb-6">
             Your first order.<br /><em>Unforgettable.</em>
           </h2>
           <div className="flex flex-wrap gap-3 justify-center">

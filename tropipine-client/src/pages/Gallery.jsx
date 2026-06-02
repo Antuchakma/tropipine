@@ -61,8 +61,8 @@ export default function Gallery() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="label text-clay/60 mb-3">TropiPine</p>
-            <h1 className="font-display text-5xl sm:text-6xl font-normal text-bark leading-none">
+            <p className="label text-grove mb-3">TropiPine</p>
+            <h1 className="font-display text-5xl sm:text-6xl font-semibold text-bark leading-none">
               From Farm<br />
               <em>to Frame</em>
             </h1>
@@ -135,7 +135,7 @@ export default function Gallery() {
         {/* ─── EMPTY ─── */}
         {!loading && filtered.length === 0 && (
           <div className="border border-stone bg-white p-16 text-center">
-            <p className="font-display text-2xl font-normal text-bark mb-2">No images yet</p>
+            <p className="font-display text-2xl font-semibold text-bark mb-2">No images yet</p>
             <p className="text-clay text-sm">This category hasn't been photographed yet.</p>
           </div>
         )}

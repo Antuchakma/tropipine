@@ -82,8 +82,8 @@ export default function Shop() {
             className="grid lg:grid-cols-2 gap-8 items-end pb-14"
           >
             <div>
-              <p className="label text-clay/60 mb-3">TropiPine / Shop</p>
-              <h1 className="font-display text-5xl sm:text-6xl font-normal text-bark leading-none">
+              <p className="label text-grove mb-3">TropiPine / Shop</p>
+              <h1 className="font-display text-5xl sm:text-6xl font-semibold text-bark leading-none">
                 {activeFilter === 'isExclusive'
                   ? <>Exclusive<br /><em>Varieties</em></>
                   : activeFilter === 'isBestSeller'
@@ -143,8 +143,8 @@ export default function Shop() {
               onClick={() => { setActiveFilter(f.key); setPage(1) }}
               className={`px-4 py-1.5 text-xs tracking-wide border transition-colors ${
                 activeFilter === f.key
-                  ? 'bg-bark text-white border-bark'
-                  : 'bg-transparent text-clay border-stone hover:border-bark hover:text-bark'
+                  ? 'bg-grove text-white border-grove font-semibold'
+                  : 'bg-transparent text-clay border-stone hover:border-grove hover:text-grove'
               }`}
             >
               {f.label}
@@ -192,12 +192,14 @@ export default function Shop() {
         {/* Grid */}
         <AnimatePresence mode="wait">
           {loading ? (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-stone">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="aspect-[4/5] bg-bone mb-3" />
-                  <div className="h-3 bg-stone rounded w-1/3 mb-2" />
-                  <div className="h-4 bg-stone rounded w-2/3" />
+                <div key={i} className="animate-pulse bg-white p-4">
+                  <div className="aspect-[4/5] bg-bone mb-4" />
+                  <div className="h-3 bg-bone rounded w-1/3 mb-2" />
+                  <div className="h-4 bg-bone rounded w-2/3 mb-2" />
+                  <div className="h-3 bg-bone rounded w-1/2 mb-4" />
+                  <div className="h-9 bg-bone rounded w-full" />
                 </div>
               ))}
             </div>
@@ -206,14 +208,15 @@ export default function Shop() {
               key={`${page}-${activeFilter}-${debouncedSearch}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-stone"
             >
               {products.map((product, i) => (
                 <motion.div
                   key={product.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.04 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="h-full"
                 >
                   <ProductCard product={product} />
                 </motion.div>
@@ -226,7 +229,7 @@ export default function Shop() {
               animate={{ opacity: 1 }}
               className="text-center py-24 border border-stone"
             >
-              <h3 className="font-display text-2xl font-normal text-bark mb-2">No products found</h3>
+              <h3 className="font-display text-2xl font-semibold text-bark mb-2">No products found</h3>
               <p className="text-clay text-sm mb-6">Try adjusting your filters.</p>
               <button
                 onClick={() => { setSearch(''); setActiveFilter(null); setSelectedCategory(''); setSelectedFruitType(''); setSortBy('') }}

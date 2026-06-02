@@ -28,7 +28,7 @@ export default function OrderTracking() {
   if (!order) {
     return (
       <div className="min-h-screen bg-cream flex flex-col items-center justify-center gap-4">
-        <p className="font-display text-2xl font-normal text-bark">Order not found</p>
+        <p className="font-display text-2xl font-semibold text-bark">Order not found</p>
         <button onClick={() => navigate('/orders')} className="label text-clay border-b border-stone hover:text-bark hover:border-bark transition-colors pb-0.5">
           Back to Orders
         </button>
@@ -46,8 +46,8 @@ export default function OrderTracking() {
           <button onClick={() => navigate('/orders')} className="label text-clay/60 hover:text-bark transition-colors mb-4 flex items-center gap-2">
             ← Orders
           </button>
-          <p className="label text-clay/60 mb-1">{order.orderNumber}</p>
-          <h1 className="font-display text-4xl font-normal text-bark">Order Details</h1>
+          <p className="label text-grove mb-1">{order.orderNumber}</p>
+          <h1 className="font-display text-4xl font-semibold text-bark">Order Details</h1>
           <p className="text-clay text-sm mt-1">
             {new Date(order.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
@@ -55,7 +55,7 @@ export default function OrderTracking() {
 
         {/* Status tracker */}
         <div className="bg-white border border-stone p-8">
-          <h2 className="font-display text-xl font-normal text-bark mb-6">Delivery Status</h2>
+          <h2 className="font-display text-xl font-semibold text-bark mb-6">Delivery Status</h2>
           <div className="flex items-center gap-0">
             {STATUSES.map((status, index) => {
               const active = index <= currentIndex
@@ -86,7 +86,7 @@ export default function OrderTracking() {
         <div className="grid sm:grid-cols-2 gap-5">
           {/* Items */}
           <div className="bg-white border border-stone p-6">
-            <h2 className="font-display text-lg font-normal text-bark mb-4">Items Ordered</h2>
+            <h2 className="font-display text-lg font-semibold text-bark mb-4">Items Ordered</h2>
             <div className="space-y-2">
               {order.items?.map((item) => (
                 <div key={item.id} className="flex justify-between text-sm">
@@ -101,7 +101,7 @@ export default function OrderTracking() {
           <div className="bg-white border border-stone p-6 space-y-4">
             {order.address && (
               <div>
-                <p className="label text-clay/60 mb-2">Delivery Address</p>
+                <p className="label text-grove mb-2">Delivery Address</p>
                 <p className="text-sm text-clay">{order.address.street}, {order.address.city}</p>
                 {order.address.phone && <p className="text-sm text-clay mt-0.5">{order.address.phone}</p>}
               </div>

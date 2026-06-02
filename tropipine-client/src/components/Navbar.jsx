@@ -71,12 +71,12 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`label transition-colors duration-200 ${
+                className={`label font-semibold transition-colors duration-200 ${
                   isActive(link.path)
-                    ? transparent ? 'text-white' : 'text-bark'
+                    ? transparent ? 'text-white' : 'text-grove'
                     : transparent
                     ? 'text-white/90 hover:text-white'
-                    : 'text-clay hover:text-bark'
+                    : 'text-grove hover:text-bark'
                 }`}
               >
                 {link.name}
@@ -90,7 +90,7 @@ export default function Navbar() {
             <Link
               to="/wishlist"
               className={`relative transition-colors duration-200 ${
-                transparent ? 'text-white/90 hover:text-white' : 'text-clay hover:text-bark'
+                transparent ? 'text-white/90 hover:text-white' : 'text-grove hover:text-bark'
               }`}
               aria-label="Wishlist"
             >
@@ -108,7 +108,7 @@ export default function Navbar() {
             <Link
               to="/cart"
               className={`relative transition-colors duration-200 ${
-                transparent ? 'text-white/90 hover:text-white' : 'text-clay hover:text-bark'
+                transparent ? 'text-white/90 hover:text-white' : 'text-grove hover:text-bark'
               }`}
               aria-label="Cart"
             >
@@ -130,7 +130,7 @@ export default function Navbar() {
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className={`label flex items-center gap-1.5 transition-colors duration-200 ${
-                    transparent ? 'text-white/90 hover:text-white' : 'text-clay hover:text-bark'
+                    transparent ? 'text-white/90 hover:text-white' : 'text-grove hover:text-bark'
                   }`}
                 >
                   {user.name.split(' ')[0]}
@@ -147,13 +147,13 @@ export default function Navbar() {
                       transition={{ duration: 0.15 }}
                       className="absolute right-0 top-full mt-3 w-44 bg-white border border-stone shadow-lift"
                     >
-                      <Link to="/profile" className="block px-5 py-3 text-xs text-clay hover:text-bark hover:bg-cream transition-colors tracking-wide">My Profile</Link>
-                      <Link to="/orders" className="block px-5 py-3 text-xs text-clay hover:text-bark hover:bg-cream transition-colors tracking-wide">My Orders</Link>
-                      <Link to="/wishlist" className="block px-5 py-3 text-xs text-clay hover:text-bark hover:bg-cream transition-colors tracking-wide">Wishlist</Link>
+                      <Link to="/profile" className="block px-5 py-3 text-xs text-grove hover:text-bark hover:bg-cream transition-colors tracking-wide">My Profile</Link>
+                      <Link to="/orders" className="block px-5 py-3 text-xs text-grove hover:text-bark hover:bg-cream transition-colors tracking-wide">My Orders</Link>
+                      <Link to="/wishlist" className="block px-5 py-3 text-xs text-grove hover:text-bark hover:bg-cream transition-colors tracking-wide">Wishlist</Link>
                       <div className="border-t border-stone" />
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-5 py-3 text-xs text-clay hover:text-bark hover:bg-cream transition-colors tracking-wide"
+                        className="w-full text-left px-5 py-3 text-xs text-grove hover:text-bark hover:bg-cream transition-colors tracking-wide"
                       >
                         Sign Out
                       </button>
@@ -166,14 +166,14 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className={`label transition-colors duration-200 ${
-                    transparent ? 'text-white/90 hover:text-white' : 'text-clay hover:text-bark'
+                    transparent ? 'text-white/90 hover:text-white' : 'text-grove hover:text-bark'
                   }`}
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className={`label px-4 py-2 border transition-all duration-200 ${
+                  className={`label font-semibold px-4 py-2 border transition-all duration-200 ${
                     transparent
                       ? 'border-white/70 text-white hover:bg-white hover:text-bark'
                       : 'border-grove text-grove hover:bg-grove hover:text-white'
@@ -187,7 +187,7 @@ export default function Navbar() {
 
           {/* Mobile trigger */}
           <div className="md:hidden flex items-center gap-4">
-            <Link to="/cart" className={`relative ${transparent ? 'text-white/70' : 'text-clay'}`}>
+            <Link to="/cart" className={`relative ${transparent ? 'text-white/70' : 'text-grove'}`}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
                 <line x1="3" y1="6" x2="21" y2="6" />
@@ -226,7 +226,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className="block py-3 border-b border-stone text-sm text-clay hover:text-bark transition-colors"
+                  className="block py-3 border-b border-stone text-sm text-grove hover:text-bark transition-colors"
                 >
                   {link.name}
                 </Link>
@@ -234,13 +234,13 @@ export default function Navbar() {
               <div className="pt-5">
                 {user ? (
                   <div className="space-y-1">
-                    <Link to="/profile" className="block py-3 border-b border-stone text-sm text-clay">{user.name}</Link>
-                    <Link to="/wishlist" className="block py-3 border-b border-stone text-sm text-clay">Wishlist ({wishlist.length})</Link>
-                    <button onClick={handleLogout} className="block py-3 text-sm text-clay w-full text-left">Sign Out</button>
+                    <Link to="/profile" className="block py-3 border-b border-stone text-sm text-grove">{user.name}</Link>
+                    <Link to="/wishlist" className="block py-3 border-b border-stone text-sm text-grove">Wishlist ({wishlist.length})</Link>
+                    <button onClick={handleLogout} className="block py-3 text-sm text-grove w-full text-left hover:text-bark transition-colors">Sign Out</button>
                   </div>
                 ) : (
                   <div className="flex gap-3 pt-2">
-                    <Link to="/login" className="flex-1 text-center py-3 border border-stone text-sm text-clay hover:border-bark hover:text-bark transition">Sign In</Link>
+                    <Link to="/login" className="flex-1 text-center py-3 border border-grove text-sm text-grove hover:bg-grove hover:text-white transition">Sign In</Link>
                     <Link to="/register" className="flex-1 text-center py-3 bg-bark text-white text-sm">Join Now</Link>
                   </div>
                 )}

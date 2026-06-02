@@ -38,8 +38,8 @@ export default function TrackOrder() {
       <div className="max-w-2xl mx-auto px-8 sm:px-10 py-14">
 
         <div className="mb-10">
-          <p className="label text-clay/60 mb-3">TropiPine</p>
-          <h1 className="font-display text-4xl font-normal text-bark mb-2">Track Your Order</h1>
+          <p className="label text-grove mb-3">TropiPine</p>
+          <h1 className="font-display text-4xl font-semibold text-bark mb-2">Track Your Order</h1>
           <p className="text-clay text-sm">Enter your order number from the confirmation email.</p>
         </div>
 
@@ -79,7 +79,7 @@ export default function TrackOrder() {
             <div className="bg-white border border-stone p-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <p className="label text-clay/60 mb-1">{order.orderNumber}</p>
+                  <p className="label text-grove mb-1">{order.orderNumber}</p>
                   <p className="text-xs text-clay">{new Date(order.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
                 <span className="label text-grove bg-mist border border-sage/20 px-3 py-1">{order.status}</span>
@@ -112,7 +112,7 @@ export default function TrackOrder() {
             </div>
 
             <div className="bg-white border border-stone p-6">
-              <p className="label text-clay/60 mb-3">Items</p>
+              <p className="label text-grove mb-3">Items</p>
               <div className="space-y-2">
                 {order.items?.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">

@@ -106,7 +106,7 @@ export default function Checkout() {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="text-center">
-          <h1 className="font-display text-3xl font-normal text-bark mb-4">Your cart is empty</h1>
+          <h1 className="font-display text-3xl font-semibold text-bark mb-4">Your cart is empty</h1>
           <button onClick={() => navigate('/shop')} className="px-8 py-3 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors">
             Browse Shop
           </button>
@@ -124,8 +124,8 @@ export default function Checkout() {
 
         {/* Header + Step indicator */}
         <div className="mb-10">
-          <p className="label text-clay/60 mb-2">Checkout</p>
-          <h1 className="font-display text-4xl font-normal text-bark mb-6">Complete Your Order</h1>
+          <p className="label text-grove mb-2">Checkout</p>
+          <h1 className="font-display text-4xl font-semibold text-bark mb-6">Complete Your Order</h1>
           <div className="flex items-center gap-3">
             {steps.map((s, i) => (
               <div key={s} className="flex items-center gap-3">
@@ -151,7 +151,7 @@ export default function Checkout() {
 
             {step === 1 && (
               <div className="bg-white border border-stone p-8 space-y-5">
-                <h2 className="font-display text-2xl font-normal text-bark mb-1">Delivery Details</h2>
+                <h2 className="font-display text-2xl font-semibold text-bark mb-1">Delivery Details</h2>
 
                 <div>
                   <label className={labelClass}>Full Address</label>
@@ -217,7 +217,7 @@ export default function Checkout() {
 
             {step === 2 && orderCreated && (
               <div className="bg-white border border-stone p-8 space-y-5">
-                <h2 className="font-display text-2xl font-normal text-bark">Complete Payment</h2>
+                <h2 className="font-display text-2xl font-semibold text-bark">Complete Payment</h2>
                 <div className="bg-mist border border-sage/20 px-5 py-4 text-sm">
                   <p className="font-medium text-grove mb-1">Order {orderCreated.orderNumber} confirmed</p>
                   <p className="text-clay">Send <span className="font-medium text-bark font-display">৳{(orderCreated.totalAmount ?? total).toFixed(2)}</span> via {formData.paymentMethod}</p>
@@ -247,7 +247,7 @@ export default function Checkout() {
 
           {/* Summary */}
           <div className="bg-white border border-stone p-8 h-fit">
-            <h2 className="font-display text-xl font-normal text-bark mb-6">Order Summary</h2>
+            <h2 className="font-display text-xl font-semibold text-bark mb-6">Order Summary</h2>
             <div className="space-y-2 mb-5">
               {displayItems.map((item) => (
                 <div key={item.productId} className="flex justify-between text-sm">

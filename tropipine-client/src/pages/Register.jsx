@@ -76,14 +76,14 @@ export default function Register() {
         <div className="relative flex flex-col h-full px-12 py-14">
 
           <Link to="/" className="flex-shrink-0">
-            <span className="font-display text-2xl font-normal italic text-white">TropiPine</span>
+            <span className="font-display text-2xl font-semibold italic text-white">TropiPine</span>
             <p className="label text-white/30 text-[10px] mt-0.5">Est. 2019</p>
           </Link>
 
           <div className="flex-1 flex flex-col justify-center py-16">
             <p className="label text-white/30 mb-4">Member perks</p>
-            <h2 className="font-display text-4xl font-normal text-white mb-10 leading-tight">
-              Join 12,000+<br /><em>satisfied families.</em>
+            <h2 className="font-display text-4xl font-semibold text-white mb-10 leading-tight">
+              Join a community<br />of <em>fruit lovers.</em>
             </h2>
             <div className="space-y-0 border-t border-white/15">
               {perks.map((p) => (
@@ -101,7 +101,7 @@ export default function Register() {
           </div>
 
           <div className="flex-shrink-0 border-t border-white/15 pt-8">
-            <p className="font-display text-lg font-normal italic text-white/70 leading-snug mb-3">
+            <p className="font-display text-lg font-semibold italic text-white/70 leading-snug mb-3">
               "Fresh is not a feature. It is the only standard."
             </p>
             <p className="label text-white/25 text-[10px]">— Our sourcing commitment</p>
@@ -118,11 +118,11 @@ export default function Register() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-sm"
         >
-          <Link to="/" className="block lg:hidden font-display text-xl font-normal italic text-bark mb-10">
+          <Link to="/" className="block lg:hidden font-display text-xl font-semibold italic text-bark mb-10">
             TropiPine
           </Link>
 
-          <h1 className="font-display text-3xl font-normal text-bark mb-1">Create account</h1>
+          <h1 className="font-display text-3xl font-semibold text-bark mb-1">Create account</h1>
           <p className="text-clay text-sm mb-8">Join and taste the difference</p>
 
           {error && (

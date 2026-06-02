@@ -43,10 +43,10 @@ export default function Profile() {
           <aside className="lg:col-span-1 space-y-4">
             <div className="bg-white border border-stone p-8">
               {/* Avatar */}
-              <div className="w-12 h-12 bg-bark flex items-center justify-center text-white font-display text-2xl font-normal mb-5">
+              <div className="w-12 h-12 bg-bark flex items-center justify-center text-white font-display text-2xl font-semibold mb-5">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
-              <h2 className="font-display text-2xl font-normal text-bark leading-none">{user.name}</h2>
+              <h2 className="font-display text-2xl font-semibold text-bark leading-none">{user.name}</h2>
               <p className="text-clay text-xs mt-1">{user.email}</p>
               {user.phone && <p className="text-clay/60 text-xs mt-0.5">{user.phone}</p>}
 
@@ -69,26 +69,6 @@ export default function Profile() {
               </nav>
             </div>
 
-            {/* Order summary stats */}
-            <div className="bg-white border border-stone p-6 space-y-0 divide-y divide-stone">
-              <div className="pb-4">
-                <p className="label text-clay/50 text-[10px] mb-1">Total Orders</p>
-                <p className="font-display text-2xl font-normal text-bark">{orders.length}</p>
-              </div>
-              <div className="pt-4 pb-4">
-                <p className="label text-clay/50 text-[10px] mb-1">Total Spent</p>
-                <p className="font-display text-2xl font-normal text-bark">
-                  ৳{orders.reduce((s, o) => s + (o.totalAmount || 0), 0).toFixed(0)}
-                </p>
-              </div>
-              <div className="pt-4">
-                <p className="label text-clay/50 text-[10px] mb-1">Member Since</p>
-                <p className="text-sm text-bark">
-                  {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Active'}
-                </p>
-              </div>
-            </div>
-
             <button
               onClick={handleLogout}
               className="w-full py-3 border border-stone text-clay text-sm hover:border-bark hover:text-bark transition-colors"
@@ -101,7 +81,7 @@ export default function Profile() {
           <div className="lg:col-span-3">
             {activeTab === 'orders' && (
               <div>
-                <h1 className="font-display text-3xl font-normal text-bark mb-8">My Orders</h1>
+                <h1 className="font-display text-3xl font-semibold text-bark mb-8">My Orders</h1>
 
                 {loading ? (
                   <div className="space-y-3">
@@ -119,10 +99,10 @@ export default function Profile() {
                       >
                         <div className="flex items-start justify-between">
                           <div>
-                            <p className="label text-clay/60 mb-1">
+                            <p className="label text-grove mb-1">
                               {order.orderNumber || `#${order.id.slice(0, 8)}`}
                             </p>
-                            <p className="font-display text-xl font-normal text-bark">
+                            <p className="font-display text-xl font-semibold text-bark">
                               ৳{order.totalAmount?.toFixed(2)}
                             </p>
                             <p className="text-xs text-clay mt-1">
@@ -147,7 +127,7 @@ export default function Profile() {
                   </div>
                 ) : (
                   <div className="bg-white border border-stone p-12 text-center">
-                    <p className="font-display text-2xl font-normal text-bark mb-2">No orders yet</p>
+                    <p className="font-display text-2xl font-semibold text-bark mb-2">No orders yet</p>
                     <p className="text-clay text-sm mb-6">Your order history will appear here.</p>
                     <button
                       onClick={() => navigate('/shop')}
@@ -162,7 +142,7 @@ export default function Profile() {
 
             {activeTab === 'account' && (
               <div>
-                <h1 className="font-display text-3xl font-normal text-bark mb-8">Account Details</h1>
+                <h1 className="font-display text-3xl font-semibold text-bark mb-8">Account Details</h1>
                 <div className="bg-white border border-stone p-8 space-y-5">
                   {[
                     { label: 'Full Name', value: user.name },

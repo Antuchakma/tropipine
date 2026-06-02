@@ -57,10 +57,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans:    ['"DM Sans"', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        serif:   ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        mono:    ['"DM Mono"', 'monospace'],
+        sans:    ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        serif:   ['"Playfair Display"', 'Georgia', 'serif'],
+        mono:    ['ui-monospace', 'monospace'],
       },
       borderRadius: {
         'none': '0',

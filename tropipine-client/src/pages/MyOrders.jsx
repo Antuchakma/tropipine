@@ -45,8 +45,8 @@ export default function MyOrders() {
     <div className="min-h-screen bg-cream pt-20">
       <div className="max-w-5xl mx-auto px-8 sm:px-10 py-14">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <p className="label text-clay/60 mb-2">Account</p>
-          <h1 className="font-display text-4xl sm:text-5xl font-normal text-bark">Order History</h1>
+          <p className="label text-grove mb-2">Account</p>
+          <h1 className="font-display text-4xl sm:text-5xl font-semibold text-bark">Order History</h1>
         </motion.div>
 
         {/* Controls */}
@@ -80,7 +80,7 @@ export default function MyOrders() {
           </div>
         ) : sorted.length === 0 ? (
           <div className="bg-white border border-stone p-12 text-center">
-            <p className="font-display text-2xl font-normal text-bark mb-2">No orders found</p>
+            <p className="font-display text-2xl font-semibold text-bark mb-2">No orders found</p>
             <p className="text-clay text-sm mb-6">Your order history will appear here.</p>
             <button onClick={() => navigate('/shop')} className="px-8 py-3 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors">
               Start Shopping
@@ -100,7 +100,7 @@ export default function MyOrders() {
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
                     <p className="label text-clay/60">{order.orderNumber || `#${order.id?.slice(0, 8)}`}</p>
-                    <p className="font-display text-xl font-normal text-bark">৳{order.totalAmount?.toFixed(2)}</p>
+                    <p className="font-display text-xl font-semibold text-bark">৳{order.totalAmount?.toFixed(2)}</p>
                     <p className="text-xs text-clay/60">
                       {new Date(order.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </p>

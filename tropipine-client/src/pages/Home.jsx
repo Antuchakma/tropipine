@@ -126,8 +126,8 @@ export default function Home() {
               {...inView(i * 0.07)}
               className={`py-10 pr-8 ${i < values.length - 1 ? 'border-b sm:border-b-0 sm:border-r border-stone' : ''}`}
             >
-              <p className="label text-clay/60 mb-3">{v.label}</p>
-              <p className="font-display text-xl font-normal text-bark mb-2">{v.title}</p>
+              <p className="label text-grove mb-3">{v.label}</p>
+              <p className="font-display text-xl font-semibold text-bark mb-2">{v.title}</p>
               <p className="text-sm text-clay leading-relaxed">{v.desc}</p>
             </motion.div>
           ))}
@@ -138,8 +138,8 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
         <motion.div {...inView(0)} className="flex items-end justify-between mb-12">
           <div>
-            <p className="label text-clay/60 mb-3">Collection</p>
-            <h2 className="font-display text-4xl sm:text-5xl font-normal text-bark">Best Sellers</h2>
+            <p className="label text-grove mb-3">Collection</p>
+            <h2 className="font-display text-4xl sm:text-5xl font-semibold text-bark">Best Sellers</h2>
           </div>
           <Link
             to="/shop"
@@ -161,9 +161,9 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-stone">
             {featured.map((product, i) => (
-              <motion.div key={product.id} {...inView(i * 0.07)}>
+              <motion.div key={product.id} {...inView(i * 0.07)} className="h-full">
                 <ProductCard product={product} />
               </motion.div>
             ))}
@@ -184,7 +184,7 @@ export default function Home() {
             <motion.div {...inView(0)} className="flex items-end justify-between mb-12">
               <div>
                 <p className="label text-white/35 mb-3">Limited Supply</p>
-                <h2 className="font-display text-4xl sm:text-5xl font-normal text-white">Exclusive<br /><em>Varieties</em></h2>
+                <h2 className="font-display text-4xl sm:text-5xl font-semibold text-white">Exclusive<br /><em>Varieties</em></h2>
               </div>
               <Link
                 to="/shop?isExclusive=true"
@@ -194,9 +194,9 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/10">
               {exclusive.map((product, i) => (
-                <motion.div key={product.id} {...inView(i * 0.08)} className="bg-cream/5 p-px">
+                <motion.div key={product.id} {...inView(i * 0.08)} className="h-full">
                   <ProductCard product={product} />
                 </motion.div>
               ))}
@@ -206,44 +206,46 @@ export default function Home() {
       )}
 
       {/* ─── EDITORIAL SPLIT ───────────────────────── */}
-      <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24 grid lg:grid-cols-2 gap-16 items-center">
-        <motion.div {...inView(0)}>
-          <p className="label text-clay/60 mb-4">Our Story</p>
-          <h2 className="font-display text-4xl sm:text-5xl font-normal text-bark mb-6 leading-none">
-            Grown with<br />
-            <em>intention.</em>
-          </h2>
-          <p className="text-clay leading-relaxed mb-5">
-            We partner directly with small-scale farmers across Bangladesh's most fertile regions. Every fruit is harvested at peak ripeness and delivered to your door within 24 hours.
-          </p>
-          <p className="text-clay leading-relaxed mb-8">
-            No cold storage. No intermediaries. Just the freshest tropical fruit you have ever tasted.
-          </p>
-          <Link
-            to="/about"
-            className="label text-bark border-b border-bark pb-0.5 hover:text-grove hover:border-grove transition-colors"
-          >
-            Read Our Story
-          </Link>
-        </motion.div>
-        <motion.div {...inView(0.15)} className="relative">
-          <div className="aspect-[4/5] overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1618897996318-5a901fa0b74a?q=80&w=800&auto=format&fit=crop"
-              alt="Fresh mangoes"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="absolute -bottom-6 -left-6 w-36 h-36 bg-mist hidden lg:block" />
-        </motion.div>
+      <section className="border-t border-stone">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-16 grid lg:grid-cols-2 gap-0">
+          {/* Left — text */}
+          <motion.div {...inView(0)} className="flex flex-col justify-center py-8 lg:py-0 lg:pr-16 order-2 lg:order-1">
+            <p className="label text-grove mb-4">Our Story</p>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-bark mb-5 leading-tight">
+              Grown with <em>intention.</em><br />Delivered with care.
+            </h2>
+            <p className="text-clay text-sm leading-relaxed mb-4">
+              We partner directly with small-scale farmers across Bangladesh's most fertile regions. Every fruit is harvested at peak ripeness and arrives within 24 hours.
+            </p>
+            <p className="text-clay text-sm leading-relaxed mb-7">
+              No cold storage. No intermediaries. Just the freshest tropical fruit you have ever tasted.
+            </p>
+            <Link
+              to="/about"
+              className="label text-grove border-b border-grove pb-0.5 hover:text-bark hover:border-bark transition-colors self-start"
+            >
+              Read Our Story →
+            </Link>
+          </motion.div>
+          {/* Right — image */}
+          <motion.div {...inView(0.1)} className="order-1 lg:order-2">
+            <div className="aspect-square overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1605027990121-cbae9e0642df?q=80&w=800&auto=format&fit=crop"
+                alt="Mango harvest"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* ─── TESTIMONIALS ──────────────────────────── */}
       <section className="border-t border-stone bg-white">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
           <motion.div {...inView(0)} className="text-center mb-14">
-            <p className="label text-clay/60 mb-3">Testimonials</p>
-            <h2 className="font-display text-4xl font-normal text-bark">What our customers say</h2>
+            <p className="label text-grove mb-3">Testimonials</p>
+            <h2 className="font-display text-4xl font-semibold text-bark">What our customers say</h2>
           </motion.div>
           <div className="grid sm:grid-cols-3 gap-8">
             {testimonials.map((t, i) => (
@@ -274,26 +276,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── TRUST NUMBERS ───────────────────────── */}
-      <section className="border-t border-b border-stone">
-        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-14 grid grid-cols-2 lg:grid-cols-4">
-          {[
-            { value: '12,000+', label: 'Happy customers' },
-            { value: '30+', label: 'Partner farms' },
-            { value: '5+', label: 'Years of sourcing' },
-            { value: '100%', label: 'Directly sourced' },
-          ].map((s, i) => (
-            <motion.div
-              key={s.label}
-              {...inView(i * 0.07)}
-              className={`py-10 text-center ${i < 3 ? 'border-r border-stone' : ''}`}
-            >
-              <p className="font-display text-4xl font-normal text-bark mb-1">{s.value}</p>
-              <p className="label text-clay/55 text-[10px]">{s.label}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
 
       {/* ─── CTA ──────────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
@@ -307,7 +289,7 @@ export default function Home() {
           </div>
           <div className="relative">
             <p className="label text-white/40 mb-4">Limited Offer</p>
-            <h2 className="font-display text-4xl sm:text-5xl font-normal mb-4">
+            <h2 className="font-display text-4xl sm:text-5xl font-semibold mb-4">
               20% off your first order
             </h2>
             <p className="text-white/60 mb-8 text-sm">

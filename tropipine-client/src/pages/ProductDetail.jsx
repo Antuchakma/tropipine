@@ -131,7 +131,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen bg-cream flex items-center justify-center">
         <div className="text-center">
-          <p className="font-display text-2xl font-normal text-bark mb-4">Product not found</p>
+          <p className="font-display text-2xl font-semibold text-bark mb-4">Product not found</p>
           <button onClick={() => navigate('/shop')} className="label text-clay border-b border-stone hover:text-bark hover:border-bark transition-colors pb-0.5">
             Back to Shop
           </button>
@@ -188,10 +188,10 @@ export default function ProductDetail() {
           {/* Info */}
           <div className="flex flex-col">
             {product.category && (
-              <p className="label text-clay/60 mb-3">{product.category.name}</p>
+              <p className="label text-grove mb-3">{product.category.name}</p>
             )}
 
-            <h1 className="font-display text-4xl sm:text-5xl font-normal text-bark leading-none mb-3">
+            <h1 className="font-display text-4xl sm:text-5xl font-semibold text-bark leading-none mb-3">
               {product.name}
             </h1>
 
@@ -204,7 +204,7 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className="flex items-baseline gap-3 mb-5 py-5 border-y border-stone">
-              <span className="font-display text-4xl font-normal text-bark">৳{product.finalPrice}</span>
+              <span className="font-display text-4xl font-semibold text-bark">৳{product.finalPrice}</span>
               <span className="text-sm text-clay">/{product.unit || 'kg'}</span>
               {discount > 0 && (
                 <>
@@ -301,7 +301,7 @@ export default function ProductDetail() {
 
         {/* Reviews */}
         <div className="border-t border-stone pt-14">
-          <h2 className="font-display text-3xl font-normal text-bark mb-10">
+          <h2 className="font-display text-3xl font-semibold text-bark mb-10">
             Customer Reviews
             {avgRating > 0 && <span className="text-clay font-sans text-base font-normal ml-3">({avgRating} avg)</span>}
           </h2>
@@ -313,7 +313,7 @@ export default function ProductDetail() {
                 [...Array(2)].map((_, i) => <div key={i} className="h-20 bg-white border border-stone animate-pulse" />)
               ) : reviews.length === 0 ? (
                 <div className="bg-white border border-stone p-10 text-center">
-                  <p className="font-display text-xl font-normal text-bark mb-1">No reviews yet</p>
+                  <p className="font-display text-xl font-semibold text-bark mb-1">No reviews yet</p>
                   <p className="text-clay text-sm">Be the first to share your experience.</p>
                 </div>
               ) : (
@@ -341,7 +341,7 @@ export default function ProductDetail() {
 
             {/* Submit review */}
             <div className="bg-white border border-stone p-8">
-              <h3 className="font-display text-xl font-normal text-bark mb-5">Write a Review</h3>
+              <h3 className="font-display text-xl font-semibold text-bark mb-5">Write a Review</h3>
               {!user ? (
                 <div className="text-center py-6">
                   <p className="text-clay text-sm mb-4">Sign in to leave a review</p>
@@ -354,7 +354,7 @@ export default function ProductDetail() {
                 </div>
               ) : hasReviewed || reviewSuccess ? (
                 <div className="text-center py-6">
-                  <p className="font-display text-xl font-normal text-bark mb-1">Thank you</p>
+                  <p className="font-display text-xl font-semibold text-bark mb-1">Thank you</p>
                   <p className="text-clay text-sm">Your review is pending approval.</p>
                 </div>
               ) : (

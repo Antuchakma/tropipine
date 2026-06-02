@@ -53,7 +53,7 @@ export default function Cart() {
           <svg className="w-12 h-12 text-clay/30 mx-auto mb-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
           </svg>
-          <h1 className="font-display text-3xl font-normal text-bark mb-3">Your cart is empty</h1>
+          <h1 className="font-display text-3xl font-semibold text-bark mb-3">Your cart is empty</h1>
           <p className="text-clay text-sm mb-8">Add some exceptional fruits to get started.</p>
           <Link to="/shop" className="px-8 py-3 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors">
             Browse Shop
@@ -67,8 +67,8 @@ export default function Cart() {
     <div className="min-h-screen bg-cream pt-20">
       <div className="max-w-7xl mx-auto px-8 sm:px-10 py-14">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <p className="label text-clay/60 mb-2">Your</p>
-          <h1 className="font-display text-4xl sm:text-5xl font-normal text-bark">Shopping Cart</h1>
+          <p className="label text-grove mb-2">Your</p>
+          <h1 className="font-display text-4xl sm:text-5xl font-semibold text-bark">Shopping Cart</h1>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-10">
@@ -146,7 +146,7 @@ export default function Cart() {
 
           {/* Summary */}
           <div className="border border-stone bg-white p-8 h-fit">
-            <h2 className="font-display text-2xl font-normal text-bark mb-6">Order Summary</h2>
+            <h2 className="font-display text-2xl font-semibold text-bark mb-6">Order Summary</h2>
 
             {/* Coupon */}
             <div className="mb-6">

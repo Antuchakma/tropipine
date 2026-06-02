@@ -72,14 +72,14 @@ export default function Login() {
 
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
-            <span className="font-display text-2xl font-normal italic text-white">TropiPine</span>
+            <span className="font-display text-2xl font-semibold italic text-white">TropiPine</span>
             <p className="label text-white/30 text-[10px] mt-0.5">Est. 2019</p>
           </Link>
 
           {/* Center: brand promise + benefits */}
           <div className="flex-1 flex flex-col justify-center py-16">
             <p className="label text-white/30 mb-4">Why our customers love us</p>
-            <h2 className="font-display text-4xl font-normal text-white mb-10 leading-tight">
+            <h2 className="font-display text-4xl font-semibold text-white mb-10 leading-tight">
               Premium fruit.<br /><em>Honest price.</em><br />Direct to you.
             </h2>
             <div className="space-y-0 border-t border-white/12">
@@ -99,7 +99,7 @@ export default function Login() {
 
           {/* Bottom quote */}
           <div className="flex-shrink-0 border-t border-white/12 pt-8">
-            <p className="font-display text-lg font-normal italic text-white/70 leading-snug mb-3">
+            <p className="font-display text-lg font-semibold italic text-white/70 leading-snug mb-3">
               "Every bite tells the story of the farm it came from."
             </p>
             <p className="label text-white/25 text-[10px]">— TropiPine, Est. 2019</p>
@@ -117,11 +117,11 @@ export default function Login() {
           className="w-full max-w-sm"
         >
           {/* Mobile logo */}
-          <Link to="/" className="block lg:hidden font-display text-xl font-normal italic text-bark mb-10">
+          <Link to="/" className="block lg:hidden font-display text-xl font-semibold italic text-bark mb-10">
             TropiPine
           </Link>
 
-          <h1 className="font-display text-3xl font-normal text-bark mb-1">Welcome back</h1>
+          <h1 className="font-display text-3xl font-semibold text-bark mb-1">Welcome back</h1>
           <p className="text-clay text-sm mb-8">Sign in to continue your fresh journey</p>
 
           {error && (
