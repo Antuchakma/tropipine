@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="border-b border-white/8">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Hill Direct', sub: 'Straight from CHT farming families.' },
+            { label: 'Farm to Door', sub: 'Grown on our own CHT farms.' },
             { label: 'Same-Day Dhaka', sub: 'Order before noon for today.' },
             { label: 'Hillside Graded', sub: 'Every batch hand-selected at source.' },
             { label: 'Secure Checkout', sub: 'bKash · Nagad · Rocket · COD' },
@@ -65,7 +65,7 @@ export default function Footer() {
           <p className="font-display text-2xl font-semibold italic text-white mb-1">TropiPine</p>
           <p className="text-[10px] text-white/30 tracking-widest uppercase mb-5">Chittagong Hill Tracts · Est. 2019</p>
           <p className="text-sm leading-relaxed text-white/40 mb-7">
-            Premium fruits sourced directly from indigenous farming families in Bandarban, Rangamati, and Khagrachhari — delivered fresh to your door.
+            Premium fruits grown on our own farms in Bandarban, Rangamati, and Khagrachhari — delivered fresh to your door.
           </p>
           <div className="flex gap-2">
             <SocialIcon href="#" label="Facebook">

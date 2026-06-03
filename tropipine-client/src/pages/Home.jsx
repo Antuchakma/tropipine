@@ -18,10 +18,10 @@ const inView = (delay = 0) => ({
 })
 
 const values = [
-  { label: 'Origin', title: 'Hill Country', desc: 'Sourced directly from farming families across Bandarban, Rangamati, and Khagrachhari.' },
+  { label: 'Origin', title: 'Hill Country', desc: 'Grown on our own farms across Bandarban, Rangamati, and Khagrachhari.' },
   { label: 'Quality', title: 'Hand Selected', desc: 'Every fruit is graded on the hillside before packing. No exceptions.' },
   { label: 'Delivery', title: 'Same Day Dhaka', desc: 'Order by noon and receive your fruits before evening.' },
-  { label: 'Trust', title: 'Since 2019', desc: 'Connecting CHT growers to homes across Bangladesh, season after season.' },
+  { label: 'Trust', title: 'Since 2019', desc: 'Growing hill fruits on our own farms and delivering to homes across Bangladesh, season after season.' },
 ]
 
 const testimonials = [
@@ -61,14 +61,14 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-8 sm:px-10 w-full">
           <motion.div {...fade(0.1)} className="max-w-2xl">
-            <p className="label text-white/60 mb-6">Chittagong Hill Tracts</p>
+           
             <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl font-light text-white leading-none mb-8 text-balance">
               From the<br />
               <em>hills</em><br />
               to your door.
             </h1>
             <p className="text-white/75 text-base leading-relaxed mb-10 max-w-md">
-              Sun-ripened pineapples, mangoes, and hillside fruits — handpicked by farming families of Bandarban, Rangamati, and Khagrachhari.
+              Sun-ripened pineapples, mangoes, and hillside fruits — grown on our own farms in Bandarban, Rangamati, and Khagrachhari.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -212,7 +212,7 @@ export default function Home() {
               Grown on the slopes.<br /><em>Delivered with care.</em>
             </h2>
             <p className="text-clay text-sm leading-relaxed mb-4">
-              We work directly with indigenous farming families in the Chittagong Hill Tracts — where altitude, rainfall, and mineral-rich soil produce fruits of rare sweetness and depth.
+              We grow our fruits on our own farms in the Chittagong Hill Tracts — where altitude, rainfall, and mineral-rich soil produce flavours you simply cannot replicate in the lowlands.
             </p>
             <p className="text-clay text-sm leading-relaxed mb-7">
               No cold storage. No middlemen. Just hillside fruit at its honest best, in your hands within 24 hours.

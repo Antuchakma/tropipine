@@ -1,21 +1,38 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
-const CATEGORIES = ['ALL', 'FARM', 'HARVEST', 'PACKAGING', 'TEAM', 'EVENTS']
+// How many px of scroll the title occupies before images unlock
+const TITLE_SCROLL = 440
 
-const inView = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] },
-})
+const paddingFor = (i) => {
+  const pattern = [
+    '138%', '76%', '162%', '98%', '122%',
+    '84%', '152%', '105%', '88%', '144%',
+    '72%', '130%',
+  ]
+  return pattern[i % pattern.length]
+}
 
 export default function Gallery() {
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('ALL')
-  const [lightbox, setLightbox] = useState(null)
+  const [gridHeight, setGridHeight] = useState(5000)
+  const gridRef = useRef(null)
+
+  const { scrollY } = useScroll()
+
+  // Title scrolls out at 1:1 with user scroll
+  const titleY = useTransform(
+    scrollY,
+    [0, TITLE_SCROLL],
+    ['0px', `-${TITLE_SCROLL}px`]
+  )
+
+  // Images: locked at y=0 while title scrolls, then scroll 1:1 after
+  const imageY = useTransform(scrollY, (val) =>
+    val < TITLE_SCROLL ? 0 : -(val - TITLE_SCROLL)
+  )
 
   const API_URL = import.meta.env.VITE_API_URL
 
@@ -26,203 +43,96 @@ export default function Gallery() {
       .finally(() => setLoading(false))
   }, [])
 
-  // Close lightbox on escape
+  // Measure the grid after it renders so the page height is accurate
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
+    if (!loading && gridRef.current) {
+      setGridHeight(gridRef.current.scrollHeight)
+    }
+  }, [loading, images])
 
-  const filtered = activeCategory === 'ALL'
-    ? images
-    : images.filter((img) => img.category === activeCategory)
-
-  // Assign height classes for visual variety in masonry
-  const heightFor = (i) => {
-    const pattern = [
-      'aspect-[4/5]',
-      'aspect-[4/3]',
-      'aspect-square',
-      'aspect-[4/5]',
-      'aspect-[16/10]',
-      'aspect-square',
-    ]
-    return pattern[i % pattern.length]
-  }
+  const items = loading ? Array(12).fill(null) : images
 
   return (
-    <div className="min-h-screen bg-cream">
+    // Page height = title scroll distance + full grid height
+    // This gives the browser the correct total scroll space
+    <div className="bg-cream" style={{ height: TITLE_SCROLL + gridHeight }}>
 
-      {/* ─── PAGE HEADER ─── */}
-      <div className="pt-28 pb-16 border-b border-stone">
-        <div className="max-w-7xl mx-auto px-8 sm:px-10 grid lg:grid-cols-2 gap-8 items-end">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <p className="label text-grove mb-3">TropiPine</p>
-            <h1 className="font-display text-5xl sm:text-6xl font-semibold text-bark leading-none">
-              From Farm<br />
-              <em>to Frame</em>
-            </h1>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-clay leading-relaxed lg:pb-1"
-          >
-            A visual record of how we source, harvest, and deliver premium tropical fruits — from the fields of Rajshahi to your door.
-          </motion.p>
-        </div>
-      </div>
-
-      {/* ─── EDITORIAL FEATURE STRIP ─── */}
-      <div className="border-b border-stone">
-        <div className="grid grid-cols-3 h-64 sm:h-80">
-          {[
-            'https://images.unsplash.com/photo-1519996529931-28324d5a630e?q=80&w=600&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1553279768-865429fa0078?q=80&w=600&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?q=80&w=600&auto=format&fit=crop',
-          ].map((src, i) => (
-            <div key={i} className={`relative overflow-hidden group ${i < 2 ? 'border-r border-stone' : ''}`}>
-              <img
-                src={src}
-                alt=""
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-bark/20 group-hover:bg-bark/10 transition-colors" />
+      {/* ─── IMAGES: always fixed, animated y unlocks after title exits ─── */}
+      <motion.div
+        style={{ y: imageY, position: 'fixed', top: 0, left: 0, right: 0, zIndex: 0 }}
+      >
+        <div
+          ref={gridRef}
+          className="columns-2 sm:columns-3 xl:columns-4 gap-px bg-stone"
+        >
+          {items.map((image, i) => (
+            <div
+              key={image?.id ?? i}
+              className="mb-px break-inside-avoid relative overflow-hidden bg-bone"
+              style={{ paddingBottom: paddingFor(i) }}
+            >
+              {image ? (
+                <img
+                  src={image.url || image.imageUrl}
+                  alt={image.caption || ''}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                  draggable={false}
+                />
+              ) : (
+                <div className="absolute inset-0 bg-bone animate-pulse" />
+              )}
             </div>
           ))}
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-8 sm:px-10 py-14">
+        {!loading && images.length > 0 && (
+          <div className="bg-cream border-t border-stone py-8 flex items-center justify-center gap-6">
+            <div className="w-16 h-px bg-stone" />
+            <p className="label text-clay/40 text-[10px]" style={{ letterSpacing: '0.2em' }}>
+              Bandarban · Rangamati · Khagrachhari
+            </p>
+            <div className="w-16 h-px bg-stone" />
+          </div>
+        )}
+      </motion.div>
 
-        {/* ─── CATEGORY FILTERS ─── */}
-        <div className="flex flex-wrap gap-1.5 mb-12">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2 text-xs tracking-widest font-medium border transition-colors ${
-                activeCategory === cat
-                  ? 'bg-bark text-white border-bark'
-                  : 'bg-transparent text-clay border-stone hover:border-bark hover:text-bark'
-              }`}
+      {/* ─── TITLE: fixed, translated up as user scrolls ─── */}
+      <motion.div
+        style={{ y: titleY }}
+        className="fixed top-0 left-0 right-0 z-20 pointer-events-none"
+      >
+        {/* Gradient fade so title is legible over any image */}
+        <div
+          className="absolute inset-x-0 top-0"
+          style={{
+            height: '40rem',
+            background: 'linear-gradient(to bottom, rgba(28,18,9,0.93) 0%, rgba(28,18,9,0.52) 38%, rgba(28,18,9,0.14) 68%, transparent 100%)',
+          }}
+        />
+
+        <div
+          className="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-20 px-8 sm:px-12 lg:px-16"
+          style={{ paddingTop: '6.5rem' }}
+        >
+          <div>
+           
+            <h1
+              className="font-display font-semibold text-white leading-none"
+              style={{ fontSize: 'clamp(3.8rem, 9.5vw, 8.5rem)', letterSpacing: '-0.02em' }}
             >
-              {cat}
-            </button>
-          ))}
-          <span className="ml-auto self-center text-xs text-clay/50 hidden sm:block">
-            {filtered.length} {filtered.length === 1 ? 'image' : 'images'}
-          </span>
+              What the<br />
+              <em>Hills Yield</em>
+            </h1>
+          </div>
+
+          <p className="hidden lg:block text-white text-sm leading-[1.8] max-w-[260px] lg:pb-2 shrink-0">
+            A visual record of our farms,<br />
+            harvests, and the hillside life<br />
+            that makes TropiPine possible.
+          </p>
         </div>
-
-        {/* ─── LOADING ─── */}
-        {loading && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className={`${heightFor(i)} bg-bone animate-pulse`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* ─── EMPTY ─── */}
-        {!loading && filtered.length === 0 && (
-          <div className="border border-stone bg-white p-16 text-center">
-            <p className="font-display text-2xl font-semibold text-bark mb-2">No images yet</p>
-            <p className="text-clay text-sm">This category hasn't been photographed yet.</p>
-          </div>
-        )}
-
-        {/* ─── MASONRY GRID ─── */}
-        {!loading && filtered.length > 0 && (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="columns-2 sm:columns-3 lg:columns-4 gap-3 sm:gap-4 [column-fill:balance]"
-            >
-              {filtered.map((image, i) => (
-                <motion.div
-                  key={image.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i * 0.04, 0.3) }}
-                  className="mb-3 sm:mb-4 break-inside-avoid overflow-hidden group cursor-pointer relative bg-bone"
-                  onClick={() => setLightbox(image)}
-                >
-                  <img
-                    src={image.url || image.imageUrl}
-                    alt={image.caption || 'TropiPine gallery'}
-                    className={`w-full ${heightFor(i)} object-cover transition-transform duration-700 group-hover:scale-105`}
-                    loading="lazy"
-                  />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-bark/0 group-hover:bg-bark/20 transition-colors duration-300 flex items-end p-4">
-                    {image.caption && (
-                      <p className="text-white text-xs font-medium translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                        {image.caption}
-                      </p>
-                    )}
-                  </div>
-                  {/* Category pill */}
-                  {image.category && image.category !== 'ALL' && (
-                    <div className="absolute top-3 left-3 label text-[9px] bg-white/90 text-bark px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {image.category}
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-        )}
-      </div>
-
-      {/* ─── LIGHTBOX ─── */}
-      <AnimatePresence>
-        {lightbox && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-bark/90 z-50 flex items-center justify-center p-4 sm:p-10"
-            onClick={() => setLightbox(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="relative max-w-4xl max-h-[90vh] w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={lightbox.url || lightbox.imageUrl}
-                alt={lightbox.caption || ''}
-                className="w-full max-h-[85vh] object-contain"
-              />
-              {lightbox.caption && (
-                <p className="text-white/60 text-sm mt-3 text-center">{lightbox.caption}</p>
-              )}
-              <button
-                onClick={() => setLightbox(null)}
-                className="absolute -top-4 -right-4 w-9 h-9 bg-white text-bark flex items-center justify-center text-sm hover:bg-cream transition-colors"
-              >
-                ✕
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </motion.div>
 
     </div>
   )

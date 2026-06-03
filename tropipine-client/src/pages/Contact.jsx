@@ -34,7 +34,7 @@ export default function Contact() {
       <section
         className="relative text-white overflow-hidden"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=1200&auto=format&fit=crop)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1649920209973-d2f09b3be005?q=80&w=1200&auto=format&fit=crop)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

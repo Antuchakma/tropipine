@@ -61,7 +61,7 @@ export default function Login() {
       <div className="hidden lg:flex lg:w-1/2 flex-col relative overflow-hidden">
         {/* Background photo */}
         <img
-          src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?q=80&w=900&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1624485871361-65454b13edfa?q=80&w=900&auto=format&fit=crop"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />

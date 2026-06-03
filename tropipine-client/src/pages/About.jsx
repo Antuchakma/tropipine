@@ -17,7 +17,7 @@ const values = [
   {
     number: '02',
     title: 'Fair at the Source',
-    desc: 'Our indigenous farming partners earn above-market rates. Better livelihoods attract better practices, which produces better fruit.',
+    desc: 'Our farm workers are paid well and treated with respect. People who take pride in their work grow fruit worth being proud of.',
   },
   {
     number: '03',
@@ -27,7 +27,7 @@ const values = [
   {
     number: '04',
     title: 'Rooted in the Region',
-    desc: 'Every fruit we sell comes from Bandarban, Rangamati, or Khagrachhari. We do not source from outside the Hill Tracts.',
+    desc: 'Every fruit we sell comes from our own farms in Bandarban, Rangamati, or Khagrachhari. We own the land, we grow the fruit.',
   },
 ]
 
@@ -62,8 +62,8 @@ export default function About() {
       <section className="relative min-h-screen flex items-center sm:items-end pb-0 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1400&auto=format&fit=crop"
-            alt="Lush Chittagong Hill Tracts jungle"
+            src="https://images.unsplash.com/photo-1715922808700-f707baae4bb5?q=80&w=1400&auto=format&fit=crop"
+            alt="Bandarban hills in fog, Chittagong Hill Tracts"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-bark/90 via-bark/25 to-bark/10" />
@@ -82,7 +82,7 @@ export default function About() {
               <em>flavour.</em>
             </h1>
             <p className="text-white/75 text-base max-w-md leading-relaxed">
-              Since 2019 we have sourced from indigenous farming families in the Chittagong Hill Tracts and delivered to thousands of homes — with no middlemen and no compromises.
+              Since 2019 we have grown our fruits on our own farms in the Chittagong Hill Tracts and delivered to thousands of homes across Bangladesh — with no middlemen and no compromises.
             </p>
           </motion.div>
         </div>
@@ -96,10 +96,10 @@ export default function About() {
             Started with a<br />hill pineapple.
           </h2>
           <p className="text-clay leading-relaxed mb-4">
-            TropiPine began when our founder visited a Rangamati farming family and tasted a pineapple still warm from the slope. It was nothing like what was sold in Dhaka's markets — sweeter, more fragrant, genuinely alive.
+            TropiPine began when our founder walked a Rangamati hillside and tasted a pineapple still warm from the slope. It was nothing like what was sold in Dhaka's markets — sweeter, more fragrant, genuinely alive.
           </p>
           <p className="text-clay leading-relaxed mb-6">
-            The problem was the chain between that hillside and your plate: too many hands, too much time, too little care for the fruit or the farmer. We rebuilt it from scratch.
+            He didn't go looking for a supplier. He went back and built a farm. Today we own and operate farms across Bandarban, Rangamati, and Khagrachhari — growing every fruit we sell on our own land, on our own terms.
           </p>
 
           <blockquote className="border-l-2 border-grove pl-6 py-2 mb-6">
@@ -117,8 +117,8 @@ export default function About() {
         <motion.div {...inView(0.15)}>
           <div className="aspect-[4/5] overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1574184864703-3487b13f0edd?q=80&w=700&auto=format&fit=crop"
-              alt="Pineapple harvest in the hills"
+              src="https://images.unsplash.com/photo-1645985926275-d2184d7c2d5c?q=80&w=700&auto=format&fit=crop"
+              alt="Kaptai Lake river, Rangamati"
               className="w-full h-full object-cover"
             />
           </div>
@@ -153,7 +153,7 @@ export default function About() {
       <section className="border-t border-b border-stone bg-white">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-16">
           <motion.div {...inView(0)} className="text-center mb-12">
-            <p className="label text-grove mb-3">Where we source</p>
+            <p className="label text-grove mb-3">Where we farm</p>
             <h2 className="font-display text-4xl font-semibold text-bark">Three districts. One promise.</h2>
           </motion.div>
           <div className="grid sm:grid-cols-3 gap-0 border-l border-t border-stone">
@@ -171,7 +171,7 @@ export default function About() {
               {
                 district: 'Khagrachhari',
                 alt: 'খাগড়াছড়ি',
-                desc: 'Fertile river valleys and shaded slopes — home to papaya, pomelo, guava, and lychee grown by Tripura and Marma families.',
+                desc: 'Fertile river valleys and shaded slopes — where our Khagrachhari farm grows papaya, pomelo, guava, and lychee in the rich subtropical soil.',
               },
             ].map((d, i) => (
               <motion.div key={d.district} {...inView(i * 0.08)} className="border-r border-b border-stone p-8 sm:p-10">
@@ -217,8 +217,8 @@ export default function About() {
 
           <div className="grid sm:grid-cols-3 gap-0 border-l border-t border-stone">
             {[
-              { step: 'I',   title: 'You Order',    desc: 'Place your order before noon. Our CHT partners receive a harvest request within the hour.' },
-              { step: 'II',  title: 'They Pick',    desc: 'Farming families on the hillside select and pack fruit at peak ripeness. No pre-harvest stock.' },
+              { step: 'I',   title: 'You Order',    desc: 'Place your order before noon. Our CHT farm teams receive a harvest request within the hour.' },
+              { step: 'II',  title: 'We Pick',      desc: 'Our team on the hillside selects and packs fruit at peak ripeness. No pre-harvest stock, ever.' },
               { step: 'III', title: 'You Receive',  desc: 'Same-day Dhaka delivery. Next-day to most cities. Tasting the hills, on your table.' },
             ].map((p, i) => (
               <motion.div

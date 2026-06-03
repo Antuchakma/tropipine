@@ -17,7 +17,7 @@ export default function Navbar() {
   const cart = useSelector((s) => s.cart.items)
   const wishlist = useSelector((s) => s.wishlist.items)
 
-  const isHome = location.pathname === '/'
+  const isTransparentPage = ['/', '/gallery'].includes(location.pathname)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -44,7 +44,8 @@ export default function Navbar() {
 
   const isActive = (path) => location.pathname.startsWith(path)
 
-  const transparent = isHome && !scrolled && !mobileOpen
+  const isGallery = location.pathname === '/gallery'
+  const transparent = isGallery ? !mobileOpen : (isTransparentPage && !scrolled && !mobileOpen)
 
   return (
     <header

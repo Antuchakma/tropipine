@@ -29,7 +29,7 @@ export default function ForgotPassword() {
       {/* ─── Left panel ─── */}
       <div className="hidden lg:flex lg:w-1/2 flex-col relative overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1550828484-d2a0bcd38e52?q=80&w=900&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1629739868151-d29aab8b4dd1?q=80&w=900&auto=format&fit=crop"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
