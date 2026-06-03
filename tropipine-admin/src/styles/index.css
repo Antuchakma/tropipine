@@ -1,33 +1,33 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
 
 @theme {
-  /* Brand — mirrored from src/theme.js */
-  --color-brand-50:  #FFF3EE;
-  --color-brand-100: #FFE4D8;
-  --color-brand-400: #FF8557;
-  --color-brand-500: #FF5C2E;
-  --color-brand-600: #E8421A;
-  --color-brand-700: #C43010;
+  /* Brand — grove/sage green family matching client */
+  --color-brand-50:  #EAF0E8;
+  --color-brand-100: #D4E1D0;
+  --color-brand-400: #4A7A52;
+  --color-brand-500: #2A3B26;
+  --color-brand-600: #1E2C1B;
+  --color-brand-700: #141E12;
 
-  /* Layout surfaces */
-  --color-sidebar:       #121018;
-  --color-surface:       #F4F5FA;
-  --color-surface-alt:   #F4F4F7;
-  --color-surface-white: #FAFAFA;
-  --color-edge:          #E8E8F0;
+  /* Layout surfaces — warm cream matching client */
+  --color-sidebar:       #1A1410;
+  --color-surface:       #F8F5F0;
+  --color-surface-alt:   #F0EBE3;
+  --color-surface-white: #FFFFFF;
+  --color-edge:          #E5DDD3;
 
-  /* Text / ink */
-  --color-ink:       #18181B;
-  --color-ink-muted: #6B7280;
-  --color-ink-faint: #9CA3AF;
-  --color-ink-dim:   #52525B;
-  --color-ink-light: #71717A;
-  --color-ink-extra: #A0A0A8;
+  /* Text / ink — bark/clay family matching client */
+  --color-ink:       #1A1410;
+  --color-ink-muted: #8C6F58;
+  --color-ink-faint: #BDA88A;
+  --color-ink-dim:   #4A3728;
+  --color-ink-light: #8C6F58;
+  --color-ink-extra: #BDA88A;
 
-  /* Fonts */
-  --font-sans:    'Inter', system-ui, sans-serif;
-  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  /* Fonts — matching client */
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+  --font-display: 'Cormorant Garant', Georgia, serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -44,5 +44,5 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }

@@ -4,26 +4,26 @@
 
 export const colors = {
   brand: {
-    50:  '#FFF3EE',
-    100: '#FFE4D8',
-    400: '#FF8557',
-    500: '#FF5C2E',
-    600: '#E8421A',
-    700: '#C43010',
+    50:  '#EAF0E8',
+    100: '#D4E1D0',
+    400: '#4A7A52',
+    500: '#2A3B26',
+    600: '#1E2C1B',
+    700: '#141E12',
   },
-  sidebar:      '#121018',
-  surface:      '#F4F5FA',
-  surfaceAlt:   '#F4F4F7',
-  surfaceWhite: '#FAFAFA',
-  edge:         '#E8E8F0',
-  chartGrid:    '#F0F0F5',
+  sidebar:      '#1A1410',
+  surface:      '#F8F5F0',
+  surfaceAlt:   '#F0EBE3',
+  surfaceWhite: '#FFFFFF',
+  edge:         '#E5DDD3',
+  chartGrid:    '#EDE8DF',
   ink: {
-    DEFAULT: '#18181B',
-    muted:   '#6B7280',
-    faint:   '#9CA3AF',
-    dim:     '#52525B',
-    light:   '#71717A',
-    extra:   '#A0A0A8',
+    DEFAULT: '#1A1410',
+    muted:   '#8C6F58',
+    faint:   '#BDA88A',
+    dim:     '#4A3728',
+    light:   '#8C6F58',
+    extra:   '#BDA88A',
   },
   white: '#FFFFFF',
   mfs: {
@@ -32,66 +32,66 @@ export const colors = {
     rocket: '#8332A4',
   },
   error: {
-    DEFAULT: '#DC2626',
+    DEFAULT: '#B91C1C',
     bg:      '#FEF2F2',
     border:  '#FEE2E2',
     text:    '#B91C1C',
-    faded:   'rgba(220,38,38,0.15)',
-    fadedBorder: 'rgba(220,38,38,0.3)',
+    faded:   'rgba(185,28,28,0.12)',
+    fadedBorder: 'rgba(185,28,28,0.25)',
     light:   '#FCA5A5',
   },
-  success: '#22C55E',
+  success: '#166534',
   // Status badge colors — keyed by order status string
   status: {
-    PENDING:    { bg: '#FFFBEB', text: '#B45309', border: '#FDE68A' },
-    CONFIRMED:  { bg: '#EEF2FF', text: '#4338CA', border: '#C7D2FE' },
-    PROCESSING: { bg: '#F5F3FF', text: '#7C3AED', border: '#DDD6FE' },
+    PENDING:    { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
+    CONFIRMED:  { bg: '#EAF0E8', text: '#2A3B26', border: '#D4E1D0' },
+    PROCESSING: { bg: '#F0EBE3', text: '#4A3728', border: '#DDD0BA' },
     SHIPPED:    { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE' },
-    DELIVERED:  { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
+    DELIVERED:  { bg: '#EAF0E8', text: '#166534', border: '#D4E1D0' },
     CANCELLED:  { bg: '#FEF2F2', text: '#B91C1C', border: '#FEE2E2' },
-    REFUNDED:   { bg: '#F8FAFC', text: '#475569', border: '#E2E8F0' },
+    REFUNDED:   { bg: '#F8F5F0', text: '#8C6F58', border: '#E5DDD3' },
   },
   // Payment badge colors — keyed by payment status string
   payment: {
     UNPAID:               { bg: '#FEF2F2', text: '#B91C1C', border: '#FEE2E2' },
-    PENDING_VERIFICATION: { bg: '#FFFBEB', text: '#B45309', border: '#FDE68A' },
-    PAID:                 { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
+    PENDING_VERIFICATION: { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
+    PAID:                 { bg: '#EAF0E8', text: '#166534', border: '#D4E1D0' },
     FAILED:               { bg: '#FEF2F2', text: '#B91C1C', border: '#FEE2E2' },
-    REFUNDED:             { bg: '#F8FAFC', text: '#475569', border: '#E2E8F0' },
+    REFUNDED:             { bg: '#F8F5F0', text: '#8C6F58', border: '#E5DDD3' },
   },
-  // Stat card palette — used for dashboard/analytics/inventory summary cards
+  // Stat card palette
   stat: {
-    brand:   { bg: '#FFF3EE', color: '#FF5C2E' },
-    orders:  { bg: '#EEF2FF', color: '#6366F1' },
-    error:   { bg: '#FEF2F2', color: '#DC2626' },
-    ok:      { bg: '#F0FDF4', color: '#10B981' },
-    warning: { bg: '#FFFBEB', color: '#D97706' },
-    total:   { bg: '#F0F5FF', color: '#4F46E5' },
-    lowRow:  '#FFFDF0',
+    brand:   { bg: '#EAF0E8', color: '#2A3B26' },
+    orders:  { bg: '#EFF6FF', color: '#1D4ED8' },
+    error:   { bg: '#FEF2F2', color: '#B91C1C' },
+    ok:      { bg: '#EAF0E8', color: '#166534' },
+    warning: { bg: '#FFFBEB', color: '#92400E' },
+    total:   { bg: '#F0EBE3', color: '#4A3728' },
+    lowRow:  '#FFF9F0',
   },
-  // Chart series colors for recharts
-  chart: ['#FF5C2E', '#6366F1', '#10B981', '#F59E0B', '#3B82F6', '#8B5CF6'],
+  // Chart series colors
+  chart: ['#2A3B26', '#4A7A52', '#4A3728', '#8C6F58', '#1D4ED8', '#92400E'],
 }
 
 export const shadows = {
-  brand:   '0 4px 14px rgba(255,92,46,0.35)',
-  tooltip: '0 8px 24px rgba(0,0,0,0.08)',
+  brand:   '0 2px 8px rgba(42,59,38,0.18)',
+  tooltip: '0 4px 16px rgba(26,20,16,0.08)',
 }
 
 // Semi-transparent overlays used on the dark login screen
 export const glass = {
-  card:        'rgba(255,255,255,0.05)',
-  inputBg:     'rgba(255,255,255,0.07)',
-  inputBorder: 'rgba(255,255,255,0.12)',
+  card:        'rgba(255,255,255,0.04)',
+  inputBg:     'rgba(255,255,255,0.06)',
+  inputBorder: 'rgba(255,255,255,0.10)',
 }
 
 export const gradients = {
-  brand: `linear-gradient(135deg, ${colors.brand[500]} 0%, ${colors.brand[400]} 100%)`,
+  brand: `${colors.brand[500]}`,
 }
 
-// Pre-composed inline style objects — import these instead of writing raw hex in components
+// Pre-composed inline style objects
 export const brandGradStyle = {
-  background: gradients.brand,
+  background: colors.brand[500],
   boxShadow:  shadows.brand,
 }
 

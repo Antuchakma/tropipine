@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser, setToken } from '../store/authSlice';
 import api from '../utils/api';
-import { colors, gradients, shadows, glass } from '../theme.js';
+import { colors, glass } from '../theme.js';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('admin@tropipine.com');
@@ -38,72 +38,104 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen flex" style={{ background: colors.sidebar }}>
+
       {/* Left decorative panel */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 relative overflow-hidden">
-        <div className="absolute -top-40 -left-20 w-[500px] h-[500px] rounded-full opacity-30 blur-[120px]"
-          style={{ background: gradients.brand }} />
-        <div className="absolute bottom-0 right-0 w-[300px] h-[300px] rounded-full opacity-20 blur-[80px]"
-          style={{ background: colors.stat.orders.color }} />
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-14 relative overflow-hidden">
+        {/* Subtle green glow */}
+        <div className="absolute -top-32 -left-16 w-[480px] h-[480px] rounded-full opacity-20 blur-[140px]"
+          style={{ background: colors.brand[500] }} />
+        <div className="absolute bottom-0 right-0 w-[280px] h-[280px] rounded-full opacity-10 blur-[100px]"
+          style={{ background: colors.brand[400] }} />
 
         <div className="relative">
-          <div>
-            <p className="text-white font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>TropiPine</p>
-            <p className="text-white/30 text-xs">Admin Dashboard</p>
-          </div>
+          <p
+            className="text-white text-xl font-semibold leading-none"
+            style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}
+          >
+            TropiPine
+          </p>
+          <p className="text-white/30 text-[10px] uppercase tracking-[0.18em] mt-1.5">Admin Dashboard</p>
         </div>
 
         <div className="relative">
-          <h1 className="text-5xl font-black text-white leading-tight mb-6" style={{ fontFamily: 'var(--font-display)' }}>
+          <p className="label text-white/30 mb-5" style={{ letterSpacing: '0.2em' }}>
+            Chittagong Hill Tracts
+          </p>
+          <h1
+            className="text-white leading-none mb-6"
+            style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3rem, 5vw, 4.5rem)', letterSpacing: '-0.02em', fontWeight: 600 }}
+          >
             Manage your<br />
-            <span style={{ background: gradients.brand, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              fruit empire.
-            </span>
+            <em>hill harvest.</em>
           </h1>
-          <p className="text-white/45 text-base leading-relaxed max-w-sm">
-            Track orders, manage inventory, verify payments, and grow your tropical fruit business — all in one place.
+          <p className="text-white/40 text-sm leading-relaxed max-w-sm">
+            Track orders, manage inventory, verify payments, and grow your fruit business — all in one place.
           </p>
         </div>
 
-        <div className="relative flex gap-8">
-          {[['10K+', 'Happy Customers'], ['99%', 'Uptime'], ['4.9', 'App Rating']].map(([val, lbl]) => (
+        <div className="relative flex gap-10">
+          {[['2019', 'Est.'], ['CHT', 'Sourced'], ['3', 'Districts']].map(([val, lbl]) => (
             <div key={lbl}>
-              <p className="text-white font-bold text-xl" style={{ fontFamily: 'var(--font-display)' }}>{val}</p>
-              <p className="text-white/35 text-xs mt-0.5">{lbl}</p>
+              <p
+                className="text-white font-semibold text-2xl leading-none"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                {val}
+              </p>
+              <p className="text-white/35 text-[10px] uppercase tracking-widest mt-1.5">{lbl}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Right login form */}
+      {/* Right — login form */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-sm">
+
           <div className="mb-8 lg:hidden">
-            <p className="text-white font-bold text-lg">TropiPine Admin</p>
+            <p
+              className="text-white text-xl font-semibold"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              TropiPine Admin
+            </p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 p-8" style={{ background: glass.card }}>
-            <h2 className="text-white font-bold text-xl mb-1" style={{ fontFamily: 'var(--font-display)' }}>Sign In</h2>
-            <p className="text-white/40 text-sm mb-7">Access your admin dashboard</p>
+          <div
+            className="border border-white/10 p-8"
+            style={{ background: glass.card }}
+          >
+            <h2
+              className="text-white font-semibold text-2xl mb-1 leading-tight"
+              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}
+            >
+              Sign In
+            </h2>
+            <p className="text-white/35 text-sm mb-7">Access your admin dashboard</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-white/50 mb-1.5">Email</label>
+                <label className="block text-[10px] font-medium text-white/45 uppercase tracking-widest mb-1.5">
+                  Email
+                </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border text-sm text-white placeholder-white/25 focus:outline-none focus:border-brand-400 transition"
+                  className="w-full px-4 py-3 border text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
                   style={{ background: glass.inputBg, borderColor: glass.inputBorder }}
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/50 mb-1.5">Password</label>
+                <label className="block text-[10px] font-medium text-white/45 uppercase tracking-widest mb-1.5">
+                  Password
+                </label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border text-sm text-white placeholder-white/25 focus:outline-none focus:border-brand-400 transition"
+                  className="w-full px-4 py-3 border text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
                   style={{ background: glass.inputBg, borderColor: glass.inputBorder }}
                   required
                 />
@@ -111,7 +143,7 @@ export default function AdminLoginPage() {
 
               {error && (
                 <div
-                  className="px-4 py-3 rounded-xl text-sm font-medium"
+                  className="px-4 py-3 text-sm"
                   style={{ background: colors.error.faded, color: colors.error.light, border: `1px solid ${colors.error.fadedBorder}` }}
                 >
                   {error}
@@ -121,15 +153,15 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 disabled:opacity-50 mt-2"
-                style={{ background: gradients.brand, boxShadow: shadows.brand }}
+                className="w-full py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50 mt-2"
+                style={{ background: colors.brand[500] }}
               >
-                {loading ? 'Signing in' : 'Sign In to Dashboard'}
+                {loading ? 'Signing in…' : 'Sign In to Dashboard'}
               </button>
             </form>
 
-            <p className="text-white/25 text-xs text-center mt-5">
-              Demo: admin@tropipine.com / admin123
+            <p className="text-white/20 text-xs text-center mt-5">
+              admin@tropipine.com · admin123
             </p>
           </div>
         </div>
