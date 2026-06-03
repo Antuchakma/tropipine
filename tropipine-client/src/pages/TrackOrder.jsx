@@ -1,15 +1,40 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import api from '../services/api'
 
 const STATUSES = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED']
 
 export default function TrackOrder() {
-  const [orderNumber, setOrderNumber] = useState('')
-  const [email, setEmail] = useState('')
+  const [searchParams] = useSearchParams()
+  const [orderNumber, setOrderNumber] = useState(searchParams.get('orderNumber') || '')
+  const [phone, setPhone] = useState('')
   const [order, setOrder] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Auto-track if orderNumber was passed in URL (from guest order confirmation)
+  useEffect(() => {
+    const prefilledNumber = searchParams.get('orderNumber')
+    if (prefilledNumber) {
+      handleTrackByNumber(prefilledNumber)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleTrackByNumber = async (num) => {
+    setLoading(true)
+    setError('')
+    setOrder(null)
+    try {
+      const params = new URLSearchParams({ orderNumber: num.trim() })
+      const res = await api.get(`/orders/track?${params}`)
+      setOrder(res.data.data)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Order not found')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleTrack = async (e) => {
     e.preventDefault()
@@ -18,7 +43,7 @@ export default function TrackOrder() {
     setOrder(null)
     try {
       const params = new URLSearchParams({ orderNumber: orderNumber.trim() })
-      if (email.trim()) params.set('email', email.trim())
+      if (phone.trim()) params.set('phone', phone.trim())
       const res = await api.get(`/orders/track?${params}`)
       setOrder(res.data.data)
     } catch (err) {
@@ -40,7 +65,7 @@ export default function TrackOrder() {
         <div className="mb-10">
           <p className="label text-grove mb-3">TropiPine</p>
           <h1 className="font-display text-4xl font-semibold text-bark mb-2">Track Your Order</h1>
-          <p className="text-clay text-sm">Enter your order number from the confirmation email.</p>
+          <p className="text-clay text-sm">Enter your order number. Add your phone to verify a guest order.</p>
         </div>
 
         <form onSubmit={handleTrack} className="bg-white border border-stone p-8 space-y-4 mb-8">
@@ -55,12 +80,14 @@ export default function TrackOrder() {
             />
           </div>
           <div>
-            <label className={labelClass}>Email <span className="text-clay/40 font-sans normal-case">(optional)</span></label>
+            <label className={labelClass}>
+              Phone <span className="text-clay/40 font-sans normal-case">(for guest orders)</span>
+            </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="+880 1234-567890"
               className={inputClass}
             />
           </div>
@@ -80,6 +107,7 @@ export default function TrackOrder() {
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <p className="label text-grove mb-1">{order.orderNumber}</p>
+                  {order.guestName && <p className="text-xs text-clay mb-0.5">{order.guestName}</p>}
                   <p className="text-xs text-clay">{new Date(order.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
                 <span className="label text-grove bg-mist border border-sage/20 px-3 py-1">{order.status}</span>

@@ -8,35 +8,50 @@ const inView = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] },
 })
 
-
 const values = [
   {
     number: '01',
-    title: 'Radical Freshness',
-    desc: 'We harvest on demand. Nothing sits in cold storage. Every order triggers a harvest, not a warehouse pick.',
+    title: 'Hill-Fresh, Always',
+    desc: 'We harvest on demand from CHT slopes. Nothing sits in cold storage. Your order triggers a pick from the hillside — not a warehouse.',
   },
   {
     number: '02',
-    title: 'Fair at Source',
-    desc: 'Our farmers earn above market rate. Better pay attracts better practices, which produces better fruit.',
+    title: 'Fair at the Source',
+    desc: 'Our indigenous farming partners earn above-market rates. Better livelihoods attract better practices, which produces better fruit.',
   },
   {
     number: '03',
-    title: 'Zero Pretense',
-    desc: 'We don\'t add artificial ripeners or wax coatings. What you receive is exactly what left the farm.',
+    title: 'Nothing Hidden',
+    desc: 'No artificial ripeners, no wax coatings, no chemical sprays. What leaves the hill is exactly what reaches your home.',
   },
   {
     number: '04',
-    title: 'Measured Growth',
-    desc: 'We expand slowly, only to regions where we can guarantee our supply chain standards hold.',
+    title: 'Rooted in the Region',
+    desc: 'Every fruit we sell comes from Bandarban, Rangamati, or Khagrachhari. We do not source from outside the Hill Tracts.',
   },
 ]
 
 const fruits = [
-  { name: 'Haribhanga', origin: 'Rajshahi', note: 'The most sought-after mango in Bangladesh. Fibreless, intensely sweet.' },
-  { name: 'Gopalbhog', origin: 'Chapainawabganj', note: 'Early season variety. Small, rich, with a distinct honey note.' },
-  { name: 'Langra', origin: 'Chapainawabganj', note: 'Green-skinned when ripe. Tangy finish, beloved by connoisseurs.' },
-  { name: 'Pineapple', origin: 'Sylhet / Chittagong', note: 'Grown on hillside soil. Higher sugar, lower acid than lowland varieties.' },
+  {
+    name: 'Hill Pineapple',
+    origin: 'Rangamati · Khagrachhari',
+    note: 'Grown on mineral-rich slopes at elevation. Denser, sweeter, and more aromatic than lowland varieties.',
+  },
+  {
+    name: 'Pahari Mango',
+    origin: 'Bandarban · Rangamati',
+    note: 'Hill-grown mangoes ripen slower, concentrating sugar. Fibreless flesh with a distinctive floral finish.',
+  },
+  {
+    name: 'Forest Jackfruit',
+    origin: 'Khagrachhari',
+    note: 'Wild-canopy trees producing smaller, intensely sweet pods. Harvested by hand from old-growth orchards.',
+  },
+  {
+    name: 'Dragon Fruit',
+    origin: 'Bandarban',
+    note: 'Cultivated on CHT hillside terraces. Vibrant, mildly sweet, with a crunch that lowland varieties rarely achieve.',
+  },
 ]
 
 export default function About() {
@@ -47,11 +62,11 @@ export default function About() {
       <section className="relative min-h-screen flex items-center sm:items-end pb-0 sm:pb-24 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1400&auto=format&fit=crop"
-            alt="Mango orchard"
+            src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1400&auto=format&fit=crop"
+            alt="Lush Chittagong Hill Tracts jungle"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-bark/85 via-bark/20 to-bark/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-bark/90 via-bark/25 to-bark/10" />
         </div>
         <div className="relative max-w-7xl mx-auto px-8 sm:px-10 w-full pt-20 pb-12 sm:pb-0">
           <motion.div
@@ -60,35 +75,33 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <p className="label text-white/65 mb-4">About TropiPine</p>
+            <p className="label text-white/60 mb-4">About TropiPine</p>
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-semibold text-white leading-none mb-5">
-              We take<br />
-              <em>freshness</em><br />
-              personally.
+              The hills<br />
+              have a<br />
+              <em>flavour.</em>
             </h1>
-            <p className="text-white/80 text-base max-w-md leading-relaxed">
-              Since 2019, we have sourced directly from Bangladeshi farms and delivered to thousands of homes — with no middlemen and no compromises.
+            <p className="text-white/75 text-base max-w-md leading-relaxed">
+              Since 2019 we have sourced from indigenous farming families in the Chittagong Hill Tracts and delivered to thousands of homes — with no middlemen and no compromises.
             </p>
           </motion.div>
         </div>
       </section>
-
 
       {/* ─── STORY ─── */}
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24 grid lg:grid-cols-2 gap-16 items-center">
         <motion.div {...inView(0)}>
           <p className="label text-grove mb-4">Our Story</p>
           <h2 className="font-display text-4xl sm:text-5xl font-semibold text-bark mb-6 leading-tight">
-            Started with a<br />mango and a question.
+            Started with a<br />hill pineapple.
           </h2>
           <p className="text-clay leading-relaxed mb-4">
-            TropiPine began when our founder — returning from a farm visit in Rajshahi — asked: why does the best mango in Bangladesh never make it to Dhaka in good condition?
+            TropiPine began when our founder visited a Rangamati farming family and tasted a pineapple still warm from the slope. It was nothing like what was sold in Dhaka's markets — sweeter, more fragrant, genuinely alive.
           </p>
           <p className="text-clay leading-relaxed mb-6">
-            The answer was a long, broken supply chain. Middlemen, improper handling, cold storage that stripped flavor. We rebuilt that chain from scratch.
+            The problem was the chain between that hillside and your plate: too many hands, too much time, too little care for the fruit or the farmer. We rebuilt it from scratch.
           </p>
 
-          {/* Pull quote */}
           <blockquote className="border-l-2 border-grove pl-6 py-2 mb-6">
             <p className="font-display text-xl font-semibold italic text-bark leading-snug">
               "If we wouldn't eat it ourselves, it doesn't go out."
@@ -104,8 +117,8 @@ export default function About() {
         <motion.div {...inView(0.15)}>
           <div className="aspect-[4/5] overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1605027990121-cbae9e0642df?q=80&w=700&auto=format&fit=crop"
-              alt="Mango harvest"
+              src="https://images.unsplash.com/photo-1574184864703-3487b13f0edd?q=80&w=700&auto=format&fit=crop"
+              alt="Pineapple harvest in the hills"
               className="w-full h-full object-cover"
             />
           </div>
@@ -136,7 +149,42 @@ export default function About() {
         </div>
       </section>
 
-      {/* ─── SPECIALTY FRUITS ─── */}
+      {/* ─── CHT REGION STRIP ─── */}
+      <section className="border-t border-b border-stone bg-white">
+        <div className="max-w-7xl mx-auto px-8 sm:px-10 py-16">
+          <motion.div {...inView(0)} className="text-center mb-12">
+            <p className="label text-grove mb-3">Where we source</p>
+            <h2 className="font-display text-4xl font-semibold text-bark">Three districts. One promise.</h2>
+          </motion.div>
+          <div className="grid sm:grid-cols-3 gap-0 border-l border-t border-stone">
+            {[
+              {
+                district: 'Bandarban',
+                alt: 'বান্দরবান',
+                desc: 'Bangladesh\'s highest hills produce mangoes, dragon fruit, and banana varieties unavailable anywhere else in the country.',
+              },
+              {
+                district: 'Rangamati',
+                alt: 'রাঙামাটি',
+                desc: 'Kaptai lake shores and surrounding slopes yield the finest hill pineapples and forest jackfruit in the CHT.',
+              },
+              {
+                district: 'Khagrachhari',
+                alt: 'খাগড়াছড়ি',
+                desc: 'Fertile river valleys and shaded slopes — home to papaya, pomelo, guava, and lychee grown by Tripura and Marma families.',
+              },
+            ].map((d, i) => (
+              <motion.div key={d.district} {...inView(i * 0.08)} className="border-r border-b border-stone p-8 sm:p-10">
+                <p className="font-display text-3xl font-semibold text-bark mb-1">{d.district}</p>
+                <p className="label text-clay/50 text-[10px] mb-4">{d.alt}</p>
+                <p className="text-sm text-clay leading-relaxed">{d.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SIGNATURE FRUITS ─── */}
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
         <motion.div {...inView(0)} className="mb-12">
           <p className="label text-grove mb-3">What we grow</p>
@@ -164,14 +212,14 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
           <motion.div {...inView(0)} className="text-center mb-14">
             <p className="label text-grove mb-3">How it works</p>
-            <h2 className="font-display text-4xl font-semibold text-bark">From order to door</h2>
+            <h2 className="font-display text-4xl font-semibold text-bark">From hill to door</h2>
           </motion.div>
 
           <div className="grid sm:grid-cols-3 gap-0 border-l border-t border-stone">
             {[
-              { step: 'I', title: 'You Order', desc: 'Place your order before noon for same-day dispatch from Dhaka.' },
-              { step: 'II', title: 'We Harvest', desc: 'Our farm partners receive the request and pick to spec. No pre-harvest.' },
-              { step: 'III', title: 'You Receive', desc: 'Same-day Dhaka delivery. Next-day to most other cities. Always fresh.' },
+              { step: 'I',   title: 'You Order',    desc: 'Place your order before noon. Our CHT partners receive a harvest request within the hour.' },
+              { step: 'II',  title: 'They Pick',    desc: 'Farming families on the hillside select and pack fruit at peak ripeness. No pre-harvest stock.' },
+              { step: 'III', title: 'You Receive',  desc: 'Same-day Dhaka delivery. Next-day to most cities. Tasting the hills, on your table.' },
             ].map((p, i) => (
               <motion.div
                 key={p.step}
@@ -189,25 +237,16 @@ export default function About() {
 
       {/* ─── CTA ─── */}
       <section className="max-w-7xl mx-auto px-8 sm:px-10 py-24">
-        <motion.div
-          {...inView(0)}
-          className="bg-grove text-white px-12 py-20 text-center"
-        >
-          <p className="label text-white/40 mb-4">Ready to taste the difference?</p>
+        <motion.div {...inView(0)} className="bg-grove text-white px-12 py-20 text-center">
+          <p className="label text-white/40 mb-4">Taste the difference</p>
           <h2 className="font-display text-4xl sm:text-5xl font-semibold mb-6">
-            Your first order.<br /><em>Unforgettable.</em>
+            The hills are ready.<br /><em>Are you?</em>
           </h2>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link
-              to="/shop"
-              className="px-8 py-3.5 bg-white text-bark text-sm font-medium tracking-wide hover:bg-cream transition-colors"
-            >
+            <Link to="/shop" className="px-8 py-3.5 bg-white text-bark text-sm font-medium tracking-wide hover:bg-cream transition-colors">
               Shop Now
             </Link>
-            <Link
-              to="/contact"
-              className="px-8 py-3.5 border border-white/30 text-white text-sm font-medium tracking-wide hover:bg-white/10 transition-colors"
-            >
+            <Link to="/contact" className="px-8 py-3.5 border border-white/30 text-white text-sm font-medium tracking-wide hover:bg-white/10 transition-colors">
               Get in Touch
             </Link>
           </div>

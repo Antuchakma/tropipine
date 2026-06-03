@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearCart } from '../store/slices/cartSlice'
 import api from '../services/api'
@@ -13,8 +13,13 @@ export default function Checkout() {
   const { couponCode, couponDiscount } = useSelector((state) => state.cart)
   const { user } = useSelector((state) => state.auth)
 
+  const isGuest = !user
+
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
+    guestName: '',
+    guestEmail: '',
+    guestPhone: '',
     address: '', city: '', postalCode: '',
     phone: user?.phone || '',
     specialNote: '',
@@ -29,6 +34,7 @@ export default function Checkout() {
   const [error, setError] = useState('')
   const [orderCreated, setOrderCreated] = useState(null)
   const [orderItemsSnapshot, setOrderItemsSnapshot] = useState([])
+  const [guestOrderDone, setGuestOrderDone] = useState(false)
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const discount = couponDiscount
@@ -52,17 +58,33 @@ export default function Checkout() {
 
   const handleCreateOrder = async () => {
     if (!formData.address || !formData.city) { setError('Please fill in all address fields'); return }
+    if (isGuest) {
+      if (!formData.guestName) { setError('Please enter your full name'); return }
+      if (!formData.guestPhone) { setError('Please enter your phone number'); return }
+    }
     setLoading(true)
     setError('')
     try {
-      const response = await api.post('/orders', {
+      const payload = {
         items: cart.map((item) => ({ productId: item.productId, quantity: item.quantity })),
-        couponCode, deliveryZoneId: formData.deliveryZoneId, deliveryCharge,
+        couponCode,
+        deliveryZoneId: formData.deliveryZoneId,
+        deliveryCharge,
         paymentMethod: formData.paymentMethod,
         specialNote: formData.specialNote,
-        address: formData.address, city: formData.city,
-        postalCode: formData.postalCode, phone: formData.phone,
-      })
+        address: formData.address,
+        city: formData.city,
+        postalCode: formData.postalCode,
+        phone: formData.phone,
+      }
+
+      if (isGuest) {
+        payload.guestName = formData.guestName
+        payload.guestEmail = formData.guestEmail
+        payload.guestPhone = formData.guestPhone || formData.phone
+      }
+
+      const response = await api.post('/orders', payload)
       const order = response.data.order
       setOrderCreated(order)
       setOrderItemsSnapshot([...cart])
@@ -91,7 +113,11 @@ export default function Checkout() {
         transactionId: formData.transactionId,
         amount: orderCreated.totalAmount ?? total,
       })
-      navigate(`/orders/${orderCreated.id}`)
+      if (isGuest) {
+        setGuestOrderDone(true)
+      } else {
+        navigate(`/orders/${orderCreated.id}`)
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Payment submission failed')
     } finally {
@@ -101,6 +127,9 @@ export default function Checkout() {
 
   const displayItems = orderCreated ? orderItemsSnapshot : cart
   const merchantNumber = paymentConfig[`${formData.paymentMethod}_number`] || paymentConfig.bkash_number || '01XXXXXXXXX'
+
+  const inputClass = "w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
+  const labelClass = "label text-clay/70 block mb-2"
 
   if (cart.length === 0 && !orderCreated) {
     return (
@@ -115,8 +144,50 @@ export default function Checkout() {
     )
   }
 
-  const inputClass = "w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
-  const labelClass = "label text-clay/70 block mb-2"
+  // Guest order fully done (payment submitted)
+  if (guestOrderDone && orderCreated) {
+    return (
+      <div className="min-h-screen bg-cream pt-20">
+        <div className="max-w-xl mx-auto px-8 sm:px-10 py-14">
+          <div className="bg-white border border-stone p-10 text-center space-y-5">
+            <div className="w-12 h-12 rounded-full bg-mist border border-sage/30 flex items-center justify-center mx-auto">
+              <svg className="w-6 h-6 text-grove" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="font-display text-3xl font-semibold text-bark mb-2">Order Placed!</h1>
+              <p className="text-clay text-sm">Your payment is under verification. We'll confirm your order shortly.</p>
+            </div>
+            <div className="bg-cream border border-stone px-6 py-4 text-left space-y-1">
+              <p className="label text-clay/60 text-xs">Order Number</p>
+              <p className="font-mono font-semibold text-bark text-lg tracking-widest">{orderCreated.orderNumber}</p>
+              <p className="text-xs text-clay/60 mt-1">Save this to track your order</p>
+            </div>
+            <div className="flex flex-col gap-3 pt-2">
+              <button
+                onClick={() => navigate(`/track-order?orderNumber=${orderCreated.orderNumber}`)}
+                className="w-full py-3 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors"
+              >
+                Track My Order
+              </button>
+              <button
+                onClick={() => navigate('/shop')}
+                className="w-full py-3 border border-stone text-bark text-sm font-medium hover:border-bark transition-colors"
+              >
+                Continue Shopping
+              </button>
+            </div>
+            <p className="text-xs text-clay/50">
+              Have an account?{' '}
+              <Link to="/login" className="text-bark underline underline-offset-2">Sign in</Link>
+              {' '}to view full order history.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-cream pt-20">
@@ -153,6 +224,33 @@ export default function Checkout() {
               <div className="bg-white border border-stone p-8 space-y-5">
                 <h2 className="font-display text-2xl font-semibold text-bark mb-1">Delivery Details</h2>
 
+                {/* Guest info — only shown when not logged in */}
+                {isGuest && (
+                  <div className="border border-stone/60 bg-cream/50 p-5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium text-bark tracking-wide uppercase">Guest Information</p>
+                      <p className="text-xs text-clay/60">
+                        <Link to="/login" className="text-bark underline underline-offset-2 hover:text-grove">Sign in</Link>
+                        {' '}for order history
+                      </p>
+                    </div>
+                    <div>
+                      <label className={labelClass}>Full Name <span className="text-earth">*</span></label>
+                      <input type="text" name="guestName" value={formData.guestName} onChange={handleChange} className={inputClass} placeholder="Your full name" />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className={labelClass}>Phone <span className="text-earth">*</span></label>
+                        <input type="tel" name="guestPhone" value={formData.guestPhone} onChange={handleChange} className={inputClass} placeholder="+880 1234-567890" />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Email <span className="text-clay/40 font-sans normal-case">(optional)</span></label>
+                        <input type="email" name="guestEmail" value={formData.guestEmail} onChange={handleChange} className={inputClass} placeholder="you@email.com" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <label className={labelClass}>Full Address</label>
                   <textarea name="address" value={formData.address} onChange={handleChange} className={inputClass} rows="3" placeholder="House, road, area" />
@@ -169,10 +267,12 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                <div>
-                  <label className={labelClass}>Phone</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={inputClass} placeholder="+880 1234-567890" />
-                </div>
+                {!isGuest && (
+                  <div>
+                    <label className={labelClass}>Phone</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className={inputClass} placeholder="+880 1234-567890" />
+                  </div>
+                )}
 
                 <div>
                   <label className={labelClass}>Delivery Zone</label>
@@ -223,6 +323,12 @@ export default function Checkout() {
                   <p className="text-clay">Send <span className="font-medium text-bark font-display">৳{(orderCreated.totalAmount ?? total).toFixed(2)}</span> via {formData.paymentMethod}</p>
                   <p className="text-clay mt-1">Merchant number: <span className="font-mono font-medium text-bark tracking-widest">{merchantNumber}</span></p>
                 </div>
+
+                {isGuest && (
+                  <div className="bg-cream border border-stone px-4 py-3 text-xs text-clay/70">
+                    Save your order number: <span className="font-mono font-semibold text-bark">{orderCreated.orderNumber}</span> — you'll need it to track your order.
+                  </div>
+                )}
 
                 <div>
                   <label className={labelClass}>Your {formData.paymentMethod} Number</label>

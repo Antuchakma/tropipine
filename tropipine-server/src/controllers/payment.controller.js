@@ -3,7 +3,6 @@ const { prisma } = require('../config/db');
 async function submitPayment(req, res) {
   try {
     const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ message: 'Authentication required' });
 
     const {
       orderId,
@@ -23,7 +22,13 @@ async function submitPayment(req, res) {
 
     const order = await prisma.order.findUnique({ where: { id: orderId } });
     if (!order) return res.status(404).json({ message: 'Order not found' });
-    if (order.userId !== userId) return res.status(403).json({ message: 'Not your order' });
+    // For authenticated orders verify ownership; guest orders trust the orderId (CUID)
+    if (order.userId && userId && order.userId !== userId) {
+      return res.status(403).json({ message: 'Not your order' });
+    }
+    if (order.userId && !userId) {
+      return res.status(403).json({ message: 'Authentication required for this order' });
+    }
 
     const existing = await prisma.payment.findUnique({ where: { transactionId } });
     if (existing) return res.status(409).json({ message: 'Transaction ID already used' });

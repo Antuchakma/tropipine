@@ -81,9 +81,7 @@ function App() {
             path="/checkout"
             element={
               <Layout>
-                <PrivateRoute>
-                  <Checkout />
-                </PrivateRoute>
+                <Checkout />
               </Layout>
             }
           />

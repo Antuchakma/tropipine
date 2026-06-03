@@ -2,8 +2,7 @@ const { prisma } = require('../config/db');
 
 async function createOrder(req, res) {
   try {
-    const userId = req.user?.id;
-    if (!userId) return res.status(401).json({ message: 'Authentication required' });
+    const userId = req.user?.id || null;
 
     const {
       items,
@@ -16,7 +15,17 @@ async function createOrder(req, res) {
       city,
       postalCode,
       phone,
+      guestName,
+      guestEmail,
+      guestPhone,
     } = req.body;
+
+    if (!userId) {
+      if (!guestName || !(guestPhone || phone)) {
+        return res.status(400).json({ message: 'Name and phone are required for guest orders' });
+      }
+    }
+
     if (!Array.isArray(items) || items.length === 0) return res.status(400).json({ message: 'Cart is empty' });
 
     const productIds = items.map((i) => i.productId).filter(Boolean);
@@ -71,13 +80,21 @@ async function createOrder(req, res) {
 
     let resolvedAddressId = addressId || null;
     if (!resolvedAddressId && address && city) {
-      const dbUser = await prisma.user.findUnique({ where: { id: userId } });
+      let fullName = guestName || 'Customer';
+      let contactPhone = guestPhone || phone || 'N/A';
+
+      if (userId) {
+        const dbUser = await prisma.user.findUnique({ where: { id: userId } });
+        fullName = dbUser?.name || guestName || 'Customer';
+        contactPhone = phone || dbUser?.phone || 'N/A';
+      }
+
       const addr = await prisma.address.create({
         data: {
-          userId,
+          userId: userId || null,
           label: 'Checkout',
-          fullName: dbUser?.name || 'Customer',
-          phone: phone || dbUser?.phone || 'N/A',
+          fullName,
+          phone: contactPhone,
           street: address,
           city,
           district: city,
@@ -87,10 +104,15 @@ async function createOrder(req, res) {
       resolvedAddressId = addr.id;
     }
 
+    const resolvedGuestPhone = guestPhone || (!userId ? phone : null) || null;
+
     const order = await prisma.order.create({
       data: {
         orderNumber,
         userId,
+        guestName: !userId ? (guestName || null) : null,
+        guestEmail: !userId ? (guestEmail || null) : null,
+        guestPhone: !userId ? resolvedGuestPhone : null,
         addressId: resolvedAddressId,
         couponId,
         couponDiscount,
@@ -195,6 +217,35 @@ async function cancelOrder(req, res) {
   }
 }
 
+async function cancelGuestOrder(req, res) {
+  try {
+    const { orderNumber, phone } = req.body;
+    if (!orderNumber || !phone) {
+      return res.status(400).json({ message: 'Order number and phone are required' });
+    }
+
+    const order = await prisma.order.findFirst({
+      where: { orderNumber: { equals: orderNumber, mode: 'insensitive' }, userId: null },
+    });
+
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    if (order.guestPhone !== phone) return res.status(403).json({ message: 'Phone does not match this order' });
+    if (order.status !== 'PENDING') return res.status(400).json({ message: 'Only PENDING orders can be cancelled' });
+
+    const updated = await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        status: 'CANCELLED',
+        statusHistory: { create: { status: 'CANCELLED', note: 'Cancelled by customer' } },
+      },
+    });
+    res.json({ data: updated });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
 async function getAllOrders(req, res) {
   try {
     const { status, paymentStatus, paymentMethod, search, page = 1, limit = 20 } = req.query;
@@ -215,7 +266,12 @@ async function getAllOrders(req, res) {
       prisma.order.count({ where }),
     ]);
 
-    res.json({ data: orders, total, page: parseInt(page), limit: parseInt(limit) });
+    const ordersWithCustomer = orders.map((o) => ({
+      ...o,
+      user: o.user || { id: null, name: o.guestName || 'Guest', email: o.guestEmail || '' },
+    }));
+
+    res.json({ data: ordersWithCustomer, total, page: parseInt(page), limit: parseInt(limit) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -286,7 +342,7 @@ async function updateOrderStatus(req, res) {
 
 async function trackOrder(req, res) {
   try {
-    const { orderNumber, email } = req.query;
+    const { orderNumber, email, phone } = req.query;
     if (!orderNumber) return res.status(400).json({ message: 'Order number is required' });
 
     const order = await prisma.order.findFirst({
@@ -301,8 +357,19 @@ async function trackOrder(req, res) {
 
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
-    if (email && order.user.email.toLowerCase() !== email.toLowerCase()) {
-      return res.status(403).json({ message: 'Email does not match this order' });
+    if (order.userId) {
+      // Authenticated order: optionally verify by email
+      if (email && order.user && order.user.email.toLowerCase() !== email.toLowerCase()) {
+        return res.status(403).json({ message: 'Email does not match this order' });
+      }
+    } else {
+      // Guest order: verify by phone or email if provided
+      if (phone && order.guestPhone && order.guestPhone !== phone) {
+        return res.status(403).json({ message: 'Phone does not match this order' });
+      }
+      if (email && order.guestEmail && order.guestEmail.toLowerCase() !== email.toLowerCase()) {
+        return res.status(403).json({ message: 'Email does not match this order' });
+      }
     }
 
     res.json({
@@ -318,6 +385,7 @@ async function trackOrder(req, res) {
         items: order.items,
         address: order.address,
         statusHistory: order.statusHistory,
+        guestName: order.guestName,
       },
     });
   } catch (err) {
@@ -338,7 +406,11 @@ async function getRecentPendingCount(req, res) {
       take: 5,
       include: { user: { select: { name: true } } },
     });
-    res.json({ data: { count, latest } });
+    const latestWithName = latest.map((o) => ({
+      ...o,
+      user: o.user || { name: o.guestName || 'Guest' },
+    }));
+    res.json({ data: { count, latest: latestWithName } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -350,6 +422,7 @@ module.exports = {
   myOrders,
   getMyOrderById,
   cancelOrder,
+  cancelGuestOrder,
   getAllOrders,
   getOrderById,
   updateOrderStatus,

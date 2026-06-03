@@ -50,7 +50,7 @@ export default function ResetPassword() {
       {/* ─── Left panel ─── */}
       <div className="hidden lg:flex lg:w-1/2 flex-col relative overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=900&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?q=80&w=900&auto=format&fit=crop"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />

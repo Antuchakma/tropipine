@@ -18,7 +18,7 @@ module.exports = {
         grove:  '#2A3B26',
         sage:   '#5C7055',
         mist:   '#EAF0E8',
-        // Legacy aliases (used in some components)
+        // Legacy aliases
         surface: '#F8F5F0',
         ink: {
           DEFAULT: '#1A1410',
@@ -57,9 +57,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans:    ['Inter', 'system-ui', 'sans-serif'],
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
-        serif:   ['"Playfair Display"', 'Georgia', 'serif'],
+        sans:    ['DM Sans', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['"Cormorant Garant"', '"Playfair Display"', 'Georgia', 'serif'],
+        serif:   ['"Cormorant Garant"', '"Playfair Display"', 'Georgia', 'serif'],
         mono:    ['ui-monospace', 'monospace'],
       },
       borderRadius: {
@@ -75,12 +75,12 @@ module.exports = {
         'full': '9999px',
       },
       boxShadow: {
-        card:     '0 1px 4px rgba(26,20,16,0.06)',
-        lift:     '0 4px 16px rgba(26,20,16,0.09)',
+        card:         '0 1px 4px rgba(26,20,16,0.06)',
+        lift:         '0 4px 16px rgba(26,20,16,0.09)',
         'card-hover': '0 4px 16px rgba(26,20,16,0.09)',
-        grove:    '0 4px 12px rgba(42,59,38,0.25)',
-        brand:    '0 4px 12px rgba(42,59,38,0.25)',
-        navbar:   '0 1px 0 #E5DDD3',
+        grove:        '0 4px 12px rgba(42,59,38,0.25)',
+        brand:        '0 4px 12px rgba(42,59,38,0.25)',
+        navbar:       '0 1px 0 #E5DDD3',
       },
       letterSpacing: {
         widest: '0.18em',

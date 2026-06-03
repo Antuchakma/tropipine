@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { authenticate } = require('../middleware/auth.middleware');
+const { authenticate, optionalAuthenticate } = require('../middleware/auth.middleware');
 const { requireAdmin } = require('../middleware/role.middleware');
 const {
   createOrder,
   myOrders,
   getMyOrderById,
   cancelOrder,
+  cancelGuestOrder,
   getAllOrders,
   getOrderById,
   updateOrderStatus,
@@ -16,7 +17,8 @@ const {
 
 router.get('/track', trackOrder);
 router.get('/notifications', authenticate, requireAdmin, getRecentPendingCount);
-router.post('/', authenticate, createOrder);
+router.post('/', optionalAuthenticate, createOrder);
+router.post('/guest-cancel', cancelGuestOrder);
 router.get('/my-orders', authenticate, myOrders);
 router.get('/my-orders/:id', authenticate, getMyOrderById);
 router.patch('/my-orders/:id/cancel', authenticate, cancelOrder);

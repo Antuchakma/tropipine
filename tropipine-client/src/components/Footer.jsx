@@ -18,9 +18,9 @@ export default function Footer() {
       <div className="border-b border-white/8">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Farm Direct', sub: 'No cold storage. No middlemen.' },
+            { label: 'Hill Direct', sub: 'Straight from CHT farming families.' },
             { label: 'Same-Day Dhaka', sub: 'Order before noon for today.' },
-            { label: 'Verified Quality', sub: 'Every batch graded by hand.' },
+            { label: 'Hillside Graded', sub: 'Every batch hand-selected at source.' },
             { label: 'Secure Checkout', sub: 'bKash · Nagad · Rocket · COD' },
           ].map((item) => (
             <div key={item.label} className="flex items-start gap-3">
@@ -39,7 +39,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
             <p className="label text-white/35 mb-2">Newsletter</p>
-            <p className="font-display text-xl font-semibold text-white">Harvest updates, seasonal drops & offers</p>
+            <p className="font-display text-xl font-semibold text-white">Harvest updates, seasonal drops & hill stories</p>
           </div>
           <form className="flex w-full max-w-sm" onSubmit={(e) => e.preventDefault()}>
             <input
@@ -62,10 +62,10 @@ export default function Footer() {
 
         {/* Brand */}
         <div>
-          <p className="font-display text-2xl font-semibold italic text-white mb-4">TropiPine</p>
-          <p className="text-[11px] text-white/35 tracking-widest uppercase mb-5">Est. 2019 · Dhaka, Bangladesh</p>
+          <p className="font-display text-2xl font-semibold italic text-white mb-1">TropiPine</p>
+          <p className="text-[10px] text-white/30 tracking-widest uppercase mb-5">Chittagong Hill Tracts · Est. 2019</p>
           <p className="text-sm leading-relaxed text-white/40 mb-7">
-            Premium tropical fruits, sourced directly from Bangladeshi farms and delivered to your door.
+            Premium fruits sourced directly from indigenous farming families in Bandarban, Rangamati, and Khagrachhari — delivered fresh to your door.
           </p>
           <div className="flex gap-2">
             <SocialIcon href="#" label="Facebook">
@@ -94,10 +94,10 @@ export default function Footer() {
           <ul className="space-y-3.5">
             {[
               { name: 'All Fruits', to: '/shop' },
-              { name: 'Exclusive Varieties', to: '/shop?isExclusive=true' },
+              { name: 'Hill Exclusives', to: '/shop?isExclusive=true' },
               { name: 'Best Sellers', to: '/shop?isBestSeller=true' },
               { name: 'Gallery', to: '/gallery' },
-              { name: 'About Us', to: '/about' },
+              { name: 'Our Story', to: '/about' },
               { name: 'Contact', to: '/contact' },
             ].map((l) => (
               <li key={l.name}>
@@ -139,11 +139,11 @@ export default function Footer() {
             </li>
             <li>
               <p className="label text-white/20 text-[10px] mb-1">Email</p>
-              <p className="text-white/45">info@tropipine.com</p>
+              <p className="text-white/45">hello@tropipine.com</p>
             </li>
             <li>
-              <p className="label text-white/20 text-[10px] mb-1">Location</p>
-              <p className="text-white/45">Dhaka, Bangladesh</p>
+              <p className="label text-white/20 text-[10px] mb-1">Sourced From</p>
+              <p className="text-white/45">Bandarban · Rangamati · Khagrachhari</p>
             </li>
             <li className="pt-2">
               <Link
@@ -160,7 +160,7 @@ export default function Footer() {
       {/* Bottom */}
       <div className="border-t border-white/8">
         <div className="max-w-7xl mx-auto px-8 sm:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/22">
-          <span>© {new Date().getFullYear()} TropiPine. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} TropiPine. Proudly from the Chittagong Hill Tracts.</span>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white/45 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white/45 transition-colors">Terms of Service</a>
