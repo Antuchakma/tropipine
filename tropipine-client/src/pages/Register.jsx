@@ -6,226 +6,135 @@ import { loginSuccess } from '../store/slices/authSlice'
 import api from '../services/api'
 import GoogleSignIn from '../components/GoogleSignIn'
 
-const perks = [
-  { label: 'Welcome Offer', desc: 'Get 20% off your very first order with code WELCOME20' },
-  { label: 'Order Tracking', desc: 'Real-time updates from harvest to your doorstep' },
-  { label: 'Loyalty Points', desc: 'Earn points on every purchase, redeemable on future orders' },
-]
-
 export default function Register() {
-  const [formData, setFormData] = useState({
-    name: '', email: '', phone: '', password: '', confirmPassword: '',
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' })
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
-      return
-    }
+    e.preventDefault(); setError('')
+    if (formData.password !== formData.confirmPassword) { setError('Passwords do not match'); return }
     setLoading(true)
     try {
-      const response = await api.post('/auth/register', {
+      const { data } = await api.post('/auth/register', {
         name: formData.name, email: formData.email,
         phone: formData.phone, password: formData.password,
       })
-      const { user, token } = response.data.data || response.data
+      const { user, token } = data.data || data
       dispatch(loginSuccess({ user, token }))
       navigate('/profile')
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed')
-    } finally {
-      setLoading(false)
-    }
+    } finally { setLoading(false) }
   }
 
   const handleGoogle = async (credential) => {
-    setLoading(true)
-    setError('')
+    setLoading(true); setError('')
     try {
-      const response = await api.post('/auth/google', { credential })
-      const { user, token } = response.data.data
-      dispatch(loginSuccess({ user, token }))
+      const { data } = await api.post('/auth/google', { credential })
+      dispatch(loginSuccess({ user: data.data.user, token: data.data.token }))
       navigate('/profile')
     } catch (err) {
       setError(err.response?.data?.message || 'Google sign-up failed')
-    } finally {
-      setLoading(false)
-    }
+    } finally { setLoading(false) }
   }
 
+  const fieldCls = "w-full bg-white border border-stone text-bark text-sm px-4 py-3 outline-none placeholder-clay focus:border-bark transition-colors"
+  const labelCls = "block text-xs tracking-[0.12em] uppercase text-bark font-medium mb-1.5"
+
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-6 py-28">
+      <motion.div
+        className="w-full"
+        style={{ maxWidth: 440 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
 
-      {/* ─── LEFT PANEL ─── */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col relative overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1675793049324-32d4932eafff?q=80&w=900&auto=format&fit=crop"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-grove/80" />
-
-        <div className="relative flex flex-col h-full px-12 py-14">
-
-          <Link to="/" className="flex-shrink-0">
-            <span className="font-display text-2xl font-semibold italic text-white">TropiPine</span>
-            <p className="label text-white/30 text-[10px] mt-0.5">Est. 2019</p>
-          </Link>
-
-          <div className="flex-1 flex flex-col justify-center py-16">
-            <p className="label text-white/30 mb-4">Member perks</p>
-            <h2 className="font-display text-4xl font-semibold text-white mb-10 leading-tight">
-              Join a community<br />of <em>fruit lovers.</em>
-            </h2>
-            <div className="space-y-0 border-t border-white/15">
-              {perks.map((p) => (
-                <div key={p.label} className="border-b border-white/15 py-5">
-                  <div className="flex items-start gap-4">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-white/90">{p.label}</p>
-                      <p className="text-xs text-white/45 mt-0.5 leading-relaxed">{p.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex-shrink-0 border-t border-white/15 pt-8">
-            <p className="font-display text-lg font-semibold italic text-white/70 leading-snug mb-3">
-              "Fresh is not a feature. It is the only standard."
-            </p>
-            <p className="label text-white/25 text-[10px]">— Our sourcing commitment</p>
-          </div>
-
+        {/* Eyebrow */}
+        <div className="flex items-center gap-3 mb-7">
+          <div className="h-px w-8 bg-clay flex-shrink-0" />
+          <span className="text-clay text-[0.57rem] tracking-[0.28em] uppercase">
+            New Member
+          </span>
         </div>
-      </div>
 
-      {/* ─── RIGHT PANEL ─── */}
-      <div className="flex-1 flex items-center justify-center px-6 py-16 bg-cream overflow-y-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-sm"
-        >
-          <Link to="/" className="block lg:hidden font-display text-xl font-semibold italic text-bark mb-10">
-            TropiPine
-          </Link>
+        {/* Headline */}
+        <h1 className="font-display text-bark font-semibold mb-3"
+          style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4rem)', lineHeight: 0.87, letterSpacing: '-0.025em' }}>
+          Your harvest<br /><em>awaits.</em>
+        </h1>
+        <p className="text-clay text-sm mb-10">Join and get 20% off your first order</p>
 
-          <h1 className="font-display text-3xl font-semibold text-bark mb-1">Create account</h1>
-          <p className="text-clay text-sm mb-8">Join and taste the difference</p>
+        {error && (
+          <p className="text-sm mb-6" style={{ color: '#B85450' }}>{error}</p>
+        )}
 
-          {error && (
-            <div className="border-l-2 border-earth bg-white px-4 py-3 mb-6">
-              <p className="text-sm text-earth">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="label text-clay/70 block mb-2">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your full name"
-                required
-                className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="label text-clay/70 block mb-2">Email Address</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="you@example.com"
-                required
-                className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="label text-clay/70 block mb-2">Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="+880 1234567890"
-                required
-                className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="label text-clay/70 block mb-2">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm focus:outline-none focus:border-bark transition-colors"
-                />
-              </div>
-              <div>
-                <label className="label text-clay/70 block mb-2">Confirm</label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm focus:outline-none focus:border-bark transition-colors"
-                />
-              </div>
-            </div>
-
-            <p className="text-xs text-clay/50 leading-relaxed">
-              By creating an account you agree to TropiPine's <a href="#" className="underline hover:text-bark">terms</a> and <a href="#" className="underline hover:text-bark">privacy policy</a>.
-            </p>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors disabled:opacity-50"
-            >
-              {loading ? 'Creating account…' : 'Create Account'}
-            </button>
-          </form>
-
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-stone" />
-            <span className="text-xs text-clay/40 tracking-wider">or continue with</span>
-            <div className="flex-1 h-px bg-stone" />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-7">
+          <div>
+            <label className={labelCls}>Full name</label>
+            <input className={fieldCls} type="text" name="name" value={formData.name}
+              onChange={handleChange} required />
           </div>
 
-          <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+          <div>
+            <label className={labelCls}>Email address</label>
+            <input className={fieldCls} type="email" name="email" value={formData.email}
+              onChange={handleChange} required />
+          </div>
 
-          <p className="text-center text-clay text-sm mt-8">
-            Already have an account?{' '}
-            <Link to="/login" className="text-bark font-medium hover:text-grove transition-colors underline underline-offset-2">
-              Sign in
-            </Link>
-          </p>
-        </motion.div>
-      </div>
+          <div>
+            <label className={labelCls}>Phone number</label>
+            <input className={fieldCls} type="tel" name="phone" value={formData.phone}
+              onChange={handleChange} required />
+          </div>
 
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className={labelCls}>Password</label>
+              <input className={fieldCls} type="password" name="password"
+                value={formData.password} onChange={handleChange} required />
+            </div>
+            <div>
+              <label className={labelCls}>Confirm</label>
+              <input className={fieldCls} type="password" name="confirmPassword"
+                value={formData.confirmPassword} onChange={handleChange} required />
+            </div>
+          </div>
+
+          <button
+            type="submit" disabled={loading}
+            className="w-full bg-bark text-cream py-[1.1rem] text-[0.6rem] tracking-[0.3em] uppercase font-semibold hover:bg-grove transition-colors disabled:opacity-40"
+            style={{ marginTop: '0.25rem' }}
+          >
+            {loading ? 'Creating account…' : 'Create Account'}
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 my-7">
+          <div className="flex-1 h-px bg-stone" />
+          <span className="text-[0.57rem] tracking-[0.22em] uppercase text-clay">or</span>
+          <div className="flex-1 h-px bg-stone" />
+        </div>
+
+        <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+
+        <p className="text-center text-clay text-sm mt-10">
+          Already a member?{' '}
+          <Link to="/login"
+            className="text-bark font-medium hover:text-grove transition-colors underline underline-offset-4">
+            Sign in
+          </Link>
+        </p>
+
+      </motion.div>
     </div>
   )
 }

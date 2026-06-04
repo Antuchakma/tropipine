@@ -6,185 +6,121 @@ import { loginSuccess, loginError } from '../store/slices/authSlice'
 import api from '../services/api'
 import GoogleSignIn from '../components/GoogleSignIn'
 
-const benefits = [
-  { label: 'Farm Direct', desc: 'Sourced from partner farms in Rajshahi and Sylhet' },
-  { label: 'Same-Day Delivery', desc: 'Order before noon, receive before evening in Dhaka' },
-  { label: 'Quality Guaranteed', desc: 'Hand-selected and graded — or your money back' },
-]
-
 export default function Login() {
-  const [email, setEmail] = useState('')
+  const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault(); setLoading(true); setError('')
     try {
-      const response = await api.post('/auth/login', { email, password })
-      const { user, token } = response.data.data
-      dispatch(loginSuccess({ user, token }))
+      const { data } = await api.post('/auth/login', { email, password })
+      dispatch(loginSuccess({ user: data.data.user, token: data.data.token }))
       navigate('/profile')
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed'
-      setError(message)
-      dispatch(loginError(message))
-    } finally {
-      setLoading(false)
-    }
+      const msg = err.response?.data?.message || 'Login failed'
+      setError(msg); dispatch(loginError(msg))
+    } finally { setLoading(false) }
   }
 
   const handleGoogle = async (credential) => {
-    setLoading(true)
-    setError('')
+    setLoading(true); setError('')
     try {
-      const response = await api.post('/auth/google', { credential })
-      const { user, token } = response.data.data
-      dispatch(loginSuccess({ user, token }))
+      const { data } = await api.post('/auth/google', { credential })
+      dispatch(loginSuccess({ user: data.data.user, token: data.data.token }))
       navigate('/profile')
     } catch (err) {
       setError(err.response?.data?.message || 'Google sign-in failed')
-    } finally {
-      setLoading(false)
-    }
+    } finally { setLoading(false) }
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen bg-cream flex items-center justify-center px-6 py-28">
+      <motion.div
+        className="w-full"
+        style={{ maxWidth: 420 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
 
-      {/* ─── LEFT PANEL ─── */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col relative overflow-hidden">
-        {/* Background photo */}
-        <img
-          src="https://images.unsplash.com/photo-1624485871361-65454b13edfa?q=80&w=900&auto=format&fit=crop"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-bark/75" />
-
-        {/* Content over image */}
-        <div className="relative flex flex-col h-full px-12 py-14">
-
-          {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
-            <span className="font-display text-2xl font-semibold italic text-white">TropiPine</span>
-            <p className="label text-white/30 text-[10px] mt-0.5">Est. 2019</p>
-          </Link>
-
-          {/* Center: brand promise + benefits */}
-          <div className="flex-1 flex flex-col justify-center py-16">
-            <p className="label text-white/30 mb-4">Why our customers love us</p>
-            <h2 className="font-display text-4xl font-semibold text-white mb-10 leading-tight">
-              Premium fruit.<br /><em>Honest price.</em><br />Direct to you.
-            </h2>
-            <div className="space-y-0 border-t border-white/12">
-              {benefits.map((b) => (
-                <div key={b.label} className="border-b border-white/12 py-5">
-                  <div className="flex items-start gap-4">
-                    <div className="w-1.5 h-1.5 rounded-full bg-grove mt-2 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-white/85">{b.label}</p>
-                      <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{b.desc}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom quote */}
-          <div className="flex-shrink-0 border-t border-white/12 pt-8">
-            <p className="font-display text-lg font-semibold italic text-white/70 leading-snug mb-3">
-              "Every bite tells the story of the farm it came from."
-            </p>
-            <p className="label text-white/25 text-[10px]">— TropiPine, Est. 2019</p>
-          </div>
-
+        {/* Eyebrow */}
+        <div className="flex items-center gap-3 mb-7">
+          <div className="h-px w-8 bg-clay flex-shrink-0" />
+          <span className="text-clay text-[0.57rem] tracking-[0.28em] uppercase">
+            Member Sign-in
+          </span>
         </div>
-      </div>
 
-      {/* ─── RIGHT PANEL ─── */}
-      <div className="flex-1 flex items-center justify-center px-6 py-16 bg-cream overflow-y-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-sm"
-        >
-          {/* Mobile logo */}
-          <Link to="/" className="block lg:hidden font-display text-xl font-semibold italic text-bark mb-10">
-            TropiPine
-          </Link>
+        {/* Headline */}
+        <h1 className="font-display text-bark font-semibold mb-12"
+          style={{ fontSize: 'clamp(3.2rem, 6vw, 4.8rem)', lineHeight: 0.87, letterSpacing: '-0.025em' }}>
+          Welcome<br /><em>back.</em>
+        </h1>
 
-          <h1 className="font-display text-3xl font-semibold text-bark mb-1">Welcome back</h1>
-          <p className="text-clay text-sm mb-8">Sign in to continue your fresh journey</p>
+        {error && (
+          <p className="text-sm mb-7" style={{ color: '#B85450' }}>{error}</p>
+        )}
 
-          {error && (
-            <div className="border-l-2 border-earth bg-white px-4 py-3 mb-6">
-              <p className="text-sm text-earth">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="label text-clay/70 block mb-2">Email Address</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="you@example.com"
-                className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm placeholder-sand focus:outline-none focus:border-bark transition-colors"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="label text-clay/70">Password</label>
-                <Link to="/forgot-password" className="text-xs text-clay hover:text-bark transition-colors underline underline-offset-2">
-                  Forgot password?
-                </Link>
-              </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-white border border-stone text-bark text-sm focus:outline-none focus:border-bark transition-colors"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 bg-bark text-white text-sm font-medium tracking-wide hover:bg-earth transition-colors disabled:opacity-50"
-            >
-              {loading ? 'Signing in…' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-stone" />
-            <span className="text-xs text-clay/40 tracking-wider">or continue with</span>
-            <div className="flex-1 h-px bg-stone" />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div>
+            <label className="block text-xs tracking-[0.12em] uppercase text-bark font-medium mb-1.5">
+              Email address
+            </label>
+            <input
+              type="email" value={email} required              onChange={e => setEmail(e.target.value)}
+              className="w-full bg-white border border-stone text-bark text-sm px-4 py-3 outline-none placeholder-clay focus:border-bark transition-colors"
+            />
           </div>
 
-          <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+          <div>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="text-xs tracking-[0.12em] uppercase text-bark font-medium">
+                Password
+              </label>
+              <Link to="/forgot-password"
+                className="text-[0.62rem] text-clay hover:text-bark transition-colors tracking-wide">
+                Forgot password?
+              </Link>
+            </div>
+            <input
+              type="password" value={password} required
+              onChange={e => setPassword(e.target.value)}
+              className="w-full bg-white border border-stone text-bark text-sm px-4 py-3 outline-none focus:border-bark transition-colors"
+            />
+          </div>
 
-          <p className="text-center text-clay text-sm mt-8">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-bark font-medium hover:text-grove transition-colors underline underline-offset-2">
-              Create one free
-            </Link>
-          </p>
-        </motion.div>
-      </div>
+          <button
+            type="submit" disabled={loading}
+            className="w-full bg-bark text-cream py-[1.1rem] text-[0.6rem] tracking-[0.3em] uppercase font-semibold hover:bg-grove transition-colors disabled:opacity-40"
+            style={{ marginTop: '0.5rem' }}
+          >
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+        </form>
 
+        {/* Divider */}
+        <div className="flex items-center gap-4 my-8">
+          <div className="flex-1 h-px bg-stone" />
+          <span className="text-xs tracking-[0.12em] uppercase text-bark font-medium">or</span>
+          <div className="flex-1 h-px bg-stone" />
+        </div>
+
+        <GoogleSignIn onSuccess={handleGoogle} disabled={loading} />
+
+        <p className="text-center text-clay text-sm mt-10">
+          No account?{' '}
+          <Link to="/register"
+            className="text-bark font-medium hover:text-grove transition-colors underline underline-offset-4">
+            Create one free
+          </Link>
+        </p>
+
+      </motion.div>
     </div>
   )
 }

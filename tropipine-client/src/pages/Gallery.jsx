@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import axios from 'axios'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Footer from '../components/Footer'
+import { usePageLoading } from '../context/LoadingContext'
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 
@@ -13,6 +14,7 @@ const TITLE_SCROLL = 520
 const EXPO_OUT  = [0.16, 1, 0.3,  1]
 const QUART_OUT = [0.25, 1, 0.5,  1]
 const SINE_OUT  = [0.39, 0.575, 0.565, 1]
+
 
 // ─── ASPECT RATIOS ───────────────────────────────────────────────────────────
 // Each column gets its own repeating rhythm of aspect ratios,
@@ -41,20 +43,6 @@ const getNumCols = () => {
   return 3
 }
 
-// ─── IMAGE REVEAL ANIMATION ──────────────────────────────────────────────────
-// Zoom-out + fade: image begins slightly cropped-in, then opens to full.
-
-const revealVariants = {
-  hidden: { opacity: 0, scale: 1.08 },
-  show: (delay) => ({
-    opacity: 1,
-    scale: 1,
-    transition: {
-      opacity: { duration: 1.4, delay, ease: QUART_OUT },
-      scale:   { duration: 2.4, delay, ease: EXPO_OUT },
-    },
-  }),
-}
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
@@ -64,6 +52,7 @@ export default function Gallery() {
   const [gridHeight, setGridHeight] = useState(6000)
   const [numCols, setNumCols]       = useState(getNumCols)
   const gridRef = useRef(null)
+  const setDataLoading = usePageLoading()
 
   // ── Scroll setup ───────────────────────────────────────────────────────────
   const { scrollY } = useScroll()
@@ -80,10 +69,11 @@ export default function Gallery() {
   const API_URL = import.meta.env.VITE_API_URL
 
   useEffect(() => {
+    setDataLoading(true)
     axios.get(`${API_URL}/gallery`)
       .then((r) => setImages(r.data.data || []))
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setDataLoading(false) })
   }, [])
 
   // ── Responsive columns ────────────────────────────────────────────────────
@@ -170,11 +160,11 @@ export default function Gallery() {
               >
                 {col.map(({ item, globalIdx }, rowIdx) => {
                   const isLast = rowIdx === col.length - 1
-                  const delay  = Math.min(globalIdx * 0.045, 0.85)
 
                   return (
                     <div
                       key={item?.id ?? globalIdx}
+                      className="gallery-tile"
                       style={{
                         // Non-last: fixed aspect ratio drives height.
                         // Last: flex-grow to fill remaining column height.
@@ -188,31 +178,47 @@ export default function Gallery() {
                       }}
                     >
                       {item ? (
-                        /*
-                          Cinematic reveal:
-                          scale 1.08→1 over 2.4 s (EXPO_OUT) — image "breathes" open.
-                          opacity 0→1 over 1.4 s (QUART_OUT) — gentle materialisation.
-                          brightness/contrast → editorial "printed" depth.
-                        */
-                        <motion.img
-                          custom={delay}
-                          initial="hidden"
-                          animate="show"
-                          variants={revealVariants}
-                          src={item.url || item.imageUrl}
-                          alt={item.caption || ''}
-                          loading="lazy"
-                          draggable={false}
-                          style={{
-                            position: 'absolute',
-                            inset: 0,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            filter: 'brightness(0.93) contrast(1.05)',
-                            willChange: 'transform, opacity',
-                          }}
-                        />
+                        <>
+                          <img
+                            src={item.url || item.imageUrl}
+                            alt={item.caption || ''}
+                            loading="lazy"
+                            draggable={false}
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              filter: 'brightness(0.93) contrast(1.05)',
+                            }}
+                          />
+                          {item.caption && (
+                            <div
+                              className="gallery-overlay"
+                              style={{
+                                position: 'absolute',
+                                bottom: 0, left: 0, right: 0,
+                                background: 'linear-gradient(to top, rgba(15,10,8,0.78) 0%, transparent 100%)',
+                                padding: '2.5rem 1.25rem 1.1rem',
+                                pointerEvents: 'none',
+                                zIndex: 2,
+                              }}
+                            >
+                              <p style={{
+                                color: 'rgba(255,255,255,0.82)',
+                                fontSize: '0.68rem',
+                                letterSpacing: '0.14em',
+                                textTransform: 'uppercase',
+                                fontFamily: '"DM Sans", system-ui, sans-serif',
+                                fontWeight: 400,
+                                margin: 0,
+                              }}>
+                                {item.caption}
+                              </p>
+                            </div>
+                          )}
+                        </>
                       ) : (
                         // Loading skeleton — dark pulse, matches bg
                         <motion.div
@@ -226,6 +232,7 @@ export default function Gallery() {
                         />
                       )}
                     </div>
+
                   )
                 })}
               </div>
@@ -371,6 +378,13 @@ export default function Gallery() {
         }
         @media (max-width: 639px) {
           [data-gallery-grid] { padding-top: 0; }
+        }
+        .gallery-overlay {
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+        .gallery-tile:hover .gallery-overlay {
+          opacity: 1;
         }
       `}</style>
 

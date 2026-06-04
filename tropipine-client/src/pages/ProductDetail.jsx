@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../store/slices/cartSlice'
 import { addToWishlist, removeFromWishlist } from '../store/slices/wishlistSlice'
 import api from '../services/api'
+import { usePageLoading } from '../context/LoadingContext'
 
 function StarPicker({ value, onChange }) {
   const [hovered, setHovered] = useState(0)
@@ -65,10 +66,12 @@ export default function ProductDetail() {
   const [reviewSuccess, setReviewSuccess] = useState(false)
   const [reviewError, setReviewError] = useState('')
   const [hasReviewed, setHasReviewed] = useState(false)
+  const setDataLoading = usePageLoading()
 
   const isInWishlist = wishlist.some((item) => item.productId === id)
 
   useEffect(() => {
+    setDataLoading(true)
     api.get(`/products/${id}`)
       .then((r) => {
         setProduct(r.data)
@@ -76,7 +79,7 @@ export default function ProductDetail() {
         setQuantity(r.data.minOrderQty || 0.5)
       })
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setDataLoading(false) })
   }, [id])
 
   useEffect(() => {

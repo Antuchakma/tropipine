@@ -1,14 +1,9 @@
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 const EXPO_OUT  = [0.16, 1, 0.3, 1]
 const QUART_OUT = [0.25, 1, 0.5, 1]
 
-export default function AppLoader({ onDone }) {
-  useEffect(() => {
-    const t = setTimeout(onDone, 1500)
-    return () => clearTimeout(t)
-  }, [onDone])
+export default function AppLoader() {
 
   return (
     <motion.div

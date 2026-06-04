@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import { usePageLoading } from '../context/LoadingContext'
 
 const STATUSES = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED']
 
@@ -9,12 +10,14 @@ export default function OrderTracking() {
   const navigate = useNavigate()
   const [order, setOrder] = useState(null)
   const [loading, setLoading] = useState(true)
+  const setDataLoading = usePageLoading()
 
   useEffect(() => {
+    setDataLoading(true)
     api.get(`/orders/my-orders/${orderId}`)
       .then((r) => setOrder(r.data.data))
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setDataLoading(false) })
   }, [orderId])
 
   if (loading) {

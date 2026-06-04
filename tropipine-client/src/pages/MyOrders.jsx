@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
 import api from '../services/api'
+import { usePageLoading } from '../context/LoadingContext'
 
 const STATUS_STYLE = {
   CONFIRMED:  'text-grove',
@@ -21,13 +22,15 @@ export default function MyOrders() {
   const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState('newest')
   const [filterMonth, setFilterMonth] = useState('')
+  const setDataLoading = usePageLoading()
 
   useEffect(() => {
     if (!user) { navigate('/login'); return }
+    setDataLoading(true)
     api.get('/orders/my-orders')
       .then((r) => setOrders(r.data.orders || r.data.items || []))
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setDataLoading(false) })
   }, [user, navigate])
 
   const sorted = [...orders].sort((a, b) => {

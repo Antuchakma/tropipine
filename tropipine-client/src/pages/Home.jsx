@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import api from '../services/api'
 import ProductCard from '../components/ProductCard'
+import { usePageLoading } from '../context/LoadingContext'
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -34,15 +35,17 @@ export default function Home() {
   const [featured, setFeatured] = useState([])
   const [exclusive, setExclusive] = useState([])
   const [loading, setLoading] = useState(true)
+  const setDataLoading = usePageLoading()
 
   useEffect(() => {
+    setDataLoading(true)
     Promise.all([
       api.get('/products?isFeatured=true&limit=4').catch(() => ({ data: { items: [] } })),
       api.get('/products?isExclusive=true&limit=3').catch(() => ({ data: { items: [] } })),
     ]).then(([featRes, excRes]) => {
       setFeatured(featRes.data.items || [])
       setExclusive(excRes.data.items || [])
-    }).finally(() => setLoading(false))
+    }).finally(() => { setLoading(false); setDataLoading(false) })
   }, [])
 
   return (

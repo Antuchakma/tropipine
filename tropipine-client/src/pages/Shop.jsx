@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '../services/api'
 import ProductCard from '../components/ProductCard'
+import { usePageLoading } from '../context/LoadingContext'
 
 const SORT_OPTIONS = [
   { value: '', label: 'Recommended' },
@@ -28,6 +29,8 @@ export default function Shop() {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
+  const setDataLoading = usePageLoading()
+  const isFirstFetch = useRef(true)
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -54,6 +57,7 @@ export default function Shop() {
 
   useEffect(() => {
     setLoading(true)
+    if (isFirstFetch.current) setDataLoading(true)
     const params = new URLSearchParams({ page, limit: LIMIT })
     if (debouncedSearch) params.set('search', debouncedSearch)
     if (sortBy) params.set('sortBy', sortBy)
@@ -63,7 +67,10 @@ export default function Shop() {
     api.get(`/products?${params}`)
       .then((r) => { setProducts(r.data.items || []); setTotal(r.data.total || 0) })
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+        if (isFirstFetch.current) { setDataLoading(false); isFirstFetch.current = false }
+      })
   }, [page, debouncedSearch, sortBy, activeFilter, selectedCategory, selectedFruitType])
 
   const totalPages = Math.ceil(total / LIMIT)

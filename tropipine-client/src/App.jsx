@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { AnimatePresence } from 'framer-motion'
@@ -12,6 +12,7 @@ import ScrollToTop from './components/ScrollToTop'
 import AuthInitializer from './components/AuthInitializer'
 import AppLoader from './components/AppLoader'
 import RouteProgress from './components/RouteProgress'
+import { LoadingContext } from './context/LoadingContext'
 
 // Pages
 import Home from './pages/Home'
@@ -51,15 +52,26 @@ function GalleryLayout({ children }) {
   )
 }
 
+function AuthLayout({ children }) {
+  return <>{children}</>
+}
+
 function App() {
-  const [appReady, setAppReady] = useState(false)
+  const [appBooting, setAppBooting] = useState(true)
+  const [dataLoading, setDataLoading] = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setAppBooting(false), 1500)
+    return () => clearTimeout(t)
+  }, [])
 
   return (
     <Provider store={store}>
-      <AnimatePresence>
-        {!appReady && <AppLoader onDone={() => setAppReady(true)} />}
-      </AnimatePresence>
-      <AuthInitializer>
+      <LoadingContext.Provider value={{ setDataLoading }}>
+        <AnimatePresence>
+          {(appBooting || dataLoading) && <AppLoader key="loader" />}
+        </AnimatePresence>
+        <AuthInitializer>
         <BrowserRouter>
           <RouteProgress />
           <ScrollToTop />
@@ -140,38 +152,10 @@ function App() {
               </Layout>
             }
           />
-          <Route
-            path="/login"
-            element={
-              <Layout>
-                <Login />
-              </Layout>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Layout>
-                <Register />
-              </Layout>
-            }
-          />
-          <Route
-            path="/forgot-password"
-            element={
-              <Layout>
-                <ForgotPassword />
-              </Layout>
-            }
-          />
-          <Route
-            path="/reset-password/:token"
-            element={
-              <Layout>
-                <ResetPassword />
-              </Layout>
-            }
-          />
+          <Route path="/login"           element={<Layout><Login /></Layout>} />
+          <Route path="/register"        element={<Layout><Register /></Layout>} />
+          <Route path="/forgot-password" element={<Layout><ForgotPassword /></Layout>} />
+          <Route path="/reset-password/:token" element={<Layout><ResetPassword /></Layout>} />
           <Route
             path="/profile"
             element={
@@ -209,6 +193,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       </AuthInitializer>
+      </LoadingContext.Provider>
     </Provider>
   )
 }

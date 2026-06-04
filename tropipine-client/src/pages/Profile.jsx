@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../store/slices/authSlice'
 import api from '../services/api'
+import { usePageLoading } from '../context/LoadingContext'
 
 const STATUS_STYLE = {
   CONFIRMED:  'bg-mist text-grove border-sage/30',
@@ -21,13 +22,15 @@ export default function Profile() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('orders')
+  const setDataLoading = usePageLoading()
 
   useEffect(() => {
     if (!user) { navigate('/login'); return }
+    setDataLoading(true)
     api.get('/orders/my-orders')
       .then((r) => setOrders(r.data.orders || r.data.items || []))
       .catch(() => {})
-      .finally(() => setLoading(false))
+      .finally(() => { setLoading(false); setDataLoading(false) })
   }, [user, navigate])
 
   const handleLogout = () => { dispatch(logout()); navigate('/') }
