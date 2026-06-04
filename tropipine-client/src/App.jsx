@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { AnimatePresence } from 'framer-motion'
 import store from './store'
 
 // Layout
@@ -8,6 +10,8 @@ import Footer from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
 import ScrollToTop from './components/ScrollToTop'
 import AuthInitializer from './components/AuthInitializer'
+import AppLoader from './components/AppLoader'
+import RouteProgress from './components/RouteProgress'
 
 // Pages
 import Home from './pages/Home'
@@ -38,11 +42,26 @@ function Layout({ children }) {
   )
 }
 
+function GalleryLayout({ children }) {
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  )
+}
+
 function App() {
+  const [appReady, setAppReady] = useState(false)
+
   return (
     <Provider store={store}>
+      <AnimatePresence>
+        {!appReady && <AppLoader onDone={() => setAppReady(true)} />}
+      </AnimatePresence>
       <AuthInitializer>
         <BrowserRouter>
+          <RouteProgress />
           <ScrollToTop />
         <Routes>
           <Route
@@ -174,9 +193,9 @@ function App() {
           <Route
             path="/gallery"
             element={
-              <Layout>
+              <GalleryLayout>
                 <Gallery />
-              </Layout>
+              </GalleryLayout>
             }
           />
           <Route

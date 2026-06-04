@@ -89,11 +89,19 @@ export default function Cart() {
                   {/* Product */}
                   <div className="col-span-12 sm:col-span-6 flex items-center gap-4">
                     <div className="w-16 h-16 flex-shrink-0 overflow-hidden bg-bone">
-                      <img
-                        src={item.image || 'https://via.placeholder.com/64'}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
-                      />
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-bone flex items-center justify-center">
+                          <svg className="w-6 h-6 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                            <rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                          </svg>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <p className="text-sm font-medium text-bark">{item.name}</p>
@@ -104,16 +112,16 @@ export default function Cart() {
                   {/* Qty */}
                   <div className="col-span-8 sm:col-span-3 flex items-center justify-start sm:justify-center gap-0">
                     <button
-                      onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: Math.max(1, item.quantity - 1) }))}
+                      onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: Math.max(0.5, +(item.quantity - 0.5).toFixed(1)) }))}
                       className="w-8 h-8 border border-stone text-clay hover:border-bark hover:text-bark transition-colors text-sm flex items-center justify-center"
                     >
                       −
                     </button>
-                    <span className="w-10 text-center text-sm text-bark border-y border-stone h-8 flex items-center justify-center">
+                    <span className="w-12 text-center text-sm text-bark border-y border-stone h-8 flex items-center justify-center">
                       {item.quantity}
                     </span>
                     <button
-                      onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: item.quantity + 1 }))}
+                      onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: +(item.quantity + 0.5).toFixed(1) }))}
                       className="w-8 h-8 border border-stone text-clay hover:border-bark hover:text-bark transition-colors text-sm flex items-center justify-center"
                     >
                       +

@@ -21,7 +21,8 @@ const cartSlice = createSlice({
           productId: action.payload.productId,
           name: action.payload.name,
           price: action.payload.price,
-          quantity: action.payload.quantity || 1,
+          quantity: action.payload.quantity || 0.5,
+          unit: action.payload.unit || 'kg',
           image: action.payload.image,
         })
       }

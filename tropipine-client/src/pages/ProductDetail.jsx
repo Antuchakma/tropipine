@@ -53,7 +53,7 @@ export default function ProductDetail() {
 
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(0.5)
   const [selectedImage, setSelectedImage] = useState(null)
 
   const [reviews, setReviews] = useState([])
@@ -70,7 +70,11 @@ export default function ProductDetail() {
 
   useEffect(() => {
     api.get(`/products/${id}`)
-      .then((r) => { setProduct(r.data); setSelectedImage(r.data.images?.find((i) => i.isPrimary)?.url || r.data.images?.[0]?.url) })
+      .then((r) => {
+        setProduct(r.data)
+        setSelectedImage(r.data.images?.find((i) => i.isPrimary)?.url || r.data.images?.[0]?.url)
+        setQuantity(r.data.minOrderQty || 0.5)
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [id])
@@ -88,7 +92,7 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (!product) return
-    dispatch(addToCart({ productId: product.id, name: product.name, price: product.finalPrice, quantity, image: selectedImage }))
+    dispatch(addToCart({ productId: product.id, name: product.name, price: product.finalPrice, quantity, unit: product.unit || 'kg', image: selectedImage }))
     navigate('/cart')
   }
 
@@ -234,7 +238,7 @@ export default function ProductDetail() {
               <span className="label text-clay/60">Quantity</span>
               <div className="flex items-center gap-0">
                 <button
-                  onClick={() => setQuantity(Math.max(product.minOrderQty || 1, quantity - 1))}
+                  onClick={() => setQuantity(+(Math.max(product.minOrderQty || 0.5, quantity - 0.5)).toFixed(1))}
                   className="w-9 h-9 border border-stone text-clay hover:border-bark hover:text-bark transition-colors flex items-center justify-center text-sm"
                 >
                   −
@@ -243,7 +247,7 @@ export default function ProductDetail() {
                   {quantity}
                 </span>
                 <button
-                  onClick={() => setQuantity(quantity + 1)}
+                  onClick={() => setQuantity(+(quantity + 0.5).toFixed(1))}
                   disabled={quantity >= product.stockQty}
                   className="w-9 h-9 border border-stone text-clay hover:border-bark hover:text-bark transition-colors flex items-center justify-center text-sm disabled:opacity-30"
                 >
