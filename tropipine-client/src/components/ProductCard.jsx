@@ -10,9 +10,18 @@ export default function ProductCard({ product }) {
   const isInWishlist = wishlist.some((i) => i.productId === product.id)
   const [justAdded, setJustAdded] = useState(false)
 
-  const primaryImage = product.images?.find((i) => i.isPrimary)?.url
+  const API_URL = import.meta.env.VITE_API_URL || ''
+  const resolveImg = (url) => {
+    if (!url) return null
+    if (url.startsWith('http')) return url
+    return `${API_URL}${url}`
+  }
+  const primaryImage = resolveImg(
+    product.images?.find((i) => i.isPrimary)?.url
     || product.images?.[0]?.url
+    || product.imageUrl
     || product.image
+  )
 
   const handleAddToCart = () => {
     dispatch(addToCart({
@@ -44,7 +53,7 @@ export default function ProductCard({ product }) {
     ? Math.round(((product.basePrice - product.finalPrice) / product.basePrice) * 100)
     : 0
 
-  const isOutOfStock = product.stockQty === 0
+  const isOutOfStock = product.stockQty === 0 || product.isAvailable === false
   const isLowStock = !isOutOfStock && product.stockQty > 0 && product.stockQty <= (product.lowStockThreshold || 5)
 
   return (
@@ -91,8 +100,10 @@ export default function ProductCard({ product }) {
 
         {/* Out of stock overlay */}
         {isOutOfStock && (
-          <div className="absolute inset-0 bg-cream/75 flex items-center justify-center">
-            <span className="bg-bark text-white text-xs px-4 py-1.5 tracking-widest uppercase font-semibold">Sold Out</span>
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <span className="bg-white text-bark text-xs px-5 py-2 tracking-widest uppercase font-bold shadow-md">
+              {product.isAvailable === false ? 'Unavailable' : 'Sold Out'}
+            </span>
           </div>
         )}
 

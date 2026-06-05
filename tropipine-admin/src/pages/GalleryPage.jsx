@@ -3,15 +3,11 @@ import AdminLayout from '../components/AdminLayout';
 import api from '../utils/api';
 import { btn, brandGrad, card, toastStyle, disabledBtnStyle } from '../utils/ui';
 
-const CATEGORIES = ['FARM', 'PACKAGING', 'DELIVERY', 'STORAGE', 'TEAM'];
-
 export default function GalleryPage() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [caption, setCaption] = useState('');
-  const [category, setCategory] = useState('FARM');
   const [toast, setToast] = useState(null);
 
   const showToast = (msg, type = 'success') => {
@@ -35,14 +31,11 @@ export default function GalleryPage() {
     if (!selectedFile) { showToast('Please select a file', 'error'); return; }
     const fd = new FormData();
     fd.append('image', selectedFile);
-    fd.append('caption', caption);
-    fd.append('category', category);
     try {
       setUploading(true);
       await api.post('/gallery', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
       showToast('Image uploaded!');
       setSelectedFile(null);
-      setCaption('');
       fetchGallery();
     } catch { showToast('Upload failed', 'error'); }
     finally { setUploading(false); }
@@ -70,7 +63,7 @@ export default function GalleryPage() {
 
         <div>
           <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Gallery</h2>
-          <p className="text-sm text-ink-muted mt-0.5">{images.length} images  Farm, packaging and delivery photos</p>
+          <p className="text-sm text-ink-muted mt-0.5">{images.length} images</p>
         </div>
 
         {/* Upload form */}
@@ -81,41 +74,20 @@ export default function GalleryPage() {
               <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} className="hidden" />
               {selectedFile ? (
                 <div className="text-center">
-                  <p className="text-2xl mb-2">Check</p>
+                  <p className="text-2xl mb-2">✓</p>
                   <p className="font-semibold text-ink text-sm">{selectedFile.name}</p>
                   <p className="text-xs text-ink-muted mt-1">Click to change</p>
                 </div>
               ) : (
                 <div className="text-center">
-                  <p className="text-4xl mb-3 group-hover:scale-110 transition-transform">Img</p>
+                  <svg className="w-10 h-10 text-ink-faint mx-auto mb-3 group-hover:text-brand-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.25}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
                   <p className="font-semibold text-ink text-sm">Click to select image</p>
                   <p className="text-xs text-ink-muted mt-1">PNG, JPG, WebP · Max 5MB</p>
                 </div>
               )}
             </label>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Caption</label>
-                <input
-                  type="text"
-                  placeholder="Optional caption"
-                  value={caption}
-                  onChange={(e) => setCaption(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-ink-muted mb-1.5">Category</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 transition"
-                >
-                  {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
-              </div>
-            </div>
 
             <button
               type="submit"
@@ -123,7 +95,7 @@ export default function GalleryPage() {
               className={`${btn.primary} disabled:opacity-50`}
               style={!uploading && selectedFile ? brandGrad : disabledBtnStyle}
             >
-              {uploading ? 'Uploading...' : 'Upload Image'}
+              {uploading ? 'Uploading…' : 'Upload Image'}
             </button>
           </form>
         </div>
@@ -134,37 +106,29 @@ export default function GalleryPage() {
             <h3 className="font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Gallery Images</h3>
           </div>
           {loading ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 p-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="rounded-2xl overflow-hidden border border-edge animate-pulse">
-                  <div className="h-44 bg-edge" />
-                  <div className="p-4 space-y-2">
-                    <div className="h-3 bg-edge rounded w-2/3" />
-                    <div className="h-3 bg-edge rounded w-1/3" />
-                  </div>
-                </div>
+                <div key={i} className="rounded-2xl overflow-hidden border border-edge animate-pulse aspect-[4/3] bg-edge" />
               ))}
             </div>
           ) : images.length === 0 ? (
             <div className="text-center py-16 text-ink-muted text-sm">No images yet</div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 p-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
               {images.map((img) => (
-                <div key={img.id} className="rounded-2xl overflow-hidden border border-edge group bg-white hover:shadow-lg transition-shadow">
-                  <div className="relative h-44 overflow-hidden bg-surface">
-                    <img src={img.url} alt={img.caption} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-                      <button
-                        onClick={() => handleDelete(img.id)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-semibold"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                  <div className="px-4 py-3">
-                    <p className="text-sm font-medium text-ink truncate">{img.caption || 'Untitled'}</p>
-                    <p className="text-xs text-ink-muted mt-0.5">{img.category}</p>
+                <div key={img.id} className="rounded-2xl overflow-hidden border border-edge group bg-white hover:shadow-lg transition-shadow aspect-[4/3] relative">
+                  <img
+                    src={img.url}
+                    alt=""
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                    <button
+                      onClick={() => handleDelete(img.id)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-semibold shadow-lg"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))}

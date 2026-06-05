@@ -29,10 +29,20 @@ export default function InventoryPage() {
   };
 
   const handleSaveStock = async (id) => {
+    const val = parseFloat(editStock);
+    if (isNaN(val) || val < 0) { showToast('Stock cannot be negative', 'error'); return; }
     try {
-      await api.patch(`/products/${id}/stock`, { stockQty: parseFloat(editStock) });
+      await api.patch(`/products/${id}/stock`, { stockQty: val });
       showToast('Stock updated!');
       setEditingId(null);
+      fetchProducts();
+    } catch { showToast('Failed to update', 'error'); }
+  };
+
+  const handleMarkOutOfStock = async (id) => {
+    try {
+      await api.patch(`/products/${id}/stock`, { stockQty: 0 });
+      showToast('Marked as out of stock');
       fetchProducts();
     } catch { showToast('Failed to update', 'error'); }
   };
@@ -101,8 +111,8 @@ export default function InventoryPage() {
           ))}
         </div>
 
-        <div className={`${card} overflow-hidden`}>
-          <table className="w-full">
+        <div className={`${card} overflow-x-auto`}>
+          <table className="w-full min-w-[600px]">
             <thead style={tableHeadStyle}>
               <tr>
                 {['Product', 'Category', 'Unit', 'Stock', 'Threshold', 'Status', 'Update'].map((h) => (
@@ -151,21 +161,36 @@ export default function InventoryPage() {
                             type="number"
                             value={editStock}
                             onChange={(e) => setEditStock(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSaveStock(p.id);
+                              if (e.key === 'Escape') setEditingId(null);
+                            }}
                             className="w-20 px-2.5 py-1.5 rounded-lg border border-edge text-sm focus:outline-none focus:border-brand-400 text-center"
                             min="0"
                             step="0.5"
                             autoFocus
                           />
                           <button onClick={() => handleSaveStock(p.id)} className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white" style={brandGrad}>Save</button>
-                          <button onClick={() => setEditingId(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-surface border border-edge text-ink-muted"></button>
+                          <button onClick={() => setEditingId(null)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-surface border border-edge text-ink-muted">✕</button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => { setEditingId(p.id); setEditStock(String(p.stockQty)); }}
-                          className={btn.ghost}
-                        >
-                          Edit
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => { setEditingId(p.id); setEditStock(String(p.stockQty)); }}
+                            className={btn.ghost}
+                          >
+                            Edit
+                          </button>
+                          {p.stockQty > 0 && (
+                            <button
+                              onClick={() => handleMarkOutOfStock(p.id)}
+                              className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors"
+                              title="Set stock to 0"
+                            >
+                              Out of Stock
+                            </button>
+                          )}
+                        </div>
                       )}
                     </td>
                   </tr>

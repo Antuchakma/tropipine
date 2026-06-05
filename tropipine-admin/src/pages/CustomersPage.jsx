@@ -62,13 +62,13 @@ export default function CustomersPage() {
             <h2 className="text-2xl font-bold text-ink" style={{ fontFamily: 'var(--font-display)' }}>Customers</h2>
             <p className="text-sm text-ink-muted mt-0.5">{total} registered customers</p>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); fetchCustomers(search); }} className="flex gap-2">
+          <form onSubmit={(e) => { e.preventDefault(); fetchCustomers(search); }} className="flex gap-2 w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search name or email"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 w-64 transition"
+              className="px-4 py-2.5 rounded-xl border border-edge bg-white text-sm focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100 w-full sm:w-64 transition"
             />
             <button type="submit" className={btn.primary} style={brandGrad}>Search</button>
             {search && (
@@ -142,8 +142,8 @@ export default function CustomersPage() {
           </div>
         )}
 
-        <div className={`${card} overflow-hidden`}>
-          <table className="w-full">
+        <div className={`${card} overflow-x-auto`}>
+          <table className="w-full min-w-[600px]">
             <thead style={tableHeadStyle}>
               <tr>
                 {['Customer', 'Email', 'Orders', 'Status', 'Joined', ''].map((h) => (

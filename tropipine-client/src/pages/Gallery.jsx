@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import axios from 'axios'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import Footer from '../components/Footer'
 import { usePageLoading } from '../context/LoadingContext'
 
@@ -8,7 +8,8 @@ import { usePageLoading } from '../context/LoadingContext'
 
 // Scroll distance (px) the user travels through the title
 // before the image grid begins moving.
-const TITLE_SCROLL = 520
+const TITLE_SCROLL = 520   // how far the title travels off screen
+const IMAGE_START  = 60    // when the image grid begins scrolling
 
 // Easing curves
 const EXPO_OUT  = [0.16, 1, 0.3,  1]
@@ -56,14 +57,48 @@ export default function Gallery() {
 
   // ── Scroll setup ───────────────────────────────────────────────────────────
   const { scrollY } = useScroll()
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 900
 
-  const rawTitleY = useTransform(scrollY, [0, TITLE_SCROLL], [0, -TITLE_SCROLL])
-  const rawImageY = useTransform(scrollY, (v) =>
-    v < TITLE_SCROLL ? 0 : -(v - TITLE_SCROLL)
-  )
+  // Title: spring fires the moment any scroll is detected, settles quickly.
+  const titleTarget    = useMotionValue(0)
+  const gradientTarget = useMotionValue(0)
+  const titleY    = useSpring(titleTarget,    { stiffness: 500, damping: 50 })
+  const gradientY = useSpring(gradientTarget, { stiffness: 500, damping: 50 })
 
-  const titleY = rawTitleY
-  const imageY = rawImageY
+  // Track whether the title spring has fully settled using a ref so
+  // the imageY transform always reads the latest value without stale closures.
+  const titleDoneRef         = useRef(false)
+  const imageScrollStartRef  = useRef(0)
+
+  useEffect(() => {
+    // Fire title exit on first scroll
+    const unsubScroll = scrollY.on('change', (v) => {
+      if (v > 5 && !titleDoneRef.current) {
+        titleTarget.set(-TITLE_SCROLL)
+        gradientTarget.set(-vh)
+      }
+      if (v < 2) {
+        titleTarget.set(0)
+        gradientTarget.set(0)
+        titleDoneRef.current = false
+      }
+    })
+    // Unlock images only once the spring has fully settled
+    const unsubTitle = titleY.on('change', (v) => {
+      if (!titleDoneRef.current && v < -(TITLE_SCROLL - 5)) {
+        titleDoneRef.current = true
+        imageScrollStartRef.current = scrollY.get()
+      }
+    })
+    return () => { unsubScroll(); unsubTitle() }
+  }, [scrollY, titleY, titleTarget, gradientTarget, vh])
+
+  // Images stay frozen (0) until title spring has settled, then scroll 1:1
+  const imageY = useTransform(scrollY, (v) => {
+    if (!titleDoneRef.current) return 0
+    const start = imageScrollStartRef.current
+    return v <= start ? 0 : -(v - start)
+  })
 
   // ── Data ───────────────────────────────────────────────────────────────────
   const API_URL = import.meta.env.VITE_API_URL
@@ -113,7 +148,7 @@ export default function Gallery() {
   return (
     // Outer container provides the total scroll height.
     // bg-bark fills below the grid in case of any residual gap.
-    <div style={{ height: TITLE_SCROLL + gridHeight, backgroundColor: '#1A1410' }}>
+    <div style={{ height: IMAGE_START + gridHeight, backgroundColor: '#1A1410' }}>
 
       {/* ════════════════════════════════════════════════════════════════════
           IMAGE GRID
@@ -178,47 +213,20 @@ export default function Gallery() {
                       }}
                     >
                       {item ? (
-                        <>
-                          <img
-                            src={item.url || item.imageUrl}
-                            alt={item.caption || ''}
-                            loading="lazy"
-                            draggable={false}
-                            style={{
-                              position: 'absolute',
-                              inset: 0,
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              filter: 'brightness(0.93) contrast(1.05)',
-                            }}
-                          />
-                          {item.caption && (
-                            <div
-                              className="gallery-overlay"
-                              style={{
-                                position: 'absolute',
-                                bottom: 0, left: 0, right: 0,
-                                background: 'linear-gradient(to top, rgba(15,10,8,0.78) 0%, transparent 100%)',
-                                padding: '2.5rem 1.25rem 1.1rem',
-                                pointerEvents: 'none',
-                                zIndex: 2,
-                              }}
-                            >
-                              <p style={{
-                                color: 'rgba(255,255,255,0.82)',
-                                fontSize: '0.68rem',
-                                letterSpacing: '0.14em',
-                                textTransform: 'uppercase',
-                                fontFamily: '"DM Sans", system-ui, sans-serif',
-                                fontWeight: 400,
-                                margin: 0,
-                              }}>
-                                {item.caption}
-                              </p>
-                            </div>
-                          )}
-                        </>
+                        <img
+                          src={item.url || item.imageUrl}
+                          alt=""
+                          loading="lazy"
+                          draggable={false}
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            filter: 'brightness(0.93) contrast(1.05)',
+                          }}
+                        />
                       ) : (
                         // Loading skeleton — dark pulse, matches bg
                         <motion.div
@@ -242,6 +250,30 @@ export default function Gallery() {
         </div>
       </motion.div>
 
+      {/* ── Gradient overlay — its own motion so it exits the full viewport ── */}
+      <motion.div
+        style={{
+          y: gradientY,
+          position: 'fixed',
+          top: 0, left: 0,
+          width: '100vw', height: '100vh',
+          zIndex: 15,
+          pointerEvents: 'none',
+          willChange: 'transform',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          background: [
+            'linear-gradient(to bottom,',
+            'hsl(25 35% 7% / 0.92)   0%,',
+            'hsl(25 35% 7% / 0.80)  18%,',
+            'hsl(25 35% 7% / 0.55)  38%,',
+            'hsl(25 35% 7% / 0.30)  58%,',
+            'hsl(25 35% 7% / 0.12)  78%,',
+            'hsl(25 35% 7% / 0.00) 100%)',
+          ].join(' '),
+        }}
+      />
+
       {/* ════════════════════════════════════════════════════════════════════
           TITLE OVERLAY
           Also fixed. titleY spring scrolls it upward on user input,
@@ -257,27 +289,6 @@ export default function Gallery() {
           willChange: 'transform',
         }}
       >
-        {/* ── Gradient ── */}
-        {/* Seven-stop fade ensures a smooth, seam-free transition
-            from fully opaque (for navbar + title) to fully transparent.
-            This prevents any visible gradient "band" over images. */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: '0 0 auto 0',
-            height: '56rem',
-            background: [
-              'linear-gradient(to bottom,',
-              'hsl(25 35% 7% / 0.98)   0%,',
-              'hsl(25 35% 7% / 0.92)  12%,',
-              'hsl(25 35% 7% / 0.78)  26%,',
-              'hsl(25 35% 7% / 0.55)  42%,',
-              'hsl(25 35% 7% / 0.28)  60%,',
-              'hsl(25 35% 7% / 0.08)  76%,',
-              'hsl(25 35% 7% / 0.00) 100%)',
-            ].join(' '),
-          }}
-        />
 
         {/* ── Title block ── */}
         <motion.div
@@ -350,20 +361,7 @@ export default function Gallery() {
               className="lg-sidebar"
             >
               <div style={{ height: 1, width: '100%', backgroundColor: 'rgba(255,255,255,0.1)' }} />
-              <p style={{
-                color: 'rgba(255,255,255,0.32)',
-                fontSize: '0.78rem',
-                lineHeight: 1.95,
-                fontWeight: 300,
-                letterSpacing: '0.04em',
-                fontFamily: '"DM Sans", system-ui, sans-serif',
-                margin: 0,
-              }}>
-                A visual record of our farms,
-                {' '}harvests, and the hillside
-                {' '}life that makes TropiPine
-                {' '}possible.
-              </p>
+             
             </motion.div>
 
           </div>
@@ -378,13 +376,6 @@ export default function Gallery() {
         }
         @media (max-width: 639px) {
           [data-gallery-grid] { padding-top: 0; }
-        }
-        .gallery-overlay {
-          opacity: 0;
-          transition: opacity 0.4s ease;
-        }
-        .gallery-tile:hover .gallery-overlay {
-          opacity: 1;
         }
       `}</style>
 

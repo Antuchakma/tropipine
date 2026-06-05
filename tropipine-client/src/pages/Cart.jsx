@@ -5,6 +5,14 @@ import { motion } from 'framer-motion'
 import { removeFromCart, updateQuantity, setCoupon, clearCoupon } from '../store/slices/cartSlice'
 import api from '../services/api'
 
+const API_URL = import.meta.env.VITE_API_URL || ''
+
+const resolveImage = (url) => {
+  if (!url) return null
+  if (url.startsWith('http')) return url
+  return `${API_URL}${url}`
+}
+
 export default function Cart() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -89,19 +97,12 @@ export default function Cart() {
                   {/* Product */}
                   <div className="col-span-12 sm:col-span-6 flex items-center gap-4">
                     <div className="w-16 h-16 flex-shrink-0 overflow-hidden bg-bone">
-                      {item.image ? (
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-bone flex items-center justify-center">
-                          <svg className="w-6 h-6 text-sand" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                            <rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-                          </svg>
-                        </div>
-                      )}
+                      <img
+                        src={resolveImage(item.image) || 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=200&q=80'}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                        onError={e => { e.target.src = 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=200&q=80' }}
+                      />
                     </div>
                     <div>
                       <p className="text-sm font-medium text-bark">{item.name}</p>
@@ -117,9 +118,26 @@ export default function Cart() {
                     >
                       −
                     </button>
-                    <span className="w-12 text-center text-sm text-bark border-y border-stone h-8 flex items-center justify-center">
-                      {item.quantity}
-                    </span>
+                    <input
+                      type="number"
+                      min="0.5"
+                      step="0.5"
+                      value={item.quantity}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value)
+                        if (!isNaN(val) && val > 0) {
+                          dispatch(updateQuantity({ productId: item.productId, quantity: +val.toFixed(2) }))
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const val = parseFloat(e.target.value)
+                        if (isNaN(val) || val < 0.5) {
+                          dispatch(updateQuantity({ productId: item.productId, quantity: 0.5 }))
+                        }
+                      }}
+                      onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+                      className="w-16 text-center text-sm text-bark border-y border-stone h-8 focus:outline-none focus:border-bark bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
                     <button
                       onClick={() => dispatch(updateQuantity({ productId: item.productId, quantity: +(item.quantity + 0.5).toFixed(1) }))}
                       className="w-8 h-8 border border-stone text-clay hover:border-bark hover:text-bark transition-colors text-sm flex items-center justify-center"

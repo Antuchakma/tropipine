@@ -10,6 +10,7 @@ const emptyForm = {
   unit: 'kg', stockQty: '', fruitType: '', variant: '',
   isFeatured: false, isBestSeller: false,
   isExclusive: false, exclusiveLabel: '',
+  isAvailable: true,
 };
 
 export default function ProductsPage() {
@@ -111,6 +112,14 @@ export default function ProductsPage() {
       showToast('Product deleted');
       fetchProducts();
     } catch { showToast('Failed to delete', 'error'); }
+  };
+
+  const handleToggleAvailable = async (id, current) => {
+    try {
+      await api.patch(`/products/${id}/toggle-available`);
+      showToast(current ? 'Marked as unavailable' : 'Marked as available');
+      fetchProducts();
+    } catch { showToast('Failed to toggle availability', 'error'); }
   };
 
   return (
@@ -225,6 +234,7 @@ export default function ProductsPage() {
 
               <div className="sm:col-span-2 flex flex-wrap gap-6">
                 {[
+                  { name: 'isAvailable', label: 'Available for sale' },
                   { name: 'isFeatured', label: 'Featured' },
                   { name: 'isBestSeller', label: 'Best Seller' },
                   { name: 'isExclusive', label: 'Exclusive' },
@@ -269,8 +279,8 @@ export default function ProductsPage() {
         )}
 
         {/* Table */}
-        <div className={`${card} overflow-hidden`}>
-          <table className="w-full">
+        <div className={`${card} overflow-x-auto`}>
+          <table className="w-full min-w-[640px]">
             <thead style={tableHeadStyle}>
               <tr>
                 {['Product', 'Type / Variant', 'Price', 'Stock', 'Flags', ''].map((h) => (
@@ -302,19 +312,41 @@ export default function ProductsPage() {
                     )}
                   </td>
                   <td className={tableCell}>
-                    <span className={`font-semibold ${p.stockQty <= 0 ? 'text-red-500' : p.stockQty <= p.lowStockThreshold ? 'text-orange-500' : 'text-ink'}`}>
-                      {p.stockQty} {p.unit}
-                    </span>
+                    <div className="flex flex-col gap-1">
+                      <span className={`font-semibold ${p.stockQty <= 0 ? 'text-red-500' : p.stockQty <= p.lowStockThreshold ? 'text-orange-500' : 'text-ink'}`}>
+                        {p.stockQty} {p.unit}
+                      </span>
+                      {!p.isAvailable && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700 border border-red-200 w-fit">
+                          Unavailable
+                        </span>
+                      )}
+                      {p.isAvailable && p.stockQty <= 0 && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-200 w-fit">
+                          Out of Stock
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className={tableCell}>
                     <div className="flex flex-wrap gap-1.5">
                       {p.isFeatured && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-600 border border-indigo-200">Featured</span>}
                       {p.isBestSeller && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Best Seller</span>}
-                      {p.isExclusive && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200"> Exclusive</span>}
+                      {p.isExclusive && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">Exclusive</span>}
                     </div>
                   </td>
                   <td className={`${tableCell} text-right`}>
                     <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleToggleAvailable(p.id, p.isAvailable)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                          p.isAvailable
+                            ? 'text-red-500 border-red-200 hover:bg-red-50'
+                            : 'text-emerald-600 border-emerald-200 hover:bg-emerald-50'
+                        }`}
+                      >
+                        {p.isAvailable ? 'Disable' : 'Enable'}
+                      </button>
                       <button onClick={() => openEdit(p)} className={btn.ghost}>Edit</button>
                       <button onClick={() => handleDelete(p.id)} className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors">Delete</button>
                     </div>

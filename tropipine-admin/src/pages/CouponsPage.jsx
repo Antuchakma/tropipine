@@ -155,8 +155,8 @@ export default function CouponsPage() {
           </div>
         )}
 
-        <div className={`${card} overflow-hidden`}>
-          <table className="w-full">
+        <div className={`${card} overflow-x-auto`}>
+          <table className="w-full min-w-[600px]">
             <thead style={tableHeadStyle}>
               <tr>
                 {['Code', 'Type', 'Discount', 'Min Order', 'Used / Limit', 'Status', ''].map((h) => (

@@ -236,6 +236,7 @@ async function updateProduct(req, res) {
     floatFields.forEach((f) => {
       if (req.body[f] !== undefined) data[f] = parseFloat(req.body[f]);
     });
+    if (data.stockQty !== undefined) data.stockQty = Math.max(0, data.stockQty);
 
     if (req.body.sortOrder !== undefined) data.sortOrder = parseInt(req.body.sortOrder);
     if (req.body.harvestDate) data.harvestDate = new Date(req.body.harvestDate);
@@ -296,9 +297,14 @@ async function updateStock(req, res) {
     const { stockQty } = req.body;
     if (stockQty == null) return res.status(400).json({ message: 'stockQty is required' });
 
+    const parsed = parseFloat(stockQty);
+    if (isNaN(parsed) || parsed < 0) {
+      return res.status(400).json({ message: 'Stock quantity cannot be negative' });
+    }
+
     const product = await prisma.product.update({
       where: { id },
-      data: { stockQty: parseFloat(stockQty) },
+      data: { stockQty: parsed },
       select: { id: true, name: true, stockQty: true, lowStockThreshold: true },
     });
     res.json({ data: product });

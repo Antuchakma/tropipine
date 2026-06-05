@@ -13,10 +13,12 @@ const {
   updateOrderStatus,
   trackOrder,
   getRecentPendingCount,
+  adminCreateOrder,
 } = require('../controllers/order.controller');
 
 router.get('/track', trackOrder);
 router.get('/notifications', authenticate, requireAdmin, getRecentPendingCount);
+router.post('/admin-create', authenticate, requireAdmin, adminCreateOrder);
 router.post('/', optionalAuthenticate, createOrder);
 router.post('/guest-cancel', cancelGuestOrder);
 router.get('/my-orders', authenticate, myOrders);
