@@ -165,8 +165,12 @@ export default function ReviewsPage() {
                         </p>
                       </td>
                       <td className="px-5 py-4">
-                        <p className="text-sm font-medium text-ink">{review.user?.name || 'Unknown'}</p>
-                        <p className="text-xs text-ink-light truncate max-w-[120px]">{review.user?.email}</p>
+                        <p className="text-sm font-medium text-ink">
+                          {review.user?.name || review.guestName || 'Anonymous'}
+                        </p>
+                        <p className="text-xs text-ink-light truncate max-w-[120px]">
+                          {review.user?.email || review.guestEmail || <span className="italic text-ink-faint">guest</span>}
+                        </p>
                       </td>
                       <td className="px-5 py-4">
                         <StarRow rating={review.rating} />
@@ -177,6 +181,15 @@ export default function ReviewsPage() {
                           <p className="text-sm text-ink-dim line-clamp-2">{review.comment}</p>
                         ) : (
                           <span className="text-xs text-ink-extra italic">No comment</span>
+                        )}
+                        {review.images?.length > 0 && (
+                          <div className="flex gap-1.5 mt-2 flex-wrap">
+                            {review.images.map((url, i) => (
+                              <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+                                <img src={url} alt="" className="w-10 h-10 object-cover rounded border border-edge hover:opacity-80 transition-opacity" />
+                              </a>
+                            ))}
+                          </div>
                         )}
                       </td>
                       <td className="px-5 py-4 whitespace-nowrap">

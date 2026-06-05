@@ -1,4 +1,5 @@
 const { prisma } = require('../config/db');
+const { uploadImage } = require('../services/cloudinary.service');
 
 async function getProductReviews(req, res) {
   try {
@@ -23,39 +24,48 @@ async function getProductReviews(req, res) {
 
 async function submitReview(req, res) {
   try {
-    const userId = req.user?.id;
-    const { productId, rating, comment, orderId } = req.body;
+    const userId = req.user?.id || null;
+    const { productId, rating, comment, orderId, guestName, guestEmail } = req.body;
 
-    if (!productId || !rating) return res.status(400).json({ message: 'productId and rating are required' });
-    if (rating < 1 || rating > 5) return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+    if (!productId || !rating) {
+      return res.status(400).json({ message: 'productId and rating are required' });
+    }
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+    }
+    if (!userId && !guestName?.trim()) {
+      return res.status(400).json({ message: 'Name is required' });
+    }
 
-    // Check if user already reviewed this product
-    const existing = await prisma.review.findFirst({ where: { userId, productId } });
-    if (existing) return res.status(409).json({ message: 'You have already reviewed this product' });
+    // Duplicate check for logged-in users
+    if (userId) {
+      const existing = await prisma.review.findFirst({ where: { userId, productId } });
+      if (existing) return res.status(409).json({ message: 'You have already reviewed this product' });
+    }
 
-    // If orderId provided, verify it belongs to this user and is DELIVERED
-    if (orderId) {
-      const order = await prisma.order.findUnique({
-        where: { id: orderId },
-        include: { items: true },
-      });
-      if (!order || order.userId !== userId) {
-        return res.status(403).json({ message: 'Order not found or not yours' });
+    // Upload images to Cloudinary
+    const imageUrls = [];
+    if (req.files?.length > 0) {
+      for (const file of req.files) {
+        try {
+          const result = await uploadImage(file.path, 'tropipine/reviews');
+          imageUrls.push(result.url);
+        } catch (e) {
+          console.error('Review image upload failed:', e.message);
+        }
       }
-      if (order.status !== 'DELIVERED') {
-        return res.status(400).json({ message: 'Can only review delivered orders' });
-      }
-      const hasProduct = order.items.some((i) => i.productId === productId);
-      if (!hasProduct) return res.status(400).json({ message: 'Product not in this order' });
     }
 
     const review = await prisma.review.create({
       data: {
         userId,
+        guestName: !userId ? guestName.trim() : null,
+        guestEmail: !userId ? (guestEmail?.trim() || null) : null,
         productId,
         orderId: orderId || null,
         rating: parseInt(rating),
-        comment: comment || null,
+        comment: comment?.trim() || null,
+        images: imageUrls,
         isApproved: false,
       },
       include: { user: { select: { id: true, name: true } } },
@@ -98,10 +108,7 @@ async function getAllReviews(req, res) {
 async function approveReview(req, res) {
   try {
     const { id } = req.params;
-    const review = await prisma.review.update({
-      where: { id },
-      data: { isApproved: true },
-    });
+    const review = await prisma.review.update({ where: { id }, data: { isApproved: true } });
     res.json({ data: review });
   } catch (err) {
     console.error(err);
